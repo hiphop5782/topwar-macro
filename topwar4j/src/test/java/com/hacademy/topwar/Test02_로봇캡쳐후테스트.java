@@ -1,16 +1,8 @@
 package com.hacademy.topwar;
 
-import org.bytedeco.opencv.opencv_calib3d.*;
-import org.bytedeco.opencv.opencv_core.*;
-import org.bytedeco.opencv.opencv_highgui.*;
-import org.bytedeco.opencv.opencv_imgproc.*;
-import org.bytedeco.opencv.opencv_objdetect.*;
-import static org.bytedeco.opencv.global.opencv_calib3d.*;
-import static org.bytedeco.opencv.global.opencv_core.*;
-import static org.bytedeco.opencv.global.opencv_highgui.*;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
-import static org.bytedeco.opencv.global.opencv_imgproc.*;
-import static org.bytedeco.opencv.global.opencv_objdetect.*;
+import static org.bytedeco.opencv.global.opencv_highgui.destroyAllWindows;
+import static org.bytedeco.opencv.global.opencv_highgui.imshow;
+import static org.bytedeco.opencv.global.opencv_highgui.waitKey;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;
@@ -22,8 +14,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.bytedeco.opencv.opencv_core.Mat;
+import org.opencv.core.CvType;
 import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
 
 public class Test02_로봇캡쳐후테스트 {
 	public static void main(String[] args) throws AWTException, IOException {
@@ -39,6 +31,8 @@ public class Test02_로봇캡쳐후테스트 {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 	    ImageIO.write(image, "jpg", byteArrayOutputStream);
 	    byte[] data = byteArrayOutputStream.toByteArray();
-	    return new Mat(data);
+	    //Mat mat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
+	    Mat mat = new Mat(data, true);
+	    return mat;
 	}
 }
