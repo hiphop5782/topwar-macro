@@ -1,0 +1,62 @@
+package com.hacademy.topwar;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.bytedeco.javacv.*;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.indexer.FloatIndexer;
+
+import org.bytedeco.opencv.opencv_calib3d.*;
+import org.bytedeco.opencv.opencv_core.*;
+import org.bytedeco.opencv.opencv_highgui.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import org.bytedeco.opencv.opencv_objdetect.*;
+import static org.bytedeco.opencv.global.opencv_calib3d.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_highgui.*;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_objdetect.*;
+
+public class Test01_JavaCV적용테스트 {
+	public static void main(String[] args) {
+		String path = System.getProperty("user.dir");
+		Mat base = imread(path+"\\images\\base.png");
+		Mat baseGray = new Mat(base.size(), CV_8UC1);
+		cvtColor(base, baseGray, COLOR_BGR2GRAY);
+		
+		Mat find = imread(path+"\\images\\find.png");
+		Mat findGray = new Mat(find.size(), CV_8UC1);
+		cvtColor(find, findGray, COLOR_BGR2GRAY);
+		
+		Size size = new Size(baseGray.cols()-findGray.cols()+1, baseGray.rows()-findGray.rows()+1);
+		Mat result = new Mat(size, CV_32FC1);
+		matchTemplate(baseGray, findGray, result, TM_CCOEFF_NORMED);
+		
+		DoublePointer minVal = new DoublePointer();
+		DoublePointer maxVal = new DoublePointer();
+		Point min = new Point();
+		Point max = new Point();
+		minMaxLoc(result, minVal, maxVal, min, max, null);
+		
+		Rect rect = new Rect(max.x(), max.y(), findGray.cols(), findGray.rows());
+		System.out.println(rect.x()+", "+rect.y()+", "+rect.width()+", "+rect.height());
+		rectangle(base, rect, randColor(), 2, 0, 0);
+		
+		imshow("Original", base);
+		waitKey(0);
+		destroyAllWindows();
+	}
+	
+	// some usefull things.
+    public static Scalar randColor(){
+       int b,g,r;
+       b= ThreadLocalRandom.current().nextInt(0, 255 + 1);
+       g= ThreadLocalRandom.current().nextInt(0, 255 + 1);
+       r= ThreadLocalRandom.current().nextInt(0, 255 + 1);
+       return new Scalar (b,g,r,0);
+    }
+    
+}
