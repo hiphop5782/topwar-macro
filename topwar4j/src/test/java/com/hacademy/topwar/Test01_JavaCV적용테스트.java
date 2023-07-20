@@ -23,11 +23,11 @@ import static org.bytedeco.opencv.global.opencv_objdetect.*;
 public class Test01_JavaCV적용테스트 {
 	public static void main(String[] args) {
 		String path = System.getProperty("user.dir");
-		Mat base = imread(path+"\\images\\base.png");
+		Mat base = imread(path+"\\images\\demo\\base.png");
 		Mat baseGray = new Mat(base.size(), CV_8UC1);
 		cvtColor(base, baseGray, COLOR_BGR2GRAY);
 		
-		Mat find = imread(path+"\\images\\find.png");
+		Mat find = imread(path+"\\images\\demo\\find.png");
 		Mat findGray = new Mat(find.size(), CV_8UC1);
 		cvtColor(find, findGray, COLOR_BGR2GRAY);
 		
