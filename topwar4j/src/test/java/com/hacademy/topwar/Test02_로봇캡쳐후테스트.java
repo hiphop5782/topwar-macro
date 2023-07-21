@@ -3,6 +3,7 @@ package com.hacademy.topwar;
 import static org.bytedeco.opencv.global.opencv_highgui.destroyAllWindows;
 import static org.bytedeco.opencv.global.opencv_highgui.imshow;
 import static org.bytedeco.opencv.global.opencv_highgui.waitKey;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 
 import java.awt.AWTException;
 import java.awt.Rectangle;
@@ -13,6 +14,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.opencv.core.CvType;
 import org.opencv.core.MatOfByte;
@@ -31,8 +34,7 @@ public class Test02_로봇캡쳐후테스트 {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 	    ImageIO.write(image, "jpg", byteArrayOutputStream);
 	    byte[] data = byteArrayOutputStream.toByteArray();
-	    //Mat mat = new Mat(image.getHeight(), image.getWidth(), CvType.CV_8UC3);
-	    Mat mat = new Mat(data, true);
+	    Mat mat = imdecode(new Mat(new BytePointer(data)), IMREAD_ANYDEPTH | IMREAD_ANYCOLOR);
 	    return mat;
 	}
 }

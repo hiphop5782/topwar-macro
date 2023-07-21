@@ -1,5 +1,9 @@
 package com.hacademy.topwar.util;
 
+import static org.bytedeco.opencv.global.opencv_imgcodecs.IMREAD_ANYCOLOR;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.IMREAD_ANYDEPTH;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.imdecode;
+
 import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -10,6 +14,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.opencv.opencv_core.Mat;
 
 public class CaptureUtils {
@@ -36,6 +41,7 @@ public class CaptureUtils {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 	    ImageIO.write(bfi, "jpg", byteArrayOutputStream);
 	    byte[] data = byteArrayOutputStream.toByteArray();
-	    return new Mat(data);
+	    Mat mat = imdecode(new Mat(new BytePointer(data)), IMREAD_ANYDEPTH | IMREAD_ANYCOLOR);
+	    return mat;
 	}
 }

@@ -20,7 +20,7 @@ import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
 
-public class Test01_JavaCV적용테스트 {
+public class Test01_데모이미지찾기 {
 	public static void main(String[] args) {
 		String path = System.getProperty("user.dir");
 		Mat base = imread(path+"\\images\\demo\\base.png");
