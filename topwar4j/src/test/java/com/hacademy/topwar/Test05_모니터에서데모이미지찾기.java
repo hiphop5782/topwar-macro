@@ -19,7 +19,7 @@ public class Test05_모니터에서데모이미지찾기 {
 		//메인모니터를 캡쳐해서 find.png 찾기
 		Rectangle rect = MonitorUtils.getMainMonitorBounds();
 		Mat monitor = CaptureUtils.captureMat(rect);
-		Mat find = ImageUtils.load("/images/demo/find.png");
+		Mat find = ImageUtils.load("/images/button/search.png");
 		List<Point> points =  ImageUtils.findImageList(monitor, find, 0.80f);
 		System.out.println("find points = " + points.size());
 		for(Point point : points) {

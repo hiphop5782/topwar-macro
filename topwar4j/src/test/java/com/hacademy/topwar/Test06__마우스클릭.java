@@ -2,7 +2,6 @@ package com.hacademy.topwar;
 
 import java.io.IOException;
 
-import com.hacademy.topwar.constant.Button;
 import com.hacademy.topwar.util.Mouse;
 
 public class Test06__마우스클릭 {

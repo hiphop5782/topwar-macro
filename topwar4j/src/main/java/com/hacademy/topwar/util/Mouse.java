@@ -26,7 +26,12 @@ public class Mouse {
 	
 	private int x, y;
 	private float delay = 0.1f;
+	private int monitor = -1;
 	
+	public Mouse monitor(int monitor) {
+		this.monitor = monitor;
+		return this;
+	}
 	public Mouse hold() {
 		return hold(delay);
 	}
@@ -72,6 +77,7 @@ public class Mouse {
 		return this;
 	}
 	public Mouse clickL(int x, int y) {
+		System.out.println("Left Click ("+x+", "+y+")");
 		return move(x, y).hold().clickL();
 	}
 	public Mouse clickR() {
@@ -84,14 +90,21 @@ public class Mouse {
 		return move(x,y).hold().clickR();
 	}
 	
+	private Mat capture() throws IOException {
+		if(monitor == -1) {
+			return CaptureUtils.captureMatGrayscale(MonitorUtils.getMainMonitorBounds());
+		}
+		return CaptureUtils.captureMatGrayscale(MonitorUtils.getMonitorBounds(monitor));
+	}
 	public Mouse clickImgL(String path) throws IOException {
 		Mat find = ImageUtils.load(path);
-		Mat origin = CaptureUtils.captureMat(MonitorUtils.getMainMonitorBounds());
+		Mat origin = capture();
 		Point point = ImageUtils.findImage(origin, find);
 		if(point == null) {
 			System.err.println("image not found");
 			return this;
 		}
+		System.out.println("Image detected at ("+point.x()+","+point.y()+")");
 		Size size = find.size();
 		int x = point.x() + size.width()/2;
 		int y = point.y() + size.height()/2;
@@ -100,8 +113,13 @@ public class Mouse {
 	
 	public Mouse clickImgR(String path) throws IOException {
 		Mat find = ImageUtils.load(path);
-		Mat origin = CaptureUtils.captureMat(MonitorUtils.getMainMonitorBounds());
+		Mat origin = capture();
 		Point point = ImageUtils.findImage(origin, find);
+		if(point == null) {
+			System.err.println("image not found");
+			return this;
+		}
+		
 		Size size = find.size();
 		int x = point.x() + size.width()/2;
 		int y = point.y() + size.height()/2;
