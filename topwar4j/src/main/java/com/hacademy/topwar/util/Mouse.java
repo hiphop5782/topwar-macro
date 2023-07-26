@@ -97,6 +97,8 @@ public class Mouse {
 		return CaptureUtils.captureMatGrayscale(MonitorUtils.getMonitorBounds(monitor));
 	}
 	public Mouse clickImgL(String path) throws IOException {
+		System.out.println("<ClickImgL>");
+		System.out.println("[path] " + path);
 		Mat find = ImageUtils.load(path);
 		Mat origin = capture();
 		Point point = ImageUtils.findImage(origin, find);
@@ -105,10 +107,7 @@ public class Mouse {
 			return this;
 		}
 		System.out.println("Image detected at ("+point.x()+","+point.y()+")");
-		Size size = find.size();
-		int x = point.x() + size.width()/2;
-		int y = point.y() + size.height()/2;
-		return clickL(x,y);
+		return clickL(point.x(), point.y());
 	}
 	
 	public Mouse clickImgR(String path) throws IOException {

@@ -17,15 +17,11 @@ import com.hacademy.topwar.util.MonitorUtils;
 public class Test05_모니터에서데모이미지찾기 {
 	public static void main(String[] args) throws IOException {
 		//메인모니터를 캡쳐해서 find.png 찾기
-		Rectangle rect = MonitorUtils.getMainMonitorBounds();
-		Mat monitor = CaptureUtils.captureMat(rect);
+		Mat monitor = CaptureUtils.captureMatGrayscale(MonitorUtils.getMainMonitorBounds());
 		Mat find = ImageUtils.load("/images/button/search.png");
-		List<Point> points =  ImageUtils.findImageList(monitor, find, 0.80f);
-		System.out.println("find points = " + points.size());
-		for(Point point : points) {
-			Rect r = new Rect(point.x(), point.y(), 80, 80);
-			rectangle(monitor, r, ImageUtils.randColor(), 2, 0, 0);
-		}
+		Point point = ImageUtils.findImage(monitor, find);
+		Rect r = new Rect(point.x(), point.y(), 80, 80);
+		rectangle(monitor, r, ImageUtils.randColor(), 2, 0, 0);
 		ImageUtils.display(monitor);
 	}
 }

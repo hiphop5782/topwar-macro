@@ -8,6 +8,7 @@ import static org.bytedeco.opencv.global.opencv_imgproc.TM_CCOEFF_NORMED;
 import static org.bytedeco.opencv.global.opencv_imgproc.cvtColor;
 import static org.bytedeco.opencv.global.opencv_imgproc.matchTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,6 +19,11 @@ import org.bytedeco.opencv.opencv_core.*;
 import org.bytedeco.opencv.opencv_highgui.*;
 import org.bytedeco.opencv.opencv_imgproc.*;
 import org.bytedeco.opencv.opencv_objdetect.*;
+
+import com.hacademy.topwar.util.CaptureUtils;
+import com.hacademy.topwar.util.ImageUtils;
+import com.hacademy.topwar.util.MonitorUtils;
+
 import static org.bytedeco.opencv.global.opencv_calib3d.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_highgui.*;
@@ -26,25 +32,30 @@ import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_objdetect.*;
 
 public class Test01_데모이미지찾기 {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		String path = System.getProperty("user.dir");
-		Mat base = imread(path + "\\images\\demo\\base.png");
-		Mat baseGray = new Mat(base.size(), CV_8UC1);
-		cvtColor(base, baseGray, COLOR_BGR2GRAY);
+//		Mat base = imread(path + "\\images\\demo\\base.png");
+//		Mat baseGray = new Mat(base.size(), CV_8UC1);
+//		cvtColor(base, baseGray, COLOR_BGR2GRAY);
+//		Mat baseGray = ImageUtils.load("/images/demo/base.png");
+		Mat baseGray = CaptureUtils.captureMatGrayscale(MonitorUtils.getMainMonitorBounds());
 
-		Mat find = imread(path + "\\images\\demo\\find.png");
-		Mat findGray = new Mat(find.size(), CV_8UC1);
-		cvtColor(find, findGray, COLOR_BGR2GRAY);
+//		Mat find = imread(path + "\\images\\demo\\find.png");
+//		Mat findGray = new Mat(find.size(), CV_8UC1);
+//		cvtColor(find, findGray, COLOR_BGR2GRAY);
+		Mat findGray = ImageUtils.load("/images/button/search.png");
+		ImageUtils.display(findGray);
 
 		Size size = new Size(baseGray.cols() - findGray.cols() + 1, baseGray.rows() - findGray.rows() + 1);
 		Mat result = new Mat(size, CV_32FC1);
 		matchTemplate(baseGray, findGray, result, TM_CCOEFF_NORMED);
 
-		List<Point> list = getPointsFromMatAboveThreshold(result, 0.90f);
+		List<Point> list = getPointsFromMatAboveThreshold(result, 0.75f);
 		System.out.println(list.size());
+		Size s = findGray.size();
 		for(Point point : list) {
-			Rect rect = new Rect(point.x(), point.y(), 100, 100);
-			rectangle(base, rect, randColor(), 2, 0, 0);
+			Rect rect = new Rect(point.x(), point.y(), s.width(), s.height());
+			rectangle(baseGray, rect, randColor(), 2, 0, 0);
 		}
 
 //		DoublePointer minVal = new DoublePointer();
@@ -57,7 +68,7 @@ public class Test01_데모이미지찾기 {
 //		System.out.println(rect.x()+", "+rect.y()+", "+rect.width()+", "+rect.height());
 //		rectangle(base, rect, randColor(), 2, 0, 0);
 
-		imshow("Original", base);
+		imshow("Original", baseGray);
 		waitKey(0);
 		destroyAllWindows();
 	}

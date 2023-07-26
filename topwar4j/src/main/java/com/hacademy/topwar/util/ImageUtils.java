@@ -61,7 +61,6 @@ public class ImageUtils {
 		Point max = new Point();
 		opencv_core.minMaxLoc(result, minVal, maxVal, min, max, null);
 		Rect rect = new Rect(max.x(), max.y(), find.cols(), find.rows());
-		System.out.println(rect.x()+", "+rect.y()+", "+rect.width()+", "+rect.height());
 		return new Point(rect.x() + rect.width()/2, rect.y()+rect.height()/2);
 	}
 	public static Point findImage(Mat origin, Mat find, float threshold) {
