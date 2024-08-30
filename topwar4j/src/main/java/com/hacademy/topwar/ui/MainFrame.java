@@ -182,20 +182,24 @@ public class MainFrame extends JFrame{
 		
 		
 		//[암흑사냥] 실행버튼
-		JPanel darkforceButtonPanel = new JPanel(new BorderLayout());
+		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 2));
 		darkforceButtonPanel.setBounds(10, 150, darkforcePanel.getWidth()-20, 50);
+		
+		JButton darkforceAreaButton = new JButton("영역 설정(F2)");
+		darkforceAreaButton.setFont(new Font("", Font.BOLD, 18));
+		darkforceAreaButton.addActionListener(e->openDarkforceDialog());
+		darkforceButtonPanel.add(darkforceAreaButton);
 		
 		JButton darkforceExecuteButton = new JButton("암흑사냥 시작 (F5)");
 		darkforceExecuteButton.setBackground(new Color(46, 204, 113));
 		darkforceExecuteButton.setForeground(Color.white);
-		darkforceExecuteButton.setFont(new Font("", Font.BOLD, 20));
+		darkforceExecuteButton.setFont(new Font("", Font.BOLD, 18));
 		darkforceButtonPanel.add(darkforceExecuteButton);
 		
 		darkforcePanel.add(darkforceButtonPanel);
 		
 		//[암흑사냥] 최종추가
 		contentPanel.add(darkforcePanel);
-		
 		
 		this.setContentPane(contentPanel);
 	}
@@ -207,6 +211,9 @@ public class MainFrame extends JFrame{
 			@Override
 			public void keyReleased(GlobalKeyEvent event) {
 				switch(event.getVirtualKeyCode()) {
+				case GlobalKeyEvent.VK_F2:
+					openDarkforceDialog();
+					break;
 				case GlobalKeyEvent.VK_F5:
 //					if(!timeline.isPlaying()) {
 //						timeline.play();
@@ -225,6 +232,10 @@ public class MainFrame extends JFrame{
 				}
 			}
 		});
+	}
+	
+	public void openDarkforceDialog() {
+		DarkForceDialog dialog = new DarkForceDialog(this);
 	}
 	
 	//상태 저장 및 프로그램 종료
