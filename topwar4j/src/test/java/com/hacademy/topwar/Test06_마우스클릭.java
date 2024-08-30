@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.hacademy.topwar.util.Mouse;
 
-public class Test06__마우스클릭 {
+public class Test06_마우스클릭 {
 	public static void main(String[] args) throws IOException {
 		Mouse.create()
 			.clickImgL("/images/button/search.png")

@@ -18,6 +18,42 @@
 		    <artifactId>javacv-platform</artifactId>
 		    <version>1.5.9</version>
 		</dependency>
+		
+		<!-- look and feel -->
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>3.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.vincenzopalazzo</groupId>
+			<artifactId>material-ui-swing</artifactId>
+			<version>1.1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.pushing-pixels</groupId>
+		    <artifactId>radiance-substance</artifactId>
+		    <version>4.5.0</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- global key hook-->
+		<dependency>
+		  	<groupId>lc.kra.system</groupId>
+		  	<artifactId>system-hook</artifactId>
+		  	<version>3.8</version>
+		</dependency>
+	
+		<!-- lombok -->	
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.34</version>
+		    <scope>provided</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
