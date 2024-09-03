@@ -1,5 +1,5 @@
 package com.hacademy.topwar.macro.action;
 
 public interface MacroAction {
-	void doSomething();
+	void doSomething() throws InterruptedException;
 }

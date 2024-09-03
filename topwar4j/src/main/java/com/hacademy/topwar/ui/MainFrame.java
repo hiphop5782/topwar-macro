@@ -1,32 +1,32 @@
 package com.hacademy.topwar.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.MouseInfo;
-import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
-import com.hacademy.topwar.macro.MacroActionListener;
 import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimeline;
-import com.hacademy.topwar.macro.action.MacroMouseAction;
-import com.hacademy.topwar.macro.action.MacroMouseActionType;
+import com.hacademy.topwar.macro.MacroTimelineFactory;
+import com.hacademy.topwar.macro.MacroTimelines;
+import com.hacademy.topwar.macro.MacroTimelinesListener;
 
 import lc.kra.system.keyboard.GlobalKeyboardHook;
 import lc.kra.system.keyboard.event.GlobalKeyAdapter;
@@ -36,10 +36,22 @@ public class MainFrame extends JFrame{
 	
 	private MacroStatus status = MacroStatus.load();
 	
+	private JLabel screenCountLabel;
+	private JLabel macroExecuteCountLabel;
+	private int macroExecuteCount = 0;
+	
+	private List<Rectangle> screenList = new ArrayList<>();
+	private MacroTimelines timelines;
+	
 //	private JList<String> list = new JList<>();
 	
+	private JButton darkforceAreaButton = new JButton("영역설정(F2)");
+	private JButton darkforceAreaRemoveButton = new JButton("영역삭제(F3)");
+	private JButton darkforceExecuteButton = new JButton("사냥시작 (F5)");
+	private JButton darkforceStopButton = new JButton("사냥종료(F6)");
+	
 	public MainFrame() throws Exception {
-		this.setSize(450, 400);
+		this.setSize(600, 300);
 		this.setAlwaysOnTop(true);
 		this.setLocationByPlatform(true);
 		this.setTitle("TW-Macro");
@@ -134,6 +146,8 @@ public class MainFrame extends JFrame{
 	}
 	
 	public void components() {
+		Font buttonFont = new Font("", Font.BOLD, 14);
+		
 		//메인 패널
 		JPanel contentPanel = new JPanel(null);
 		
@@ -144,7 +158,7 @@ public class MainFrame extends JFrame{
 		//[암흑사냥]
 		JPanel darkforcePanel = new JPanel(null);
 		darkforcePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "암흑(DarkForce)"));
-		darkforcePanel.setBounds(5, 5, getWidth()-25, 220);
+		darkforcePanel.setBounds(5, 5, getWidth()-25, 240);
 		
 		//[암흑사냥] 횟수
 		JPanel darkforceCountPanel = new JPanel(new GridLayout(1, 8));
@@ -180,21 +194,58 @@ public class MainFrame extends JFrame{
 		}
 		darkforcePanel.add(darkforceMarchPanel);
 		
+		//라벨 영역
+		JPanel darkforceStatusPanel = new JPanel(new GridLayout(1, 2));
+		darkforceStatusPanel.setBounds(10, 140, darkforcePanel.getWidth() - 20, 30);
+
+		screenCountLabel = new JLabel("현재 설정된 화면 : 0", JLabel.LEFT);
+		darkforceStatusPanel.add(screenCountLabel);
+		
+		macroExecuteCountLabel = new JLabel("매크로 실행 횟수 : 0", JLabel.LEFT);
+		darkforceStatusPanel.add(macroExecuteCountLabel);
+		
+		darkforcePanel.add(darkforceStatusPanel);
 		
 		//[암흑사냥] 실행버튼
-		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 2));
-		darkforceButtonPanel.setBounds(10, 150, darkforcePanel.getWidth()-20, 50);
+		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 3));
+		darkforceButtonPanel.setBounds(10, 180, darkforcePanel.getWidth()-20, 50);
 		
-		JButton darkforceAreaButton = new JButton("영역 설정(F2)");
-		darkforceAreaButton.setFont(new Font("", Font.BOLD, 18));
-		darkforceAreaButton.addActionListener(e->openDarkforceDialog());
+		darkforceAreaButton.setBackground(new Color(99, 110, 114));
+		darkforceAreaButton.setForeground(Color.white);
+		darkforceAreaButton.setFont(buttonFont);
+		darkforceAreaButton.addActionListener(e->{
+			addScreenRect();
+		});
 		darkforceButtonPanel.add(darkforceAreaButton);
 		
-		JButton darkforceExecuteButton = new JButton("암흑사냥 시작 (F5)");
+		darkforceAreaRemoveButton.setBackground(new Color(243, 156, 18));
+		darkforceAreaRemoveButton.setForeground(Color.white);
+		darkforceAreaRemoveButton.setFont(buttonFont);
+		darkforceAreaRemoveButton.addActionListener(e->{
+			removeScreenRect();
+		});
+		darkforceButtonPanel.add(darkforceAreaRemoveButton);
+		
 		darkforceExecuteButton.setBackground(new Color(46, 204, 113));
 		darkforceExecuteButton.setForeground(Color.white);
-		darkforceExecuteButton.setFont(new Font("", Font.BOLD, 18));
+		darkforceExecuteButton.setFont(buttonFont);
+		darkforceExecuteButton.addActionListener(e->{
+			playDarkforceMacro();
+		});
 		darkforceButtonPanel.add(darkforceExecuteButton);
+		
+		darkforceStopButton.setBackground(new Color(214, 48, 49));
+		darkforceStopButton.setForeground(Color.white);
+		darkforceStopButton.setFont(buttonFont);
+		darkforceStopButton.addActionListener(e->{
+			stopDarkforceMacro();
+		});
+		darkforceButtonPanel.add(darkforceStopButton);
+		
+		darkforceAreaButton.setEnabled(true);
+		darkforceAreaRemoveButton.setEnabled(true);
+		darkforceExecuteButton.setEnabled(true);
+		darkforceStopButton.setEnabled(false);
 		
 		darkforcePanel.add(darkforceButtonPanel);
 		
@@ -212,16 +263,17 @@ public class MainFrame extends JFrame{
 			public void keyReleased(GlobalKeyEvent event) {
 				switch(event.getVirtualKeyCode()) {
 				case GlobalKeyEvent.VK_F2:
-					openDarkforceDialog();
+					addScreenRect();
+					break;
+				case GlobalKeyEvent.VK_F3:
+					removeScreenRect();
 					break;
 				case GlobalKeyEvent.VK_F5:
-//					if(!timeline.isPlaying()) {
-//						timeline.play();
-//					}
-//					break;
-//				case GlobalKeyEvent.VK_F6:
-//					timeline.stop();
-//					break;
+					playDarkforceMacro();
+					break;
+				case GlobalKeyEvent.VK_F6:
+					stopDarkforceMacro();
+					break;
 //				case GlobalKeyEvent.VK_F7:
 //					Point location = MouseInfo.getPointerInfo().getLocation();
 //					timeline.add(new MacroMouseAction(location, MacroMouseActionType.CLICK));
@@ -243,5 +295,60 @@ public class MainFrame extends JFrame{
 		status.save();
 		System.exit(0);
 	}
+	
+	private void addScreenRect() {
+		Rectangle screenRect = DarkForceDialog.showDialog(MainFrame.this);
+		screenList.add(screenRect);
+		screenCountLabel.setText("현재 설정된 화면 : " + screenList.size());
+	}
+	private void removeScreenRect() {
+		if(screenList.isEmpty()) return;
+		screenList.remove(screenList.size()-1);
+		screenCountLabel.setText("현재 설정된 화면 : " + screenList.size());
+	}
+	
+	private void playDarkforceMacro() {
+		if(screenList.isEmpty()) return;
+		if(timelines != null && timelines.playing()) return;
+		
+		timelines = new MacroTimelines(macroTimelinesListener);
+		for(Rectangle screenRect : screenList) {
+			MacroTimeline timeline = MacroTimelineFactory.getDarkforceMacro(status, screenRect.getLocation(), screenList.size());
+			timelines.add(timeline);
+		}
+		
+		timelines.play();
+	}
+	private void stopDarkforceMacro() {
+		timelines.stop();
+	}
+	
+	private MacroTimelinesListener macroTimelinesListener = new MacroTimelinesListener() {
+		@Override
+		public void start(MacroTimelines timelines) {
+			macroExecuteCount = 0;
+			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
+			darkforceAreaButton.setEnabled(false);
+			darkforceAreaRemoveButton.setEnabled(false);
+			darkforceExecuteButton.setEnabled(false);
+			darkforceStopButton.setEnabled(true);
+		}
+		@Override
+		public void finish(MacroTimelines timelines) {
+			darkforceAreaButton.setEnabled(true);
+			darkforceAreaRemoveButton.setEnabled(true);
+			darkforceExecuteButton.setEnabled(true);
+			darkforceStopButton.setEnabled(false);
+		}
+		@Override
+		public void cycleStart(MacroTimelines timelines) {
+			macroExecuteCount++;
+			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
+		}
+		@Override
+		public void cycleFinish(MacroTimelines timelines) {
+			
+		}
+	};
 	
 }

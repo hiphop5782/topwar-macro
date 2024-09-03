@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
@@ -36,7 +35,7 @@ public class DarkForceDialog extends JDialog {
     		initialClick = e.getPoint();  // 클릭 위치 저장
     		initialRect = getBounds(); //초기 영역 저장
             isResizing = true;  // 커서가 기본이 아니면 크기 조절 시작
-            System.out.println("initialClick = " + initialClick);
+            //System.out.println("initialClick = " + initialClick);
     	}
     	public void mouseReleased(MouseEvent e) {
     		isResizing = false;  // 마우스 버튼을 놓으면 크기 조절 종료
@@ -79,8 +78,8 @@ public class DarkForceDialog extends JDialog {
 	public DarkForceDialog(Window parent) {
 		super(parent);
 		this.setAlwaysOnTop(true);
-		this.setLocationRelativeTo(parent);
-		this.setModal(false);
+		this.setLocation(0, 0);
+		this.setModal(true);
 		this.setSize(500, 700);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
@@ -182,5 +181,10 @@ public class DarkForceDialog extends JDialog {
         }
 
         //initialClick = e.getPoint();  // 새로운 기준점 설정
+    }
+    
+    public static Rectangle showDialog(Window parent) {
+    	DarkForceDialog dialog = new DarkForceDialog(parent);
+    	return dialog.getBounds();
     }
 }

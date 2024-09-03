@@ -9,10 +9,7 @@ public class MacroDelayAction implements MacroAction{
 	}
 	
 	@Override
-	public void doSomething() {
-		try {
-			Thread.sleep((long)(second * 1000L));
-		}
-		catch(Exception e) {}
+	public void doSomething() throws InterruptedException{
+		Thread.sleep((long)(second * 1000L));
 	}
 }
