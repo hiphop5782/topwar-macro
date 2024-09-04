@@ -77,7 +77,7 @@ public class Mouse {
 		return this;
 	}
 	public Mouse clickL(int x, int y) {
-		System.out.println("Left Click ("+x+", "+y+")");
+		//System.out.println("Left Click ("+x+", "+y+")");
 		return move(x, y).hold().clickL();
 	}
 	public Mouse clickR() {
@@ -97,8 +97,8 @@ public class Mouse {
 		return CaptureUtils.captureMatGrayscale(MonitorUtils.getMonitorBounds(monitor));
 	}
 	public Mouse clickImgL(String path) throws IOException {
-		System.out.println("<ClickImgL>");
-		System.out.println("[path] " + path);
+		//System.out.println("<ClickImgL>");
+		//System.out.println("[path] " + path);
 		Mat find = ImageUtils.load(path);
 		Mat origin = capture();
 		Point point = ImageUtils.findImage(origin, find);

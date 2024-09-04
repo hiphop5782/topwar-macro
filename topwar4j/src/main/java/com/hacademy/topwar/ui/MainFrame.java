@@ -1,5 +1,6 @@
 package com.hacademy.topwar.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -10,6 +11,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -52,7 +54,7 @@ public class MainFrame extends JFrame{
 	private JButton darkforceStopButton = new JButton("사냥종료(F6)");
 	
 	public MainFrame() throws Exception {
-		this.setSize(600, 300);
+		this.setSize(600, 350);
 		this.setAlwaysOnTop(true);
 		this.setLocationByPlatform(true);
 		this.setTitle("TW-Macro");
@@ -169,15 +171,20 @@ public class MainFrame extends JFrame{
 		Border lineBorder2 = BorderFactory.createLineBorder(Color.black, 2, true);
 		Border lineBorder1 = BorderFactory.createLineBorder(Color.gray, 1, true);
 		
+		
 		//[암흑사냥]
 		JPanel darkforcePanel = new JPanel(null);
 		darkforcePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "암흑(DarkForce)"));
-		darkforcePanel.setBounds(5, 5, getWidth()-25, 240);
+		darkforcePanel.setBounds(5, 5, getWidth()-25, 290);
+		
+		int x = 10;
+		int y = darkforcePanel.getY() + 25;
+		int offset = 10;
 		
 		//[암흑사냥] 횟수
 		JPanel darkforceCountPanel = new JPanel(new GridLayout(1, 8));
 		darkforceCountPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "공격횟수"));
-		darkforceCountPanel.setBounds(10, 30, darkforcePanel.getWidth()-20, 50);
+		darkforceCountPanel.setBounds(x, y, darkforcePanel.getWidth()-20, 50);
 		darkforcePanel.add(darkforceCountPanel);
 		
 		JRadioButton darkforceCount1 = new JRadioButton("1회", status.getDarkforceAttackCount() == 1);
@@ -190,9 +197,11 @@ public class MainFrame extends JFrame{
 		darkforceCountGroup.add(darkforceCount1);
 		darkforceCountGroup.add(darkforceCount2);
 		
+		y += darkforceCountPanel.getHeight() + offset;
+		
 		//[암흑사냥] 부대번호
 		JPanel darkforceMarchPanel = new JPanel(new GridLayout(1, 8));
-		darkforceMarchPanel.setBounds(10, 90, darkforcePanel.getWidth()-20, 50);
+		darkforceMarchPanel.setBounds(x, y, darkforcePanel.getWidth()-20, 50);
 		darkforceMarchPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "부대번호"));
 		
 		ButtonGroup darkforceMarchGroup = new ButtonGroup();
@@ -208,9 +217,26 @@ public class MainFrame extends JFrame{
 		}
 		darkforcePanel.add(darkforceMarchPanel);
 		
+		y += darkforceMarchPanel.getHeight() + offset;
+		
+		//물약사용 체크박스
+		JPanel useVitPanel = new JPanel(new BorderLayout());
+		useVitPanel.setBounds(x, y, darkforcePanel.getWidth() - 20, 30);
+		
+		JCheckBox useVit = new JCheckBox("물약 사용", status.isPotion());
+		useVit.addActionListener(e->{
+			status.setPotion(useVit.isSelected());
+		});
+		
+		useVitPanel.add(useVit);
+		
+		darkforcePanel.add(useVitPanel);
+		
+		y += useVitPanel.getHeight() + offset;
+		
 		//라벨 영역
 		JPanel darkforceStatusPanel = new JPanel(new GridLayout(1, 2));
-		darkforceStatusPanel.setBounds(10, 140, darkforcePanel.getWidth() - 20, 30);
+		darkforceStatusPanel.setBounds(10, 180, darkforcePanel.getWidth() - 20, 30);
 
 		screenCountLabel = new JLabel("현재 설정된 화면 : "+status.getScreenList().size(), JLabel.LEFT);
 		darkforceStatusPanel.add(screenCountLabel);
@@ -220,9 +246,11 @@ public class MainFrame extends JFrame{
 		
 		darkforcePanel.add(darkforceStatusPanel);
 		
+		y += darkforceStatusPanel.getHeight() + offset;
+		
 		//[암흑사냥] 실행버튼
 		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 3));
-		darkforceButtonPanel.setBounds(10, 180, darkforcePanel.getWidth()-20, 50);
+		darkforceButtonPanel.setBounds(x, y, darkforcePanel.getWidth()-20, 50);
 		
 		darkforceAreaButton.setBackground(new Color(99, 110, 114));
 		darkforceAreaButton.setForeground(Color.white);

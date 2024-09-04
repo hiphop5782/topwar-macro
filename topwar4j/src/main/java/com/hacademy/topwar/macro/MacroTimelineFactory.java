@@ -9,6 +9,7 @@ import com.hacademy.topwar.macro.action.MacroMouseActionType;
 public class MacroTimelineFactory {
 	public static MacroTimeline getDarkforceMacro(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
+		timeline.add(new MacroMouseAction(basePoint.x + 87, basePoint.y + 665, MacroMouseActionType.CLICK));//적군 검색(+다른창닫기)
 		timeline.add(new MacroMouseAction(basePoint.x + 87, basePoint.y + 665, MacroMouseActionType.CLICK));//적군 검색
 		timeline.add(new MacroMouseAction(basePoint.x + 109, basePoint.y + 317, MacroMouseActionType.CLICK));//적군
 		timeline.add(new MacroMouseAction(basePoint.x + 131, basePoint.y + 437, MacroMouseActionType.CLICK));//암흑 오딘
@@ -21,8 +22,8 @@ public class MacroTimelineFactory {
 		timeline.add(new MacroMouseAction(basePoint.x + 249, basePoint.y + 652, MacroMouseActionType.CLICK));//검색
 
 		//매크로 개수에 맞게 대기(4~6초)
-		int delay = (int)(Math.random() * 2) + 4;
-		timeline.add(new MacroDelayAction(delay + Math.random()));
+		double delay = (int)(Math.random() * 2) + 4 + Math.random();
+		timeline.add(new MacroDelayAction(delay / status.getScreenList().size()));
 		
 		timeline.add(new MacroMouseAction(basePoint.x + 246, basePoint.y + 353, MacroMouseActionType.CLICK));//유닛선택
 		
@@ -33,10 +34,16 @@ public class MacroTimelineFactory {
 			timeline.add(new MacroMouseAction(basePoint.x + 184, basePoint.y + 260, MacroMouseActionType.CLICK));
 		}
 		
-		timeline.add(new MacroMouseAction(basePoint.x + 104, basePoint.y + 19, MacroMouseActionType.CLICK));//체력충전 창열기
-		timeline.add(new MacroMouseAction(basePoint.x + 155, basePoint.y + 378, MacroMouseActionType.CLICK));//물약선택
-		timeline.add(new MacroMouseAction(basePoint.x + 257, basePoint.y + 486, MacroMouseActionType.CLICK));//물약사용
-		timeline.add(new MacroMouseAction(basePoint.x + 412, basePoint.y + 219, MacroMouseActionType.CLICK));//체력충전 창닫기
+		//물약 사용(option)
+		if(status.isPotion()) {
+			timeline.add(new MacroMouseAction(basePoint.x + 104, basePoint.y + 19, MacroMouseActionType.CLICK));//체력충전 창열기
+			timeline.add(new MacroMouseAction(basePoint.x + 155, basePoint.y + 378, MacroMouseActionType.CLICK));//물약선택
+			timeline.add(new MacroMouseAction(basePoint.x + 257, basePoint.y + 486, MacroMouseActionType.CLICK));//물약사용
+			timeline.add(new MacroMouseAction(basePoint.x + 412, basePoint.y + 219, MacroMouseActionType.CLICK));//체력충전 창닫기
+		}
+		else {
+			timeline.add(new MacroMouseAction(basePoint.x + 250, basePoint.y + 170, MacroMouseActionType.CLICK));
+		}
 		
 		//부대선택
 		switch(status.getDarkforceMarchCount()) {
@@ -71,12 +78,12 @@ public class MacroTimelineFactory {
 		
 		//대기 - 매크로 개수별로 다르게...
 		if(status.getDarkforceAttackCount() == 1) {
-			delay = (int)(Math.random() * 2) + 29;
-			timeline.add(new MacroDelayAction(delay + Math.random()));
+			delay = (int)(Math.random() * 2) + 29 + Math.random();
+			timeline.add(new MacroDelayAction(delay / status.getScreenList().size()));
 		}
 		else {
-			delay = (int)(Math.random() * 10) + 295;
-			timeline.add(new MacroDelayAction(delay + Math.random()));
+			delay = (int)(Math.random() * 2) + 295 + Math.random();
+			timeline.add(new MacroDelayAction(delay / status.getScreenList().size()));
 		}
 		
 		return timeline;

@@ -35,7 +35,7 @@ public class DarkForceDialog extends JDialog {
     		initialClick = e.getPoint();  // 클릭 위치 저장
     		initialRect = getBounds(); //초기 영역 저장
             isResizing = true;  // 커서가 기본이 아니면 크기 조절 시작
-            //System.out.println("initialClick = " + initialClick);
+            System.out.println("initialClick = " + initialClick);
     	}
     	public void mouseReleased(MouseEvent e) {
     		isResizing = false;  // 마우스 버튼을 놓으면 크기 조절 종료

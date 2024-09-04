@@ -20,6 +20,7 @@ public class MacroStatus implements Serializable{
 	
 	private int darkforceAttackCount = 5;
 	private int darkforceMarchCount = 1;
+	private boolean potion = false;
 	
 	private List<Rectangle> screenList = new ArrayList<>();
 	
