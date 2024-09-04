@@ -25,6 +25,7 @@ public class MacroTimelineFactory {
 		double delay = (int)(Math.random() * 2) + 4 + Math.random();
 		timeline.add(new MacroDelayAction(delay / status.getScreenList().size()));
 		
+		//공격
 		timeline.add(new MacroMouseAction(basePoint.x + 246, basePoint.y + 353, MacroMouseActionType.CLICK));//유닛선택
 		
 		if(status.getDarkforceAttackCount() == 1) {//1회 공격
@@ -44,6 +45,16 @@ public class MacroTimelineFactory {
 		}
 		else {
 			timeline.add(new MacroMouseAction(basePoint.x + 250, basePoint.y + 170, MacroMouseActionType.CLICK));
+		}
+		
+		//다시 공격
+		timeline.add(new MacroMouseAction(basePoint.x + 246, basePoint.y + 353, MacroMouseActionType.CLICK));//유닛선택
+		
+		if(status.getDarkforceAttackCount() == 1) {//1회 공격
+			timeline.add(new MacroMouseAction(basePoint.x + 319, basePoint.y + 260, MacroMouseActionType.CLICK));
+		}
+		else {//5회 공격
+			timeline.add(new MacroMouseAction(basePoint.x + 184, basePoint.y + 260, MacroMouseActionType.CLICK));
 		}
 		
 		//부대선택
