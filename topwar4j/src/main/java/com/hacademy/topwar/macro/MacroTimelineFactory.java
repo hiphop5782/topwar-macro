@@ -7,16 +7,22 @@ import com.hacademy.topwar.macro.action.MacroMouseAction;
 import com.hacademy.topwar.macro.action.MacroMouseActionType;
 
 public class MacroTimelineFactory {
-	public static MacroTimeline getDarkforceMacro(MacroStatus status, Point basePoint, int macroSize) {
+	public static MacroTimeline getDarkforceMacro(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		timeline.add(new MacroMouseAction(basePoint.x + 87, basePoint.y + 665, MacroMouseActionType.CLICK));//적군 검색
 		timeline.add(new MacroMouseAction(basePoint.x + 109, basePoint.y + 317, MacroMouseActionType.CLICK));//적군
 		timeline.add(new MacroMouseAction(basePoint.x + 131, basePoint.y + 437, MacroMouseActionType.CLICK));//암흑 오딘
-		timeline.add(new MacroMouseAction(basePoint.x + 250, basePoint.y + 600, MacroMouseActionType.CLICK));//레벨선택
+		
+		//레벨선택은 랜덤하게 설정(98~102)
+		//timeline.add(new MacroMouseAction(basePoint.x + 250, basePoint.y + 600, MacroMouseActionType.CLICK));//레벨선택
+		int offset = (int)(Math.random() * 101) + 200;
+		timeline.add(new MacroMouseAction(basePoint.x + offset, basePoint.y + 600, MacroMouseActionType.CLICK));//레벨선택
+		
 		timeline.add(new MacroMouseAction(basePoint.x + 249, basePoint.y + 652, MacroMouseActionType.CLICK));//검색
 
-		//매크로 개수에 맞게 대기(최소 1초)
-		timeline.add(new MacroDelayAction(Math.max(5 / macroSize, 1)));
+		//매크로 개수에 맞게 대기(4~6초)
+		int delay = (int)(Math.random() * 2) + 4;
+		timeline.add(new MacroDelayAction(delay + Math.random()));
 		
 		timeline.add(new MacroMouseAction(basePoint.x + 246, basePoint.y + 353, MacroMouseActionType.CLICK));//유닛선택
 		
@@ -65,10 +71,12 @@ public class MacroTimelineFactory {
 		
 		//대기 - 매크로 개수별로 다르게...
 		if(status.getDarkforceAttackCount() == 1) {
-			timeline.add(new MacroDelayAction(Math.max(30 / macroSize, 5)));
+			delay = (int)(Math.random() * 2) + 29;
+			timeline.add(new MacroDelayAction(delay + Math.random()));
 		}
 		else {
-			timeline.add(new MacroDelayAction(Math.max(300 / macroSize, 30)));
+			delay = (int)(Math.random() * 10) + 295;
+			timeline.add(new MacroDelayAction(delay + Math.random()));
 		}
 		
 		return timeline;

@@ -6,12 +6,11 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -34,13 +33,15 @@ import lc.kra.system.keyboard.event.GlobalKeyEvent;
 
 public class MainFrame extends JFrame{
 	
-	private MacroStatus status = MacroStatus.load();
+	private MacroStatus status;
+	{
+		status = MacroStatus.load();
+	}
 	
 	private JLabel screenCountLabel;
 	private JLabel macroExecuteCountLabel;
 	private int macroExecuteCount = 0;
 	
-	private List<Rectangle> screenList = new ArrayList<>();
 	private MacroTimelines timelines;
 	
 //	private JList<String> list = new JList<>();
@@ -87,15 +88,28 @@ public class MainFrame extends JFrame{
 		
 //		file.addSeparator();
 		
-//		JMenuItem openMacro = new JMenuItem("매크로 열기");
-//		openMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
-//		openMacro.addActionListener(e->{});
-//		file.add(openMacro);
+		JMenuItem openMacro = new JMenuItem("매크로 열기");
+		openMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
+		openMacro.addActionListener(e->{
+			JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+			int choose = chooser.showOpenDialog(this);
+			if(choose == JFileChooser.APPROVE_OPTION) {
+				status = MacroStatus.load(chooser.getSelectedFile());
+				screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
+			}
+		});
+		file.add(openMacro);
 		
-//		JMenuItem saveMacro = new JMenuItem("매크로 저장");
-//		saveMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
-//		saveMacro.addActionListener(e->{});
-//		file.add(saveMacro);
+		JMenuItem saveMacro = new JMenuItem("매크로 저장");
+		saveMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
+		saveMacro.addActionListener(e->{
+			JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+			int choose = chooser.showSaveDialog(this);
+			if(choose == JFileChooser.APPROVE_OPTION) {
+				status.save(chooser.getSelectedFile());
+			}
+		});
+		file.add(saveMacro);
 		
 //		file.addSeparator();
 		
@@ -198,7 +212,7 @@ public class MainFrame extends JFrame{
 		JPanel darkforceStatusPanel = new JPanel(new GridLayout(1, 2));
 		darkforceStatusPanel.setBounds(10, 140, darkforcePanel.getWidth() - 20, 30);
 
-		screenCountLabel = new JLabel("현재 설정된 화면 : 0", JLabel.LEFT);
+		screenCountLabel = new JLabel("현재 설정된 화면 : "+status.getScreenList().size(), JLabel.LEFT);
 		darkforceStatusPanel.add(screenCountLabel);
 		
 		macroExecuteCountLabel = new JLabel("매크로 실행 횟수 : 0", JLabel.LEFT);
@@ -286,10 +300,6 @@ public class MainFrame extends JFrame{
 		});
 	}
 	
-	public void openDarkforceDialog() {
-		DarkForceDialog dialog = new DarkForceDialog(this);
-	}
-	
 	//상태 저장 및 프로그램 종료
 	public void exitProgram() {
 		status.save();
@@ -298,22 +308,22 @@ public class MainFrame extends JFrame{
 	
 	private void addScreenRect() {
 		Rectangle screenRect = DarkForceDialog.showDialog(MainFrame.this);
-		screenList.add(screenRect);
-		screenCountLabel.setText("현재 설정된 화면 : " + screenList.size());
+		status.getScreenList().add(screenRect);
+		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
 	}
 	private void removeScreenRect() {
-		if(screenList.isEmpty()) return;
-		screenList.remove(screenList.size()-1);
-		screenCountLabel.setText("현재 설정된 화면 : " + screenList.size());
+		if(status.getScreenList().isEmpty()) return;
+		status.getScreenList().remove(status.getScreenList().size()-1);
+		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
 	}
 	
 	private void playDarkforceMacro() {
-		if(screenList.isEmpty()) return;
+		if(status.getScreenList().isEmpty()) return;
 		if(timelines != null && timelines.playing()) return;
 		
 		timelines = new MacroTimelines(macroTimelinesListener);
-		for(Rectangle screenRect : screenList) {
-			MacroTimeline timeline = MacroTimelineFactory.getDarkforceMacro(status, screenRect.getLocation(), screenList.size());
+		for(Rectangle screenRect : status.getScreenList()) {
+			MacroTimeline timeline = MacroTimelineFactory.getDarkforceMacro(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		
