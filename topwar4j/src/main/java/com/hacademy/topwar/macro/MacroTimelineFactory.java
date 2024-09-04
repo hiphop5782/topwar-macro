@@ -35,8 +35,9 @@ public class MacroTimelineFactory {
 		}
 		
 		//물약 사용(option)
+		System.out.println("potion = " + status.isPotion());
 		if(status.isPotion()) {
-			timeline.add(new MacroMouseAction(basePoint.x + 104, basePoint.y + 19, MacroMouseActionType.CLICK));//체력충전 창열기
+//			timeline.add(new MacroMouseAction(basePoint.x + 104, basePoint.y + 19, MacroMouseActionType.CLICK));//체력충전 창열기
 			timeline.add(new MacroMouseAction(basePoint.x + 155, basePoint.y + 378, MacroMouseActionType.CLICK));//물약선택
 			timeline.add(new MacroMouseAction(basePoint.x + 257, basePoint.y + 486, MacroMouseActionType.CLICK));//물약사용
 			timeline.add(new MacroMouseAction(basePoint.x + 412, basePoint.y + 219, MacroMouseActionType.CLICK));//체력충전 창닫기
