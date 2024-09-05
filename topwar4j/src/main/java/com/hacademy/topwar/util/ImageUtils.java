@@ -1,33 +1,7 @@
-//package com.hacademy.topwar.util;
-//
-//import static org.bytedeco.opencv.global.opencv_core.CV_32FC1;
-//import static org.bytedeco.opencv.global.opencv_core.CV_8UC1;
-//import static org.bytedeco.opencv.global.opencv_imgproc.COLOR_BGR2GRAY;
-//import static org.bytedeco.opencv.global.opencv_imgproc.TM_CCOEFF_NORMED;
-//import static org.bytedeco.opencv.global.opencv_imgproc.cvtColor;
-//import static org.bytedeco.opencv.global.opencv_imgproc.matchTemplate;
-//
-//import java.io.File;
-//import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Map;
-//import java.util.concurrent.ThreadLocalRandom;
-//
-//import org.bytedeco.javacpp.DoublePointer;
-//import org.bytedeco.javacpp.indexer.FloatIndexer;
-//import org.bytedeco.opencv.global.opencv_core;
-//import org.bytedeco.opencv.global.opencv_highgui;
-//import org.bytedeco.opencv.global.opencv_imgcodecs;
-//import org.bytedeco.opencv.global.opencv_imgproc;
-//import org.bytedeco.opencv.opencv_core.Mat;
-//import org.bytedeco.opencv.opencv_core.Point;
-//import org.bytedeco.opencv.opencv_core.Rect;
-//import org.bytedeco.opencv.opencv_core.Scalar;
-//import org.bytedeco.opencv.opencv_core.Size;
-//
-//public class ImageUtils {
+package com.hacademy.topwar.util;
+
+
+public class ImageUtils {
 //	
 //	public static final float THRESHOLD = 0.9f;
 //	
@@ -149,4 +123,4 @@
 //		opencv_imgproc.resize(origin, dest, dest.size(), 0, 0, opencv_imgproc.INTER_CUBIC);
 //		return dest;
 //	}
-//}
+}
