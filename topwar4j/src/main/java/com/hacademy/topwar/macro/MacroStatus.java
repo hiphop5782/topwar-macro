@@ -18,9 +18,12 @@ import lombok.Data;
 public class MacroStatus implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private int darkforceAttackCount = 5;
-	private int darkforceMarchCount = 1;
-	private boolean potion = false;
+	private int darkforceAttackCount = 1;
+	private int darkforceMarchNumber = 1;
+	private boolean potion = true;
+	
+	private int terror4kLevel = 5;
+	private boolean terror4kManual = false;
 	
 	private List<Rectangle> screenList = new ArrayList<>();
 	
@@ -33,9 +36,11 @@ public class MacroStatus implements Serializable{
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(target));
 			MacroStatus status = (MacroStatus) in.readObject();
-			if(status.screenList == null) {
+			if(status.screenList == null) 
 				status.screenList = new ArrayList<>();
-			}
+			status.darkforceAttackCount = Math.max(status.darkforceAttackCount, 1);
+			status.darkforceMarchNumber = Math.max(status.darkforceMarchNumber, 1);
+			status.terror4kLevel = Math.max(status.terror4kLevel, 1);
 			in.close();
 			return status;
 		}

@@ -17,6 +17,42 @@ public class MacroTimelines {
 	public void add(MacroTimeline timeline) {
 		list.add(timeline);
 	}
+	public void playOnce() {
+		play(1);
+	}
+	public void play(int count) {
+		if(isPlaying) return;
+		isPlaying = true;
+		
+		if(listener != null) listener.start(this);
+		
+		thread = new Thread(()->{
+			int size = list.get(0).size();
+			
+			int acc = 0;
+			
+			try {
+				while(isPlaying) {
+					if(listener != null) listener.cycleStart(this);
+					for(int i=0; i < size; i++) {
+						for(MacroTimeline timeline : list) {
+							timeline.play(i);
+							pause();
+						}
+					}
+					if(listener != null) listener.cycleFinish(this);
+					if(++acc == count) break;
+				}
+			}
+			catch(Exception e) {}
+			
+			if(listener != null) listener.finish(this);
+			isPlaying = false;
+		});
+		thread.setDaemon(true);
+		thread.setPriority(Thread.MAX_PRIORITY);
+		thread.start();
+	}
 	public void play() {
 		if(isPlaying) return;
 		isPlaying = true;

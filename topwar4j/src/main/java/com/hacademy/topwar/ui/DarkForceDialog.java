@@ -78,9 +78,11 @@ public class DarkForceDialog extends JDialog {
 	public DarkForceDialog(Window parent) {
 		super(parent);
 		this.setAlwaysOnTop(true);
-		this.setLocation(0, 0);
 		this.setModal(true);
 		this.setSize(500, 700);
+		int x = parent.getX() - (parent.getWidth() - this.getWidth()) / 2;
+		int y = parent.getY() - (parent.getHeight() - this.getHeight()) / 2;
+		this.setLocation(x, y);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0, 0, 0, 0.5f));

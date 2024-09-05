@@ -12,6 +12,9 @@ public class MacroMouseAction implements MacroAction {
 	public MacroMouseAction(Point point, MacroMouseActionType type) {
 		this(point.x, point.y, type);
 	}
+	public MacroMouseAction(int x, int y) {
+		this(x, y, MacroMouseActionType.CLICK);
+	}
 	public MacroMouseAction(int x, int y, MacroMouseActionType type) {
 		this.x = x;
 		this.y = y;
