@@ -420,11 +420,13 @@ public class MainFrame extends JFrame{
 		Rectangle screenRect = DarkForceDialog.showDialog(MainFrame.this);
 		status.getScreenList().add(screenRect);
 		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
+		setPlayingState(false);
 	}
 	private void removeScreenRect() {
 		if(status.getScreenList().isEmpty()) return;
 		status.getScreenList().remove(status.getScreenList().size()-1);
 		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
+		setPlayingState(false);
 	}
 	
 	private void playDarkforceMacroOnce() {
@@ -502,16 +504,27 @@ public class MainFrame extends JFrame{
 			
 		}
 	};
-	
 	private void setPlayingState(boolean isPlay) {
-		areaButton.setEnabled(isPlay == false);
-		areaRemoveButton.setEnabled(isPlay == false);
-		darkforceOnceButton.setEnabled(isPlay == false);
-		darkforceLoopButton.setEnabled(isPlay == false);
-		darkforceStopButton.setEnabled(isPlay == true);
-		terror4kOnceButton.setEnabled(isPlay == false);
-		terror4kLoopButton.setEnabled(isPlay == false);
-		terror4kStopButton.setEnabled(isPlay == true);
+		if(status.getScreenList().isEmpty()) {
+			areaButton.setEnabled(true);
+			areaRemoveButton.setEnabled(false);
+			darkforceOnceButton.setEnabled(false);
+			darkforceLoopButton.setEnabled(false);
+			darkforceStopButton.setEnabled(false);
+			terror4kOnceButton.setEnabled(false);
+			terror4kLoopButton.setEnabled(false);
+			terror4kStopButton.setEnabled(false);
+		}
+		else {
+			areaButton.setEnabled(isPlay == false);
+			areaRemoveButton.setEnabled(isPlay == false);
+			darkforceOnceButton.setEnabled(isPlay == false);
+			darkforceLoopButton.setEnabled(isPlay == false);
+			darkforceStopButton.setEnabled(isPlay == true);
+			terror4kOnceButton.setEnabled(isPlay == false);
+			terror4kLoopButton.setEnabled(isPlay == false);
+			terror4kStopButton.setEnabled(isPlay == true);
+		}
 	}
 	
 }
