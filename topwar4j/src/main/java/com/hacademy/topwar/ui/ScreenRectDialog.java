@@ -20,7 +20,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-public class DarkForceDialog extends JDialog {
+public class ScreenRectDialog extends JDialog {
 	
 	private BufferedImage background;
 	
@@ -75,7 +75,7 @@ public class DarkForceDialog extends JDialog {
 		}
 	};
 	
-	public DarkForceDialog(Window parent) {
+	public ScreenRectDialog(Window parent) {
 		super(parent);
 		this.setAlwaysOnTop(true);
 		this.setModal(true);
@@ -186,7 +186,7 @@ public class DarkForceDialog extends JDialog {
     }
     
     public static Rectangle showDialog(Window parent) {
-    	DarkForceDialog dialog = new DarkForceDialog(parent);
+    	ScreenRectDialog dialog = new ScreenRectDialog(parent);
     	return dialog.getBounds();
     }
 }

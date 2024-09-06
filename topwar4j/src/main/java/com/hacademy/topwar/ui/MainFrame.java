@@ -417,7 +417,7 @@ public class MainFrame extends JFrame{
 	}
 	
 	private void addScreenRect() {
-		Rectangle screenRect = DarkForceDialog.showDialog(MainFrame.this);
+		Rectangle screenRect = ScreenRectDialog.showDialog(MainFrame.this);
 		status.getScreenList().add(screenRect);
 		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
 		setPlayingState(false);
