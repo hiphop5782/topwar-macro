@@ -187,9 +187,10 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 1, 2));
 		
 		for(int i=0; i < 2; i++) {
-			//3회 눌러야 다시 원래화면으로 옴
+			//3회 누르거나 딜레이를 줘야 다시 원래화면으로 옴
 			timeline.add(모집1회(status, basePoint));
-			timeline.add(모집1회(status, basePoint));
+			//timeline.add(모집1회(status, basePoint));//다중화면에서 부적합
+			timeline.add(randomDelay(status, 5, 6));//다중화면에서 적합
 			timeline.add(모집1회(status, basePoint));
 		}
 		
@@ -253,6 +254,7 @@ public class MacroTimelineFactory {
 		
 		timeline.add(원정탐험빠른전투클릭(status, basePoint));
 		timeline.add(원정탐험빠른전투시작(status, basePoint));
+		timeline.add(randomDelay(status, 3, 5));
 		timeline.add(원정탐험빠른전투스킵(status, basePoint));
 		timeline.add(randomDelay(status, 3, 5));
 		timeline.add(원정탐험보상수령(status, basePoint));
