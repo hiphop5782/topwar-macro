@@ -2,6 +2,7 @@ package com.hacademy.topwar.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
@@ -48,20 +49,23 @@ public class MainFrame extends JFrame{
 	
 //	private JList<String> list = new JList<>();
 	
+	private JButton macroStopButton = new JButton("실행중인 매크로 중지(ESC)");
+	
 	private JButton areaButton = new JButton("영역설정(F2)");
 	private JButton areaRemoveButton = new JButton("영역삭제(F3)");
 	private JButton darkforceOnceButton = new JButton("1회");
 	private JButton darkforceLoopButton = new JButton("반복");
-	private JButton darkforceStopButton = new JButton("종료(ESC)");
 	
 	private JButton terror4kOnceButton = new JButton("1회");
 	private JButton terror4kLoopButton = new JButton("10회");
-	private JButton terror4kStopButton = new JButton("종료(ESC)");
+	
+	private JButton taskRunButton = new JButton("작업 시작");
 	
 	public MainFrame() throws Exception {
-		this.setSize(600, 600);
-		this.setAlwaysOnTop(true);
+		this.setSize(500, 750);
+		this.setAlwaysOnTop(false);
 		this.setLocationByPlatform(true);
+		this.setResizable(false);
 		this.setTitle("TW-Macro");
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
@@ -205,9 +209,17 @@ public class MainFrame extends JFrame{
 		
 		contentPanel.add(statusPanel);
 		
+		macroStopButton.setBounds(5, 95, getWidth() - 25, 40);
+		macroStopButton.setBackground(new Color(214, 48, 49));
+		macroStopButton.setForeground(Color.white);
+		macroStopButton.setFont(buttonFont);
+		macroStopButton.addActionListener(e->{ stopMacro(); }); 
+		
+		contentPanel.add(macroStopButton);
+		
 		//부대번호
 		JPanel darkforceMarchPanel = new JPanel(new GridLayout(1, 8));
-		darkforceMarchPanel.setBounds(5, 95, getWidth()-25, 50);
+		darkforceMarchPanel.setBounds(5, macroStopButton.getY() + macroStopButton.getHeight()+5, getWidth()-25, 50);
 		darkforceMarchPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "부대번호 설정"));
 		
 		ButtonGroup darkforceMarchGroup = new ButtonGroup();
@@ -225,7 +237,7 @@ public class MainFrame extends JFrame{
 		
 		//물약사용 체크박스
 		JPanel useVitPanel = new JPanel(new BorderLayout());
-		useVitPanel.setBounds(5, 145, getWidth() - 25, 30);
+		useVitPanel.setBounds(5, darkforceMarchPanel.getY()+darkforceMarchPanel.getHeight()+5, getWidth() - 25, 30);
 		
 		JCheckBox useVit = new JCheckBox("물약 사용", status.isPotion());
 		useVit.addActionListener(e->{
@@ -238,7 +250,7 @@ public class MainFrame extends JFrame{
 		//암흑사냥
 		JPanel darkforcePanel = new JPanel(null);
 		darkforcePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "암흑(DarkForce)"));
-		darkforcePanel.setBounds(5, 180, getWidth()-25, 140);
+		darkforcePanel.setBounds(5, useVitPanel.getY()+useVitPanel.getHeight()+5, getWidth()-25, 140);
 		
 		int x = 10;
 		int y = 20;
@@ -263,7 +275,7 @@ public class MainFrame extends JFrame{
 		y += darkforceCountPanel.getHeight() + offset;
 		
 		//[암흑사냥] 실행버튼
-		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 3));
+		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 2));
 		darkforceButtonPanel.setBounds(x, y, darkforcePanel.getWidth()-20, 45);
 		
 		darkforceOnceButton.setBackground(new Color(46, 204, 113));
@@ -281,14 +293,6 @@ public class MainFrame extends JFrame{
 			playDarkforceMacroLoop();
 		});
 		darkforceButtonPanel.add(darkforceLoopButton);
-		
-		darkforceStopButton.setBackground(new Color(214, 48, 49));
-		darkforceStopButton.setForeground(Color.white);
-		darkforceStopButton.setFont(buttonFont);
-		darkforceStopButton.addActionListener(e->{
-			stopMacro();
-		});
-		darkforceButtonPanel.add(darkforceStopButton);
 		
 		setPlayingState(false);
 		
@@ -347,7 +351,7 @@ public class MainFrame extends JFrame{
 		y += terror4kAttackTypePanel.getHeight() + 10;
 		
 		//테러 공격/중지 버튼
-		JPanel terror4kButtonPanel = new JPanel(new GridLayout(1, 3));
+		JPanel terror4kButtonPanel = new JPanel(new GridLayout(1, 2));
 		terror4kButtonPanel.setBounds(x, y, terror4kPanel.getWidth()-20, 40);
 		
 		terror4kOnceButton.setBackground(new Color(46, 204, 113));
@@ -364,19 +368,59 @@ public class MainFrame extends JFrame{
 			playTerror4kMacroLoop();
 		});
 		
-		terror4kStopButton.setBackground(new Color(214, 48, 49));
-		terror4kStopButton.setForeground(Color.white);
-		terror4kStopButton.setFont(buttonFont);
-		terror4kStopButton.addActionListener(e->{
-			stopMacro();
-		});
-		
 		terror4kButtonPanel.add(terror4kOnceButton);
 		terror4kButtonPanel.add(terror4kLoopButton);
-		terror4kButtonPanel.add(terror4kStopButton);
 		terror4kPanel.add(terror4kButtonPanel);
 		
 		contentPanel.add(terror4kPanel);
+		
+		JPanel dailyPanel = new JPanel(null);
+		dailyPanel.setBounds(terror4kPanel.getX(), terror4kPanel.getY() + terror4kPanel.getHeight() + 10, terror4kPanel.getWidth(), 120);
+		dailyPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "매일 하루에 한번씩"));
+		
+		JPanel dailyTaskPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		dailyTaskPanel.setBounds(5, 15, dailyPanel.getWidth() - 10, 50);
+		JCheckBox chk1 = new JCheckBox("VIP보상", status.isDailyVipReward());
+		chk1.addActionListener(e->status.setDailyVipReward(chk1.isSelected()));
+		JCheckBox chk2 = new JCheckBox("장바구니", status.isDailyBasketReward());
+		chk2.addActionListener(e->status.setDailyBasketReward(chk2.isSelected()));
+		JCheckBox chk3 = new JCheckBox("특별패키지", status.isDailySpecialReward());
+		chk3.addActionListener(e->status.setDailySpecialReward(chk3.isSelected()));
+		JCheckBox chk4 = new JCheckBox("무료다이아", status.isDailyGemReward());
+		chk4.addActionListener(e->status.setDailyGemReward(chk4.isSelected()));
+		JCheckBox chk5 = new JCheckBox("미지의작전", status.isDailyHeavyTrooperReward());
+		chk5.addActionListener(e->status.setDailyHeavyTrooperReward(chk5.isSelected()));
+		JCheckBox chk6 = new JCheckBox("사판훈련", status.isDailySandTraning());
+		chk6.addActionListener(e->status.setDailySandTraning(chk6.isSelected()));
+		JCheckBox chk7 = new JCheckBox("원정탐험", status.isDailyExpeditionBase());
+		chk7.addActionListener(e->status.setDailyExpeditionBase(chk7.isSelected()));
+		JCheckBox chk8 = new JCheckBox("섬 대작전", status.isDailyIslandBattle());
+		chk8.addActionListener(e->status.setDailyIslandBattle(chk8.isSelected()));
+		JCheckBox chk9 = new JCheckBox("고급모집2회", status.isDailyAdvancedIncruit());
+		chk9.addActionListener(e->status.setDailyAdvancedIncruit(chk9.isSelected()));
+		
+		dailyTaskPanel.add(chk1);
+		dailyTaskPanel.add(chk2);
+		dailyTaskPanel.add(chk3);
+		dailyTaskPanel.add(chk4);
+		dailyTaskPanel.add(chk5);
+		dailyTaskPanel.add(chk6);
+		dailyTaskPanel.add(chk7);
+		dailyTaskPanel.add(chk8);
+		dailyTaskPanel.add(chk9);
+		
+		dailyPanel.add(dailyTaskPanel);
+		
+		taskRunButton.setBounds(5, 70, dailyPanel.getWidth()-10, 40);
+		taskRunButton.setBackground(new Color(46, 204, 113));
+		taskRunButton.setForeground(Color.white);
+		taskRunButton.setFont(buttonFont);
+		taskRunButton.addActionListener(e->{
+			playTaskMacro();
+		});
+		dailyPanel.add(taskRunButton);
+		
+		contentPanel.add(dailyPanel);
 	}
 	
 	public void events() throws Exception {
@@ -435,7 +479,7 @@ public class MainFrame extends JFrame{
 		
 		timelines = new MacroTimelines(macroTimelinesListener);
 		for(Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.getDarkforceOnceMacro(status, screenRect.getLocation());
+			MacroTimeline timeline = MacroTimelineFactory.암흑매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		
@@ -447,7 +491,7 @@ public class MainFrame extends JFrame{
 		
 		timelines = new MacroTimelines(macroTimelinesListener);
 		for(Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.getDarkforceLoopMacro(status, screenRect.getLocation());
+			MacroTimeline timeline = MacroTimelineFactory.암흑반복매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		
@@ -459,7 +503,7 @@ public class MainFrame extends JFrame{
 		
 		timelines = new MacroTimelines(macroTimelinesListener);
 		for(Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.getTerror4kOnceMacro(status, screenRect.getLocation());
+			MacroTimeline timeline = MacroTimelineFactory.테러매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		
@@ -471,7 +515,7 @@ public class MainFrame extends JFrame{
 		
 		timelines = new MacroTimelines(macroTimelinesListener);
 		for(Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.getTerror4kLoopMacro(status, screenRect.getLocation());
+			MacroTimeline timeline = MacroTimelineFactory.테러반복매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		
@@ -480,7 +524,26 @@ public class MainFrame extends JFrame{
 	private void stopMacro() {
 		if(timelines != null) {
 			timelines.stop();
+			timelines = null;
 		}
+	}
+	private void playTaskMacro() {
+		if(status.getScreenList().isEmpty()) return;
+		if(timelines != null && timelines.playing()) return;
+		
+		timelines = new MacroTimelines(macroTimelinesListener);
+		for(Rectangle screenRect : status.getScreenList()) {
+//			MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
+//			MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
+//			MacroTimeline timeline = MacroTimelineFactory.고급모집2회매크로(status, screenRect.getLocation());
+//			MacroTimeline timeline = MacroTimelineFactory.미지의작전매크로(status, screenRect.getLocation());
+//			MacroTimeline timeline = MacroTimelineFactory.원정탐험매크로(status, screenRect.getLocation());
+//			MacroTimeline timeline = MacroTimelineFactory.섬대작전매크로(status, screenRect.getLocation());
+			MacroTimeline timeline = MacroTimelineFactory.일일매크로(status, screenRect.getLocation());
+			timelines.add(timeline);
+		}
+		
+		timelines.playOnce();
 	}
 	
 	private MacroTimelinesListener macroTimelinesListener = new MacroTimelinesListener() {
@@ -510,20 +573,20 @@ public class MainFrame extends JFrame{
 			areaRemoveButton.setEnabled(false);
 			darkforceOnceButton.setEnabled(false);
 			darkforceLoopButton.setEnabled(false);
-			darkforceStopButton.setEnabled(false);
 			terror4kOnceButton.setEnabled(false);
 			terror4kLoopButton.setEnabled(false);
-			terror4kStopButton.setEnabled(false);
+			macroStopButton.setEnabled(false);
+			taskRunButton.setEnabled(false);
 		}
 		else {
 			areaButton.setEnabled(isPlay == false);
 			areaRemoveButton.setEnabled(isPlay == false);
 			darkforceOnceButton.setEnabled(isPlay == false);
 			darkforceLoopButton.setEnabled(isPlay == false);
-			darkforceStopButton.setEnabled(isPlay == true);
+			macroStopButton.setEnabled(isPlay == true);
 			terror4kOnceButton.setEnabled(isPlay == false);
 			terror4kLoopButton.setEnabled(isPlay == false);
-			terror4kStopButton.setEnabled(isPlay == true);
+			taskRunButton.setEnabled(isPlay == false);
 		}
 	}
 	

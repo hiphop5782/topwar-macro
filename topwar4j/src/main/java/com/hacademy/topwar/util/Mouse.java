@@ -77,7 +77,7 @@ public class Mouse {
 		return this;
 	}
 	public Mouse clickL(int x, int y) {
-		//System.out.println("Left Click ("+x+", "+y+")");
+//		System.out.println("Left Click ("+x+", "+y+")");
 		return move(x, y).hold().clickL();
 	}
 	public Mouse clickR() {
@@ -88,6 +88,18 @@ public class Mouse {
 	}
 	public Mouse clickR(int x, int y) {
 		return move(x,y).hold().clickR();
+	}
+	public Mouse wheelUp(int offset) {
+		moveWheel(-offset);
+		return this;
+	}
+	public Mouse wheelDown(int offset) {
+		moveWheel(offset);
+		return this;
+	}
+	private Mouse moveWheel(int offset) {
+		robot.mouseWheel(offset);
+		return this;
 	}
 	
 //	private Mat capture() throws IOException {

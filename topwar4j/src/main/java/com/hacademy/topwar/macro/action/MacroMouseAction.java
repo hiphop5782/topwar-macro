@@ -6,7 +6,7 @@ import com.hacademy.topwar.util.Mouse;
 
 public class MacroMouseAction implements MacroAction {
 
-	private int x, y;
+	private int x, y, wheel;
 	private MacroMouseActionType type;
 	
 	public MacroMouseAction(Point point, MacroMouseActionType type) {
@@ -14,6 +14,13 @@ public class MacroMouseAction implements MacroAction {
 	}
 	public MacroMouseAction(int x, int y) {
 		this(x, y, MacroMouseActionType.CLICK);
+	}
+	public MacroMouseAction(Point basePoint, int x, int y) {
+		this(basePoint.x + x, basePoint.y + y, MacroMouseActionType.CLICK);
+	}
+	public MacroMouseAction(Point basePoint, int x, int y, MacroMouseActionType type, int wheel) {
+		this(basePoint.x + x, basePoint.y + y, type);
+		this.wheel = wheel;
 	}
 	public MacroMouseAction(int x, int y, MacroMouseActionType type) {
 		this.x = x;
@@ -29,6 +36,12 @@ public class MacroMouseAction implements MacroAction {
 		else if(type == MacroMouseActionType.MOVE) {
 			Mouse.create().move(x, y);
 		}
+		else if(type == MacroMouseActionType.WHEELUP) {
+			Mouse.create().move(x, y).wheelUp(wheel);
+		}
+		else if(type == MacroMouseActionType.WHEELDOWN) {
+			Mouse.create().move(x, y).wheelDown(wheel);
+		}
 	}
 	
 	@Override
@@ -38,6 +51,9 @@ public class MacroMouseAction implements MacroAction {
 		}
 		else if(type == MacroMouseActionType.MOVE) {
 			return "마우스 이동 ("+x+", "+y+")";
+		}
+		else if(type == MacroMouseActionType.WHEELUP) {
+			return "마우스 휠 올리기 ("+x+", "+y+") - "+wheel;
 		}
 		return super.toString();
 	}

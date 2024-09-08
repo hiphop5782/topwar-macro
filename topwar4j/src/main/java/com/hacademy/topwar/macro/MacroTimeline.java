@@ -39,6 +39,12 @@ public class MacroTimeline {
 			listener.add(this);
 		}
 	}
+	public void add(MacroTimeline timeline) {
+		actionList.addAll(timeline.actionList);
+		if(listener != null) {
+			listener.add(this);
+		}
+	}
 	public void add(List<MacroAction> actions) {
 		actionList.addAll(actions);
 		if(listener != null) {

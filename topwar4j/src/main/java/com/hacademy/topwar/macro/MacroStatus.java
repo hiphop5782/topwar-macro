@@ -27,6 +27,16 @@ public class MacroStatus implements Serializable{
 	
 	private List<Rectangle> screenList = new ArrayList<>();
 	
+	private boolean dailyVipReward = true;
+	private boolean dailyBasketReward = true;
+	private boolean dailySpecialReward = true;
+	private boolean dailyGemReward = true;
+	private boolean dailyHeavyTrooperReward = true;
+	private boolean dailySandTraning = true;
+	private boolean dailyExpeditionBase = true;
+	private boolean dailyIslandBattle = true;
+	private boolean dailyAdvancedIncruit = false;
+	
 	public static MacroStatus load() {
 		File dir = new File(System.getProperty("user.home"), "tw-macro");
 		File target = new File(dir, "status");
