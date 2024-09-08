@@ -80,8 +80,16 @@ public class ScreenRectDialog extends JDialog {
 		this.setAlwaysOnTop(true);
 		this.setModal(true);
 		this.setSize(500, 700);
-		int x = parent.getX() - (parent.getWidth() - this.getWidth()) / 2;
-		int y = parent.getY() - (parent.getHeight() - this.getHeight()) / 2;
+		int x = parent.getX();
+		if(parent.getWidth() > this.getWidth()) 
+			x += (parent.getWidth() - this.getWidth()) / 2;
+		else if(parent.getWidth() < this.getWidth())
+			x -= (parent.getWidth() - this.getWidth()) / 2;
+		int y = parent.getY();
+		if(parent.getHeight() > this.getHeight())
+			y += ((parent.getHeight() - this.getHeight()) / 2);
+		else if(parent.getHeight() < this.getHeight())
+			y -= ((parent.getHeight() - this.getHeight()) / 2);
 		this.setLocation(x, y);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
