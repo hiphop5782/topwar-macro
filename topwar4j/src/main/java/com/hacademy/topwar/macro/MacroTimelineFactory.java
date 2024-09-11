@@ -259,6 +259,9 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 3, 5));
 		timeline.add(원정탐험보상수령(status, basePoint));
 		
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
 		return timeline;
 	}
 	public static MacroTimeline 섬대작전매크로(MacroStatus status, Point basePoint) {
