@@ -215,6 +215,7 @@ public class MacroTimelineFactory {
 		
 		timeline.add(VIP버튼선택(status, basePoint));
 		timeline.add(VIP상점버튼클릭(status, basePoint));
+		timeline.add(처음탭으로이동(status, basePoint));
 		timeline.add(장바구니탭선택(status, basePoint));
 		timeline.add(장바구니빠른교환클릭(status, basePoint));
 		timeline.add(장바구니확인버튼(status, basePoint));
@@ -457,8 +458,11 @@ public class MacroTimelineFactory {
 	private static MacroAction VIP상점버튼클릭(MacroStatus stauts, Point basePoint) {
 		return new MacroMouseAction(basePoint, 140, 180);
 	}
+	private static MacroAction 처음탭으로이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 225, 75, MacroMouseActionType.WHEELDOWN, 20);
+	}
 	private static MacroAction 장바구니탭선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 165, 75);
+		return new MacroMouseAction(basePoint, 225, 75);
 	}
 	private static MacroAction 장바구니빠른교환클릭(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 387, 662);
