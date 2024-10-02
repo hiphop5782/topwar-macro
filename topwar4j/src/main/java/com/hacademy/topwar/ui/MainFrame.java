@@ -40,7 +40,7 @@ public class MainFrame extends JFrame{
 	{
 		status = MacroStatus.load();
 	}
-	
+
 	private JLabel screenCountLabel;
 	private JLabel macroExecuteCountLabel;
 	private int macroExecuteCount = 0;
@@ -57,6 +57,10 @@ public class MainFrame extends JFrame{
 	private JButton darkforceTenButton = new JButton("10회");
 	private JButton darkforceLoopButton = new JButton("무한");
 	
+	private JButton warhammerOnceButton = new JButton("1회");
+	private JButton warhammerTenButton = new JButton("10회");
+	private JButton warhammerLoopButton = new JButton("무한");
+	
 	private JButton terror4kOnceButton = new JButton("1회");
 	private JButton terror4kFiveButton = new JButton("5회");
 	private JButton terror4kLoopButton = new JButton("10회");
@@ -64,7 +68,7 @@ public class MainFrame extends JFrame{
 	private JButton taskRunButton = new JButton("작업 시작");
 	
 	public MainFrame() throws Exception {
-		this.setSize(500, 750);
+		this.setSize(500, 800);
 		this.setAlwaysOnTop(false);
 		this.setLocationByPlatform(true);
 		this.setResizable(false);
@@ -252,7 +256,7 @@ public class MainFrame extends JFrame{
 		//암흑사냥
 		JPanel darkforcePanel = new JPanel(null);
 		darkforcePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "암흑(DarkForce)"));
-		darkforcePanel.setBounds(5, useVitPanel.getY()+useVitPanel.getHeight()+5, getWidth()-25, 140);
+		darkforcePanel.setBounds(5, useVitPanel.getY()+useVitPanel.getHeight()+5, getWidth()-25, 90);
 		
 		int x = 10;
 		int y = 20;
@@ -261,7 +265,7 @@ public class MainFrame extends JFrame{
 		//[암흑사냥] 횟수
 		JPanel darkforceCountPanel = new JPanel(new GridLayout(1, 8));
 		darkforceCountPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "공격유형"));
-		darkforceCountPanel.setBounds(x, y, darkforcePanel.getWidth()-20, 50);
+		darkforceCountPanel.setBounds(x, y, darkforcePanel.getWidth() / 2-10 , 50);
 		darkforcePanel.add(darkforceCountPanel);
 		
 		JRadioButton darkforceCount1 = new JRadioButton("1회", status.getDarkforceAttackCount() == 1);
@@ -274,11 +278,9 @@ public class MainFrame extends JFrame{
 		darkforceCountGroup.add(darkforceCount1);
 		darkforceCountGroup.add(darkforceCount2);
 		
-		y += darkforceCountPanel.getHeight() + offset;
-		
 		//[암흑사냥] 실행버튼
-		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 2));
-		darkforceButtonPanel.setBounds(x, y, darkforcePanel.getWidth()-20, 45);
+		JPanel darkforceButtonPanel = new JPanel(new GridLayout(1, 3));
+		darkforceButtonPanel.setBounds(x+darkforcePanel.getWidth()/2, y+5, darkforcePanel.getWidth()/2-20, 45);
 		
 		darkforceOnceButton.setBackground(new Color(46, 204, 113));
 		darkforceOnceButton.setForeground(Color.white);
@@ -304,16 +306,51 @@ public class MainFrame extends JFrame{
 		});
 		darkforceButtonPanel.add(darkforceLoopButton);
 		
-		setPlayingState(false);
-		
 		darkforcePanel.add(darkforceButtonPanel);
 		
 		//[암흑사냥] 최종추가
 		contentPanel.add(darkforcePanel);
+		
+		//[워해머4k]
+		JPanel warhammer4kPanel = new JPanel(null);
+		warhammer4kPanel.setBounds(darkforcePanel.getX(), darkforcePanel.getY() + darkforcePanel.getHeight() + 10, darkforcePanel.getWidth(), 90);
+		warhammer4kPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "워해머(Warhammer-4k)"));
+		
+		JPanel warhammerButtonPanel = new JPanel(new GridLayout(1, 3));
+		warhammerButtonPanel.setBounds(x+darkforcePanel.getWidth()/2, y+5, darkforcePanel.getWidth()/2-20, 45);
+		
+		warhammerOnceButton.setBackground(new Color(46, 204, 113));
+		warhammerOnceButton.setForeground(Color.white);
+		warhammerOnceButton.setFont(buttonFont);
+		warhammerOnceButton.addActionListener(e->{
+			playWarhammerMacroOnce();
+		});
+		warhammerButtonPanel.add(warhammerOnceButton);
+		
+		warhammerTenButton.setBackground(new Color(46, 204, 113));
+		warhammerTenButton.setForeground(Color.white);
+		warhammerTenButton.setFont(buttonFont);
+		warhammerTenButton.addActionListener(e->{
+			playWarhammerMacroLoop(10);
+		});
+		warhammerButtonPanel.add(warhammerTenButton);
+		
+		warhammerLoopButton.setBackground(new Color(9, 132, 227));
+		warhammerLoopButton.setForeground(Color.white);
+		warhammerLoopButton.setFont(buttonFont);
+		warhammerLoopButton.addActionListener(e->{
+			playWarhammerMacroLoop();
+		});
+		warhammerButtonPanel.add(warhammerLoopButton);
+		
+		warhammer4kPanel.add(warhammerButtonPanel);
+
+		//[워해머4k] 최종추가
+		contentPanel.add(warhammer4kPanel);
 
 		//[테러4k]
 		JPanel terror4kPanel = new JPanel(null);
-		terror4kPanel.setBounds(darkforcePanel.getX(), darkforcePanel.getY() + darkforcePanel.getHeight() + 10, darkforcePanel.getWidth(), 200);
+		terror4kPanel.setBounds(warhammer4kPanel.getX(), warhammer4kPanel.getY() + warhammer4kPanel.getHeight() + 10, warhammer4kPanel.getWidth(), 135);
 		terror4kPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "테러(Terror-4k)"));
 
 		x = 10; y = 20;
@@ -321,11 +358,11 @@ public class MainFrame extends JFrame{
 		//[테러4k] 테러레벨 선택
 		JPanel terror4kLevelPanel = new JPanel(new GridLayout(1, 5));
 		terror4kLevelPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "레벨(Level)"));
-		terror4kLevelPanel.setBounds(x, y, terror4kPanel.getWidth() - 20, 50);
+		terror4kLevelPanel.setBounds(x, y, terror4kPanel.getWidth()/2 - 20, 50);
 		
 		ButtonGroup terror4kLevelGroup = new ButtonGroup();
 		for(int i=1; i <= 5; i++) {
-			JRadioButton radio = new JRadioButton(i+"레벨", i == status.getTerror4kLevel());
+			JRadioButton radio = new JRadioButton(String.valueOf(i), i == status.getTerror4kLevel());
 			radio.addActionListener(e->{
 				status.setTerror4kLevel(Integer.parseInt(radio.getText().substring(0, 1)));
 			});
@@ -335,11 +372,9 @@ public class MainFrame extends JFrame{
 		
 		terror4kPanel.add(terror4kLevelPanel);
 		
-		y += terror4kLevelPanel.getHeight() + 10;
-		
 		//[테러4k] 집결/공격 선택
 		JPanel terror4kAttackTypePanel = new JPanel(new GridLayout(1, 2));
-		terror4kAttackTypePanel.setBounds(x, y, terror4kPanel.getWidth() - 20, 50);
+		terror4kAttackTypePanel.setBounds(x + terror4kPanel.getWidth()/2, y, terror4kPanel.getWidth() / 2 - 20, 50);
 		terror4kAttackTypePanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "공격방식(Attack Type)"));
 		ButtonGroup terror4kAttackTypeGroup = new ButtonGroup();
 		JRadioButton terror4kAttackRally = new JRadioButton("집결", status.isTerror4kManual() == false);
@@ -362,7 +397,7 @@ public class MainFrame extends JFrame{
 		
 		//테러 공격/중지 버튼
 		JPanel terror4kButtonPanel = new JPanel(new GridLayout(1, 2));
-		terror4kButtonPanel.setBounds(x, y, terror4kPanel.getWidth()-20, 40);
+		terror4kButtonPanel.setBounds(x + terror4kPanel.getWidth()/2, y, terror4kPanel.getWidth() / 2 - 20, 45);
 		
 		terror4kOnceButton.setBackground(new Color(46, 204, 113));
 		terror4kOnceButton.setForeground(Color.white);
@@ -393,30 +428,37 @@ public class MainFrame extends JFrame{
 		contentPanel.add(terror4kPanel);
 		
 		JPanel dailyPanel = new JPanel(null);
-		dailyPanel.setBounds(terror4kPanel.getX(), terror4kPanel.getY() + terror4kPanel.getHeight() + 10, terror4kPanel.getWidth(), 120);
+		dailyPanel.setBounds(terror4kPanel.getX(), terror4kPanel.getY() + terror4kPanel.getHeight() + 10, terror4kPanel.getWidth(), 150);
 		dailyPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "매일 하루에 한번씩"));
 		
 		JPanel dailyTaskPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		dailyTaskPanel.setBounds(5, 15, dailyPanel.getWidth() - 10, 50);
+		dailyTaskPanel.setBounds(5, 15, dailyPanel.getWidth() - 10, 80);
 		JCheckBox chk1 = new JCheckBox("VIP보상", status.isDailyVipReward());
 		chk1.addActionListener(e->status.setDailyVipReward(chk1.isSelected()));
 		JCheckBox chk2 = new JCheckBox("장바구니", status.isDailyBasketReward());
 		chk2.addActionListener(e->status.setDailyBasketReward(chk2.isSelected()));
 		JCheckBox chk3 = new JCheckBox("특별패키지", status.isDailySpecialReward());
 		chk3.addActionListener(e->status.setDailySpecialReward(chk3.isSelected()));
-		JCheckBox chk4 = new JCheckBox("무료다이아", status.isDailyGemReward());
+		JCheckBox chk4 = new JCheckBox("무료다이아20회", status.isDailyGemReward());
 		chk4.addActionListener(e->status.setDailyGemReward(chk4.isSelected()));
-		JCheckBox chk5 = new JCheckBox("미지의작전", status.isDailyHeavyTrooperReward());
-		chk5.addActionListener(e->status.setDailyHeavyTrooperReward(chk5.isSelected()));
+		JCheckBox chk5 = new JCheckBox("일일업무", status.isDailyQuestReward());
+		chk5.addActionListener(e->status.setDailyQuestReward(chk5.isSelected()));
 		JCheckBox chk6 = new JCheckBox("사판훈련", status.isDailySandTraning());
 		chk6.addActionListener(e->status.setDailySandTraning(chk6.isSelected()));
-		JCheckBox chk7 = new JCheckBox("원정탐험", status.isDailyExpeditionBase());
-		chk7.addActionListener(e->status.setDailyExpeditionBase(chk7.isSelected()));
-		JCheckBox chk8 = new JCheckBox("섬 대작전", status.isDailyIslandBattle());
-		chk8.addActionListener(e->status.setDailyIslandBattle(chk8.isSelected()));
+		JCheckBox chk7 = new JCheckBox("일반&스킬모집", status.isDailyNormalIncrutAndSkill());
+		chk7.addActionListener(e->status.setDailyNormalIncrutAndSkill(chk7.isSelected()));
+		JCheckBox chk8 = new JCheckBox("크로스패배10회", status.isDailyCrossBattle());
+		chk8.addActionListener(e->status.setDailyCrossBattle(chk8.isSelected()));
 		JCheckBox chk9 = new JCheckBox("고급모집2회", status.isDailyAdvancedIncruit());
 		chk9.addActionListener(e->status.setDailyAdvancedIncruit(chk9.isSelected()));
-		
+		JCheckBox chk10 = new JCheckBox("무료장식토큰", status.isWeeklyDecorFreeToken());
+		chk10.addActionListener(e->status.setWeeklyDecorFreeToken(chk10.isSelected()));
+		JCheckBox chk11 = new JCheckBox("석유시설", status.isOilFacility());
+		chk11.addActionListener(e->status.setOilFacility(chk11.isSelected()));
+		JCheckBox chk12 = new JCheckBox("식량시설", status.isFoodFacility());
+		chk12.addActionListener(e->status.setFoodFacility(chk12.isSelected()));
+		JCheckBox chk13 = new JCheckBox("오딘시설", status.isOdinFacility());
+		chk13.addActionListener(e->status.setOdinFacility(chk13.isSelected()));
 		
 		dailyTaskPanel.add(chk1);
 		dailyTaskPanel.add(chk2);
@@ -427,10 +469,14 @@ public class MainFrame extends JFrame{
 		dailyTaskPanel.add(chk7);
 		dailyTaskPanel.add(chk8);
 		dailyTaskPanel.add(chk9);
+		dailyTaskPanel.add(chk10);
+		dailyTaskPanel.add(chk11);
+		dailyTaskPanel.add(chk12);
+		dailyTaskPanel.add(chk13);
 		
 		dailyPanel.add(dailyTaskPanel);
 		
-		taskRunButton.setBounds(5, 70, dailyPanel.getWidth()-10, 40);
+		taskRunButton.setBounds(5, 100, dailyPanel.getWidth()-10, 40);
 		taskRunButton.setBackground(new Color(46, 204, 113));
 		taskRunButton.setForeground(Color.white);
 		taskRunButton.setFont(buttonFont);
@@ -443,6 +489,8 @@ public class MainFrame extends JFrame{
 	}
 	
 	public void events() throws Exception {
+		setPlayingState(false);
+		
 		//global keyboard listener
 		GlobalKeyboardHook hook = new GlobalKeyboardHook(false);
 		hook.addKeyListener(new GlobalKeyAdapter() {
@@ -450,15 +498,18 @@ public class MainFrame extends JFrame{
 			public void keyReleased(GlobalKeyEvent event) {
 				switch(event.getVirtualKeyCode()) {
 				case GlobalKeyEvent.VK_F2:
+					if(timelines != null && timelines.playing()) return;
 					addScreenRect();
 					break;
 				case GlobalKeyEvent.VK_F3:
+					if(timelines != null && timelines.playing()) return;
 					removeScreenRect();
 					break;
 //				case GlobalKeyEvent.VK_F5:
 //					playDarkforceMacroOnce();
 //					break;
 				case GlobalKeyEvent.VK_ESCAPE:
+					if(timelines == null || !timelines.playing()) return;
 					stopMacro();
 					break;
 //				case GlobalKeyEvent.VK_F7:
@@ -529,6 +580,43 @@ public class MainFrame extends JFrame{
 		
 		timelines.play();
 	}
+	private void playWarhammerMacroOnce() {
+		if(status.getScreenList().isEmpty()) return;
+		if(timelines != null && timelines.playing()) return;
+		
+		timelines = new MacroTimelines(macroTimelinesListener);
+		for(Rectangle screenRect : status.getScreenList()) {
+			MacroTimeline timeline = MacroTimelineFactory.워해머매크로(status, screenRect.getLocation());
+			timelines.add(timeline);
+		}
+		
+		timelines.playOnce();
+	}
+	private void playWarhammerMacroLoop(int count) {
+		if(count < 1) return;
+		if(status.getScreenList().isEmpty()) return;
+		if(timelines != null && timelines.playing()) return;
+		
+		timelines = new MacroTimelines(macroTimelinesListener);
+		for(Rectangle screenRect : status.getScreenList()) {
+			MacroTimeline timeline = MacroTimelineFactory.워해머반복매크로(status, screenRect.getLocation());
+			timelines.add(timeline);
+		}
+		
+		timelines.play(count);
+	}
+	private void playWarhammerMacroLoop() {
+		if(status.getScreenList().isEmpty()) return;
+		if(timelines != null && timelines.playing()) return;
+		
+		timelines = new MacroTimelines(macroTimelinesListener);
+		for(Rectangle screenRect : status.getScreenList()) {
+			MacroTimeline timeline = MacroTimelineFactory.워해머반복매크로(status, screenRect.getLocation());
+			timelines.add(timeline);
+		}
+		
+		timelines.play();
+	}
 	private void playTerror4kMacroOnce() {
 		if(status.getScreenList().isEmpty()) return;
 		if(timelines != null && timelines.playing()) return;
@@ -572,6 +660,7 @@ public class MainFrame extends JFrame{
 //			MacroTimeline timeline = MacroTimelineFactory.미지의작전매크로(status, screenRect.getLocation());
 //			MacroTimeline timeline = MacroTimelineFactory.원정탐험매크로(status, screenRect.getLocation());
 //			MacroTimeline timeline = MacroTimelineFactory.섬대작전매크로(status, screenRect.getLocation());
+//			MacroTimeline timeline = MacroTimelineFactory.주간장식세트쿠폰매크로(status, screenRect.getLocation());
 			MacroTimeline timeline = MacroTimelineFactory.일일매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
@@ -605,8 +694,13 @@ public class MainFrame extends JFrame{
 			areaButton.setEnabled(true);
 			areaRemoveButton.setEnabled(false);
 			darkforceOnceButton.setEnabled(false);
+			darkforceTenButton.setEnabled(false);
 			darkforceLoopButton.setEnabled(false);
+			warhammerOnceButton.setEnabled(false);
+			warhammerTenButton.setEnabled(false);
+			warhammerLoopButton.setEnabled(false);
 			terror4kOnceButton.setEnabled(false);
+			terror4kFiveButton.setEnabled(false);
 			terror4kLoopButton.setEnabled(false);
 			macroStopButton.setEnabled(false);
 			taskRunButton.setEnabled(false);
@@ -615,9 +709,14 @@ public class MainFrame extends JFrame{
 			areaButton.setEnabled(isPlay == false);
 			areaRemoveButton.setEnabled(isPlay == false);
 			darkforceOnceButton.setEnabled(isPlay == false);
+			darkforceTenButton.setEnabled(isPlay == false);
 			darkforceLoopButton.setEnabled(isPlay == false);
+			warhammerOnceButton.setEnabled(isPlay == false);
+			warhammerTenButton.setEnabled(isPlay == false);
+			warhammerLoopButton.setEnabled(isPlay == false);
 			macroStopButton.setEnabled(isPlay == true);
 			terror4kOnceButton.setEnabled(isPlay == false);
+			terror4kFiveButton.setEnabled(isPlay == false);
 			terror4kLoopButton.setEnabled(isPlay == false);
 			taskRunButton.setEnabled(isPlay == false);
 		}

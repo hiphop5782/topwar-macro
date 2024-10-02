@@ -2,20 +2,27 @@ package com.hacademy.topwar.macro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import lombok.Setter;
 
 public class MacroTimelines {
 	private List<MacroTimeline> list = new ArrayList<>();
-	private long delayBetween = 400L;
-	private boolean isPlaying = false;
-	private Thread thread;
+	private List<Double> delayList = new ArrayList<>();
+	private volatile boolean isPlaying = false;
+	private ExecutorService service = Executors.newSingleThreadExecutor();
 	public MacroTimelines() {}
 	public MacroTimelines(MacroTimelinesListener listener) {
 		this.listener = listener;
 	}
 	public void add(MacroTimeline timeline) {
 		list.add(timeline);
+		delayList.add(0.25d);
+	}
+	public void add(MacroTimeline timeline, double delayAfter) {
+		list.add(timeline);
+		delayList.add(delayAfter);
 	}
 	public void playOnce() {
 		play(1);
@@ -26,7 +33,7 @@ public class MacroTimelines {
 		
 		if(listener != null) listener.start(this);
 		
-		thread = new Thread(()->{
+		service.submit(()->{
 			int size = list.get(0).size();
 			
 			int acc = 0;
@@ -35,23 +42,30 @@ public class MacroTimelines {
 				while(isPlaying) {
 					if(listener != null) listener.cycleStart(this);
 					for(int i=0; i < size; i++) {
-						for(MacroTimeline timeline : list) {
+//						for(MacroTimeline timeline : list) {
+						for(int k=0; k < list.size(); k++) {
+							MacroTimeline timeline = list.get(k);
+							if(!isPlaying) throw new InterruptedException();
 							timeline.play(i);
-							pause();
+							
+							double delay = delayList.get(k);
+							if(delay > 0d) {
+								pause(delay);
+							}
 						}
 					}
 					if(listener != null) listener.cycleFinish(this);
 					if(++acc == count) break;
 				}
 			}
-			catch(Exception e) {}
+			catch(Exception e) {
+				System.out.println("Count Macro Interrupted - "+e.getMessage());
+//				e.printStackTrace();
+			}
 			
 			if(listener != null) listener.finish(this);
 			isPlaying = false;
 		});
-		thread.setDaemon(true);
-		thread.setPriority(Thread.MAX_PRIORITY);
-		thread.start();
 	}
 	public void play() {
 		if(isPlaying) return;
@@ -59,7 +73,7 @@ public class MacroTimelines {
 		
 		if(listener != null) listener.start(this);
 		
-		thread = new Thread(()->{
+		service.submit(()->{
 			int size = list.get(0).size();
 			
 			try {
@@ -67,29 +81,28 @@ public class MacroTimelines {
 					if(listener != null) listener.cycleStart(this);
 					for(int i=0; i < size; i++) {
 						for(MacroTimeline timeline : list) {
+							if(!isPlaying) throw new InterruptedException();
 							timeline.play(i);
-							pause();
+//							pause();
 						}
 					}
 					if(listener != null) listener.cycleFinish(this);
 				}
 			}
-			catch(Exception e) {}
+			catch(Exception e) {
+				System.out.println("Macro Interrupted - "+e.getMessage());
+			}
 			
 			if(listener != null) listener.finish(this);
 			isPlaying = false;
 		});
-		thread.setDaemon(true);
-		thread.setPriority(Thread.MAX_PRIORITY);
-		thread.start();
 	}
-	public void pause() throws InterruptedException {
-		long delay = (long)(Math.random() * 400L) + delayBetween - 200L;
-		Thread.sleep(delay);
+	public void pause(double second) throws InterruptedException {
+		Thread.sleep((long)(second * 1000L));
 	}
 	public void stop() {
 		isPlaying = false;
-		thread.interrupt();
+		service.shutdownNow();
 	}
 	public boolean playing() {
 		return isPlaying;

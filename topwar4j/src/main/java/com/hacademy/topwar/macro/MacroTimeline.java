@@ -1,17 +1,17 @@
 package com.hacademy.topwar.macro;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.hacademy.topwar.macro.action.MacroAction;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
-import com.hacademy.topwar.macro.action.MacroMouseAction;
-import com.hacademy.topwar.macro.action.MacroMouseActionType;
+
+import lombok.Setter;
 
 public class MacroTimeline {
 	
 	private List<MacroAction> actionList = new ArrayList<>();
+	private List<Double> delayList = new ArrayList<>();
 	private boolean playing = false;
 	
 	private MacroActionListener listener;
@@ -19,13 +19,10 @@ public class MacroTimeline {
 		this.listener = listener;
 	}
 	
-	private long delayBetweenAction = 300L;
-	public void setDelayBetweenAction(long delayBetweenAction) {
-		if(delayBetweenAction < 10) return;
-		this.delayBetweenAction = delayBetweenAction;
-	}
+	@Setter
+	private double delayBetweenAction = 0.3d;
 	public MacroTimeline() {}
-	public MacroTimeline(long delayBetweenAction) {
+	public MacroTimeline(double delayBetweenAction) {
 		this.setDelayBetweenAction(delayBetweenAction);
 	}	
 	
@@ -34,7 +31,12 @@ public class MacroTimeline {
 	}
 	
 	public void add(MacroAction action) {
+		add(action, 0d);
+	}
+	public void add(MacroAction action, double afterDelay) {
 		actionList.add(action);
+//		actionList.add(new MacroDelayAction(delayBetweenAction));
+		delayList.add(afterDelay);
 		if(listener != null) {
 			listener.add(this);
 		}
@@ -72,7 +74,6 @@ public class MacroTimeline {
 			}
 			
 			play(i);
-			pause();
 		}
 		playing = false;
 	}
@@ -85,7 +86,7 @@ public class MacroTimeline {
 	}
 	private void pause() {
 		try {
-			Thread.sleep(delayBetweenAction);
+			Thread.sleep((long)(delayBetweenAction * 1000L));
 		}
 		catch(Exception e) {}
 	}

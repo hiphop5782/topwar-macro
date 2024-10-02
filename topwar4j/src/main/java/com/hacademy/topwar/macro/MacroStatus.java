@@ -31,11 +31,15 @@ public class MacroStatus implements Serializable{
 	private boolean dailyBasketReward = true;
 	private boolean dailySpecialReward = true;
 	private boolean dailyGemReward = true;
-	private boolean dailyHeavyTrooperReward = true;
+	private boolean dailyQuestReward = true;
 	private boolean dailySandTraning = true;
-	private boolean dailyExpeditionBase = true;
-	private boolean dailyIslandBattle = true;
+	private boolean dailyNormalIncrutAndSkill = false;
 	private boolean dailyAdvancedIncruit = false;
+	private boolean weeklyDecorFreeToken = true;
+	private boolean oilFacility = true;
+	private boolean foodFacility = true;
+	private boolean odinFacility = true;
+	private boolean dailyCrossBattle = true;
 	
 	public static MacroStatus load() {
 		File dir = new File(System.getProperty("user.home"), "tw-macro");

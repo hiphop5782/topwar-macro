@@ -10,6 +10,14 @@ public class MacroDelayAction implements MacroAction{
 	
 	@Override
 	public void doSomething() throws InterruptedException{
-		Thread.sleep((long)(second * 1000L));
+		long time = (long)(second * 1000L);
+		long acc = 0;
+		long before = System.currentTimeMillis();
+		while(time > acc) {
+			Thread.sleep(100);
+			long now = System.currentTimeMillis();
+			acc += now - before;
+			before = now;
+		}
 	}
 }

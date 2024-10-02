@@ -10,8 +10,8 @@ import com.hacademy.topwar.macro.action.MacroMouseActionType;
 public class MacroTimelineFactory {
 	public static MacroTimeline 암흑매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
-		timeline.add(적군검색버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
-		timeline.add(적군검색버튼클릭(status, basePoint));//적군 검색
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색
 		timeline.add(적군탭선택(status, basePoint));//적군
 		timeline.add(암흑오딘유닛선택(status, basePoint));//암흑 오딘
 		
@@ -76,10 +76,63 @@ public class MacroTimelineFactory {
 		return timeline;
 	}
 	
+	public static MacroTimeline 워해머매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색
+		timeline.add(집결탭선택(status, basePoint));//집결
+		timeline.add(워해머선택(status, basePoint));//워해머-4K
+		
+		//레벨선택
+		timeline.add(랜덤워해머선택(status, basePoint));
+		
+		timeline.add(적군검색(status, basePoint));//검색
+
+		//매크로 개수에 맞게 대기(4~6초)
+		timeline.add(randomDelay(status, 4, 6));
+		
+		//공격
+		timeline.add(적선택(status, basePoint));//유닛선택
+		
+		timeline.add(상단창우측공격버튼(status, basePoint));//일반집결
+		
+		//물약 사용(option)
+		if(status.isPotion()) {
+			timeline.add(체력물약선택(status, basePoint));
+			timeline.add(체력물약사용(status, basePoint));
+			timeline.add(체력충전창닫기(status, basePoint));
+		}
+		else {
+			timeline.add(빈공간선택(status, basePoint));
+		}
+		
+		//다시 공격
+		timeline.add(적선택(status, basePoint));//유닛선택
+		timeline.add(상단창우측공격버튼(status, basePoint));//일반집결
+		
+		//부대선택
+		timeline.add(부대번호선택(status, basePoint));
+		
+		//출정
+		timeline.add(출정버튼클릭(status, basePoint));
+		
+		//대기 없음
+		return timeline;
+	}
+	
+	public static MacroTimeline 워해머반복매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = 워해머매크로(status, basePoint);
+		
+		//대기 90~100초
+		timeline.add(randomDelay(status, 90, 100));
+		
+		return timeline;
+	}
+	
 	public static MacroTimeline 테러매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
-		timeline.add(적군검색버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
-		timeline.add(적군검색버튼클릭(status, basePoint));//적군 검색
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색
 		timeline.add(집결탭선택(status, basePoint));//집결
 		timeline.add(테러선택(status, basePoint));//테러-4K
 		
@@ -144,6 +197,7 @@ public class MacroTimelineFactory {
 		
 		timeline.add(일일임무버튼(status, basePoint));
 		timeline.add(randomDelay(status, 3, 5));
+		timeline.add(사판훈련으로이동(status, basePoint));
 		timeline.add(사판훈련(status, basePoint));
 		timeline.add(사판훈련도전(status, basePoint));
 		timeline.add(randomDelay(status, 1, 2));
@@ -193,6 +247,28 @@ public class MacroTimelineFactory {
 			timeline.add(randomDelay(status, 5, 6));//다중화면에서 적합
 			timeline.add(모집1회(status, basePoint));
 		}
+		
+		timeline.add(randomDelay(status, 1, 2));
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 일반모집스킬모집매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(영웅메뉴(status, basePoint));
+		timeline.add(영웅모집(status, basePoint));
+		timeline.add(randomDelay(status, 1, 2));
+		
+		timeline.add(일반모집탭선택(status, basePoint));
+		timeline.add(모집1회(status, basePoint));
+		timeline.add(randomDelay(status, 5, 6));//다중화면에서 적합
+		timeline.add(모집1회(status, basePoint));
+		
+		timeline.add(스킬모집탭선택(status, basePoint));
+		timeline.add(모집1회(status, basePoint));
+		timeline.add(randomDelay(status, 5, 6));//다중화면에서 적합
+		timeline.add(모집1회(status, basePoint));
 		
 		timeline.add(randomDelay(status, 1, 2));
 		timeline.add(뒤로가기(status, basePoint));
@@ -300,6 +376,140 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}
+	public static MacroTimeline 주간장식세트무료쿠폰매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(VIP버튼선택(status, basePoint));
+		timeline.add(VIP상점버튼클릭(status, basePoint));
+		timeline.add(마지막탭으로이동(status, basePoint));
+		timeline.add(장식세트상점탭클릭(status, basePoint));
+		timeline.add(장식세트토큰받기버튼클릭(status, basePoint));
+		timeline.add(장식세트무료토큰받기클릭(status, basePoint));
+		timeline.add(장식세트무료토큰받기클릭(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 석유시설매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(돋보기버튼클릭(status, basePoint));
+		timeline.add(돋보기버튼클릭(status, basePoint));
+		timeline.add(자원지탭선택(status, basePoint));
+		timeline.add(자원지마지막탭으로이동(status, basePoint));
+		timeline.add(유전선택(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(자원지검색버튼(status, basePoint));
+		timeline.add(randomDelay(status, 3, 5));
+		
+		timeline.add(화면중앙클릭(status, basePoint));
+		timeline.add(채집시설버튼클릭(status, basePoint));
+		timeline.add(빠른출전버튼클릭(status, basePoint));
+		timeline.add(출정버튼클릭(status, basePoint));
+		timeline.add(자원건설확인버튼클릭(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 식량시설매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(돋보기버튼클릭(status, basePoint));
+		timeline.add(돋보기버튼클릭(status, basePoint));
+		timeline.add(자원지탭선택(status, basePoint));
+		timeline.add(자원지마지막탭으로이동(status, basePoint));
+		timeline.add(농지선택(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(자원지검색버튼(status, basePoint));
+		timeline.add(randomDelay(status, 3, 5));
+		
+		timeline.add(화면중앙클릭(status, basePoint));
+		timeline.add(채집시설버튼클릭(status, basePoint));
+		timeline.add(빠른출전버튼클릭(status, basePoint));
+		timeline.add(출정버튼클릭(status, basePoint));
+		timeline.add(자원건설확인버튼클릭(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 오딘시설매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(돋보기버튼클릭(status, basePoint));
+		timeline.add(돋보기버튼클릭(status, basePoint));
+		timeline.add(자원지탭선택(status, basePoint));
+		timeline.add(자원지마지막탭으로이동(status, basePoint));
+		timeline.add(오딘광맥선택(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(자원지검색버튼(status, basePoint));
+		timeline.add(randomDelay(status, 3, 5));
+		
+		timeline.add(화면중앙클릭(status, basePoint));
+		timeline.add(채집시설버튼클릭(status, basePoint));
+		timeline.add(빠른출전버튼클릭(status, basePoint));
+		timeline.add(출정버튼클릭(status, basePoint));
+		timeline.add(자원건설확인버튼클릭(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 일일임무매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(일일임무버튼(status, basePoint));
+		timeline.add(일일임무일괄수령버튼클릭(status, basePoint));
+		timeline.add(일일임무일괄수령진행버튼클릭(status, basePoint));
+		timeline.add(일일임무일괄수령확인버튼클릭(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 크로스패배매크로(MacroStatus status, Point basePoint, int count) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(일일임무버튼(status, basePoint));
+		timeline.add(크로스훈련으로이동(status, basePoint));
+		timeline.add(크로스훈련선택(status, basePoint));
+		timeline.add(크로스훈련도전버튼(status, basePoint));
+		
+		for(int i=0; i < count; i++) {
+			timeline.add(크로스훈련적선택(status, basePoint));
+			
+			if(i == 0) {
+				timeline.add(슬롯1번선택(status, basePoint));
+				timeline.add(슬롯2번선택(status, basePoint));
+				timeline.add(슬롯3번선택(status, basePoint));
+				timeline.add(슬롯4번선택(status, basePoint));
+				timeline.add(슬롯5번선택(status, basePoint));
+				timeline.add(슬롯6번선택(status, basePoint));
+				timeline.add(슬롯7번선택(status, basePoint));
+				timeline.add(슬롯8번선택(status, basePoint));
+				timeline.add(슬롯9번선택(status, basePoint));
+				timeline.add(첫번째유닛선택(status, basePoint));
+			}
+			timeline.add(전투버튼(status, basePoint));
+			
+			timeline.add(randomDelay(status, 2, 3));
+			timeline.add(전투스킵(status, basePoint));
+			timeline.add(크로스훈련뒤로버튼(status, basePoint));
+		}
+		
+		timeline.add(크로스훈련구매창X버튼(status, basePoint));
+		timeline.add(크로스훈련X버튼(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}	
 	public static MacroTimeline 일일매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		
@@ -311,16 +521,24 @@ public class MacroTimelineFactory {
 			timeline.add(패키지무료보상매크로(status, basePoint));
 		if(status.isDailyGemReward())
 			timeline.add(무료보석수집매크로(status, basePoint));
-		if(status.isDailyHeavyTrooperReward())
-			timeline.add(미지의작전매크로(status, basePoint));
+		if(status.isDailyQuestReward())
+			timeline.add(일일임무매크로(status, basePoint));
 		if(status.isDailySandTraning())
 			timeline.add(사판훈련매크로(status, basePoint));
-		if(status.isDailyExpeditionBase())
-			timeline.add(원정탐험매크로(status, basePoint));
-		if(status.isDailyIslandBattle())
-			timeline.add(섬대작전매크로(status, basePoint));
+		if(status.isDailyNormalIncrutAndSkill())
+			timeline.add(일반모집스킬모집매크로(status, basePoint));
+		if(status.isDailyCrossBattle()) 
+			timeline.add(크로스패배매크로(status, basePoint, 10));
 		if(status.isDailyAdvancedIncruit())
 			timeline.add(고급모집2회매크로(status, basePoint));
+		if(status.isWeeklyDecorFreeToken())
+			timeline.add(주간장식세트무료쿠폰매크로(status, basePoint));
+		if(status.isOilFacility())
+			timeline.add(석유시설매크로(status, basePoint));
+		if(status.isFoodFacility())
+			timeline.add(식량시설매크로(status, basePoint));
+		if(status.isOdinFacility())
+			timeline.add(오딘시설매크로(status, basePoint));
 		
 		return timeline;
 	}
@@ -372,7 +590,7 @@ public class MacroTimelineFactory {
 	private static MacroAction 빈공간선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 250, 170);
 	}
-	private static MacroAction 적군검색버튼클릭(MacroStatus status, Point basePoint) {
+	private static MacroAction 돋보기버튼클릭(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 87, 665);
 	}
 	private static MacroAction 랜덤암흑유닛선택(MacroStatus status, Point basePoint) {
@@ -395,6 +613,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 암흑오딘유닛선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 131, 437);//암흑 오딘
+	}
+	private static MacroAction 워해머선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 134, 437);
 	}
 	private static MacroAction 테러선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 257, 437);
@@ -461,6 +682,9 @@ public class MacroTimelineFactory {
 	private static MacroAction 처음탭으로이동(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 225, 75, MacroMouseActionType.WHEELDOWN, 20);
 	}
+	private static MacroAction 마지막탭으로이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 225, 75, MacroMouseActionType.WHEELUP, 200);
+	}
 	private static MacroAction 장바구니탭선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 225, 75);
 	}
@@ -488,11 +712,23 @@ public class MacroTimelineFactory {
 	private static MacroAction 일일임무버튼(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 77, 580);
 	}
+	private static MacroAction 일일임무일괄수령버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 348, 135);
+	}
+	private static MacroAction 일일임무일괄수령진행버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 250, 550);
+	}
+	private static MacroAction 일일임무일괄수령확인버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 250, 615);
+	}
+	private static MacroAction 사판훈련으로이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 354, 640, MacroMouseActionType.WHEELDOWN, 10);
+	}
 	private static MacroAction 사판훈련(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 353, 600);
+		return new MacroMouseAction(basePoint, 353, 640);
 	}
 	private static MacroAction 사판훈련도전(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 248, 663);
+		return new MacroMouseAction(basePoint, 200, 663);
 	}
 	private static MacroAction 전투스킵(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 25, 116);
@@ -552,10 +788,10 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 415, 603);
 	}
 	private static MacroAction 섬대작전으로이동(MacroStatus status ,Point basePoint) {
-		return new MacroMouseAction(basePoint, 349, 634, MacroMouseActionType.WHEELDOWN, 200);
+		return new MacroMouseAction(basePoint, 349, 660, MacroMouseActionType.WHEELDOWN, 200);
 	}
 	private static MacroAction 섬대작전선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 349, 634);
+		return new MacroMouseAction(basePoint, 349, 660);
 	}
 	private static MacroAction 섬대작전리셋(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 338, 402);
@@ -571,6 +807,111 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 섬대작전나가기(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 244, 404);
+	}
+	private static MacroAction 장식세트상점탭클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 74, 70);
+	}
+	private static MacroAction 장식세트토큰받기버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 352, 663);
+	}
+	private static MacroAction 장식세트무료토큰받기클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 162, 137);
+	}
+	private static MacroAction 자원지탭선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 205, 319);
+	}
+	private static MacroAction 유전선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 123, 435);
+	}
+	private static MacroAction 농지선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 247, 435);
+	}
+	private static MacroAction 오딘광맥선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 383, 435);
+	}
+	private static MacroAction 레벨더하기버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 354, 595);
+	}
+	private static MacroAction 레벨빼기버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 146, 595);
+	}
+	private static MacroAction 자원지검색버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 244, 644);
+	}
+	private static MacroAction 화면중앙클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 246, 345);
+	}
+	private static MacroAction 채집시설버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 189, 267);
+	}
+	private static MacroAction 빠른출전버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 467, 548);
+	}
+	private static MacroAction 자원건설확인버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 248, 456);
+	}
+	private static MacroAction 자원지마지막탭으로이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 247, 435, MacroMouseActionType.WHEELUP, 100);
+	}
+	private static MacroAction 일반모집탭선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 80, 645);
+	}
+	private static MacroAction 스킬모집탭선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 414, 645);
+	}
+	private static MacroAction 크로스훈련구매창X버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 417, 193);
+	}
+	private static MacroAction 크로스훈련X버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 409, 111);
+	}
+	private static MacroAction 크로스훈련뒤로버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 251, 604);
+	}
+	private static MacroAction 전투버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 244, 285);
+	}
+	private static MacroAction 첫번째유닛선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 29, 643);
+	}
+	private static MacroAction 슬롯9번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 318, 538);
+	}
+	private static MacroAction 슬롯8번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 202, 519);
+	}
+	private static MacroAction 슬롯7번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 89, 497);
+	}
+	private static MacroAction 슬롯6번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 363, 481);
+	}
+	private static MacroAction 슬롯5번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 249, 458);
+	}
+	private static MacroAction 슬롯4번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 129, 439);
+	}
+	private static MacroAction 슬롯3번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 404, 420);
+	}
+	private static MacroAction 슬롯2번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 289, 400);
+	}
+	private static MacroAction 슬롯1번선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 181, 376);
+	}
+	private static MacroAction 크로스훈련적선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 365, 550);
+	}
+	private static MacroAction 크로스훈련도전버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 251, 653);
+	}
+	private static MacroAction 크로스훈련선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 351, 623);
+	}
+	private static MacroAction 크로스훈련으로이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELDOWN, 50);
 	}
 }
 
