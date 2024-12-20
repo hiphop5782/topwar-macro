@@ -8,104 +8,72 @@ import java.util.concurrent.Executors;
 import lombok.Setter;
 
 public class MacroTimelines {
-	private List<MacroTimeline> list = new ArrayList<>();
+	private List<MacroTimeline> timelineList = new ArrayList<>();
 	private List<Double> delayList = new ArrayList<>();
-	private volatile boolean isPlaying = false;
-	private ExecutorService service = Executors.newSingleThreadExecutor();
+	private boolean seperate;
 	public MacroTimelines() {}
-	public MacroTimelines(MacroTimelinesListener listener) {
-		this.listener = listener;
+	public MacroTimelines(boolean seperate) {
+		this.seperate = seperate;
 	}
 	public void add(MacroTimeline timeline) {
-		list.add(timeline);
+		timelineList.add(timeline);
 		delayList.add(0.25d);
 	}
 	public void add(MacroTimeline timeline, double delayAfter) {
-		list.add(timeline);
+		timelineList.add(timeline);
 		delayList.add(delayAfter);
 	}
-	public void playOnce() {
+	public void playOnce() throws InterruptedException {
 		play(1);
 	}
-	public void play(int count) {
-		if(isPlaying) return;
-		isPlaying = true;
-		
+	public void play(int count) throws InterruptedException {
 		if(listener != null) listener.start(this);
 		
-		service.submit(()->{
-			int size = list.get(0).size();
-			
-			int acc = 0;
-			
-			try {
-				while(isPlaying) {
-					if(listener != null) listener.cycleStart(this);
-					for(int i=0; i < size; i++) {
-//						for(MacroTimeline timeline : list) {
-						for(int k=0; k < list.size(); k++) {
-							MacroTimeline timeline = list.get(k);
-							if(!isPlaying) throw new InterruptedException();
-							timeline.play(i);
-							
-							double delay = delayList.get(k);
-							if(delay > 0d) {
-								pause(delay);
-							}
-						}
-					}
-					if(listener != null) listener.cycleFinish(this);
-					if(++acc == count) break;
+		for(int k=0; k < count; k++) {
+			if(seperate) {//독립 매크로
+				for(int i=0; i < timelineList.size(); i++) {
+					MacroTimeline timeline = timelineList.get(i);
+					double delay = delayList.get(i);
+					timeline.play(delay);
 				}
 			}
-			catch(Exception e) {
-				System.out.println("Count Macro Interrupted - "+e.getMessage());
-//				e.printStackTrace();
+			else {//종속 매크로
+				int size = timelineList.get(0).size();
+				for(int i=0; i < size; i++) {
+					for(int j=0; j < timelineList.size(); j++) {
+						MacroTimeline timeline = timelineList.get(j);
+						double delay = delayList.get(j);
+						timeline.play(i, delay);
+					}
+				}
 			}
-			
-			if(listener != null) listener.finish(this);
-			isPlaying = false;
-		});
+		}
+		
+		if(listener != null) listener.finish(this);
 	}
-	public void play() {
-		if(isPlaying) return;
-		isPlaying = true;
-		
-		if(listener != null) listener.start(this);
-		
-		service.submit(()->{
-			int size = list.get(0).size();
-			
-			try {
-				while(isPlaying) {
-					if(listener != null) listener.cycleStart(this);
-					for(int i=0; i < size; i++) {
-						for(MacroTimeline timeline : list) {
-							if(!isPlaying) throw new InterruptedException();
-							timeline.play(i);
-//							pause();
-						}
-					}
-					if(listener != null) listener.cycleFinish(this);
+	public void play() throws InterruptedException {
+		while(true) {
+			if(seperate) {//독립 매크로
+				for(int i=0; i < timelineList.size(); i++) {
+					MacroTimeline timeline = timelineList.get(i);
+					double delay = delayList.get(i);
+					timeline.play(delay);
 				}
 			}
-			catch(Exception e) {
-				System.out.println("Macro Interrupted - "+e.getMessage());
+			else {//종속 매크로
+				int size = timelineList.get(0).size();
+				for(int i=0; i < size; i++) {
+					for(int j=0; j < timelineList.size(); j++) {
+						MacroTimeline timeline = timelineList.get(j);
+						double delay = delayList.get(i);
+						timeline.play(i, delay);
+					}
+				}
 			}
-			
-			if(listener != null) listener.finish(this);
-			isPlaying = false;
-		});
+		}
 	}
 	public void pause(double second) throws InterruptedException {
 		Thread.sleep((long)(second * 1000L));
-	}
-	public void stop() {
-		isPlaying = false;
-		service.shutdownNow();
-	}
-	public boolean playing() {
-		return isPlaying;
 	}
 	
 	//이벤트

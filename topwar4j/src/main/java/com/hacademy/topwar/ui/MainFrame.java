@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -28,6 +30,7 @@ import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimeline;
 import com.hacademy.topwar.macro.MacroTimelineFactory;
 import com.hacademy.topwar.macro.MacroTimelines;
+import com.hacademy.topwar.macro.MacroTimelinesGroup;
 import com.hacademy.topwar.macro.MacroTimelinesListener;
 
 import lc.kra.system.keyboard.GlobalKeyboardHook;
@@ -45,9 +48,29 @@ public class MainFrame extends JFrame{
 	private JLabel macroExecuteCountLabel;
 	private int macroExecuteCount = 0;
 	
-	private MacroTimelines timelines;
+	private MacroTimelinesListener macroTimelinesListener = new MacroTimelinesListener() {
+		@Override
+		public void start(MacroTimelines timelines) {
+			macroExecuteCount = 0;
+			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
+			setPlayingState(true);
+		}
+		@Override
+		public void finish(MacroTimelines timelines) {
+			setPlayingState(false);
+		}
+		@Override
+		public void cycleStart(MacroTimelines timelines) {
+			macroExecuteCount++;
+			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
+		}
+		@Override
+		public void cycleFinish(MacroTimelines timelines) {
+			
+		}
+	};
+	private MacroTimelinesGroup timelinesGroup = new MacroTimelinesGroup(macroTimelinesListener);
 	
-//	private JList<String> list = new JList<>();
 	
 	private JButton macroStopButton = new JButton("실행중인 매크로 중지(ESC)");
 	
@@ -66,6 +89,8 @@ public class MainFrame extends JFrame{
 	private JButton terror4kLoopButton = new JButton("10회");
 	
 	private JButton taskRunButton = new JButton("작업 시작");
+	
+	private JCheckBox dummyBox;
 	
 	public MainFrame() throws Exception {
 		this.setSize(500, 800);
@@ -433,46 +458,50 @@ public class MainFrame extends JFrame{
 		
 		JPanel dailyTaskPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		dailyTaskPanel.setBounds(5, 15, dailyPanel.getWidth() - 10, 80);
-		JCheckBox chk1 = new JCheckBox("VIP보상", status.isDailyVipReward());
-		chk1.addActionListener(e->status.setDailyVipReward(chk1.isSelected()));
-		JCheckBox chk2 = new JCheckBox("장바구니", status.isDailyBasketReward());
-		chk2.addActionListener(e->status.setDailyBasketReward(chk2.isSelected()));
-		JCheckBox chk3 = new JCheckBox("특별패키지", status.isDailySpecialReward());
-		chk3.addActionListener(e->status.setDailySpecialReward(chk3.isSelected()));
-		JCheckBox chk4 = new JCheckBox("무료다이아20회", status.isDailyGemReward());
-		chk4.addActionListener(e->status.setDailyGemReward(chk4.isSelected()));
-		JCheckBox chk5 = new JCheckBox("일일업무", status.isDailyQuestReward());
-		chk5.addActionListener(e->status.setDailyQuestReward(chk5.isSelected()));
-		JCheckBox chk6 = new JCheckBox("사판훈련", status.isDailySandTraning());
-		chk6.addActionListener(e->status.setDailySandTraning(chk6.isSelected()));
-		JCheckBox chk7 = new JCheckBox("일반&스킬모집", status.isDailyNormalIncrutAndSkill());
-		chk7.addActionListener(e->status.setDailyNormalIncrutAndSkill(chk7.isSelected()));
-		JCheckBox chk8 = new JCheckBox("크로스패배10회", status.isDailyCrossBattle());
-		chk8.addActionListener(e->status.setDailyCrossBattle(chk8.isSelected()));
-		JCheckBox chk9 = new JCheckBox("고급모집2회", status.isDailyAdvancedIncruit());
-		chk9.addActionListener(e->status.setDailyAdvancedIncruit(chk9.isSelected()));
-		JCheckBox chk10 = new JCheckBox("무료장식토큰", status.isWeeklyDecorFreeToken());
-		chk10.addActionListener(e->status.setWeeklyDecorFreeToken(chk10.isSelected()));
-		JCheckBox chk11 = new JCheckBox("석유시설", status.isOilFacility());
-		chk11.addActionListener(e->status.setOilFacility(chk11.isSelected()));
-		JCheckBox chk12 = new JCheckBox("식량시설", status.isFoodFacility());
-		chk12.addActionListener(e->status.setFoodFacility(chk12.isSelected()));
-		JCheckBox chk13 = new JCheckBox("오딘시설", status.isOdinFacility());
-		chk13.addActionListener(e->status.setOdinFacility(chk13.isSelected()));
 		
-		dailyTaskPanel.add(chk1);
-		dailyTaskPanel.add(chk2);
-		dailyTaskPanel.add(chk3);
-		dailyTaskPanel.add(chk4);
-		dailyTaskPanel.add(chk5);
-		dailyTaskPanel.add(chk6);
-		dailyTaskPanel.add(chk7);
-		dailyTaskPanel.add(chk8);
-		dailyTaskPanel.add(chk9);
-		dailyTaskPanel.add(chk10);
-		dailyTaskPanel.add(chk11);
-		dailyTaskPanel.add(chk12);
-		dailyTaskPanel.add(chk13);
+		List<JCheckBox> dailyTaskCheckboxes = new ArrayList<>();
+		dailyTaskCheckboxes.add(new JCheckBox("VIP보상", status.isDailyVipReward()));
+		dailyTaskCheckboxes.get(0).addActionListener(e->status.setDailyVipReward(dailyTaskCheckboxes.get(0).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("장바구니", status.isDailyBasketReward()));
+		dailyTaskCheckboxes.get(1).addActionListener(e->status.setDailyBasketReward(dailyTaskCheckboxes.get(1).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("특별패키지", status.isDailySpecialReward()));
+		dailyTaskCheckboxes.get(2).addActionListener(e->status.setDailySpecialReward(dailyTaskCheckboxes.get(2).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("무료다이아20회", status.isDailyGemReward()));
+		dailyTaskCheckboxes.get(3).addActionListener(e->status.setDailyGemReward(dailyTaskCheckboxes.get(3).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("사판훈련", status.isDailySandTraning()));
+		dailyTaskCheckboxes.get(4).addActionListener(e->status.setDailySandTraning(dailyTaskCheckboxes.get(4).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("일반&스킬모집", status.isDailyNormalIncrutAndSkill()));
+		dailyTaskCheckboxes.get(5).addActionListener(e->status.setDailyNormalIncrutAndSkill(dailyTaskCheckboxes.get(5).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("크로스패배10회", status.isDailyCrossBattle()));
+		dailyTaskCheckboxes.get(6).addActionListener(e->status.setDailyCrossBattle(dailyTaskCheckboxes.get(6).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("고급모집2회", status.isDailyAdvancedIncruit()));
+		dailyTaskCheckboxes.get(7).addActionListener(e->status.setDailyAdvancedIncruit(dailyTaskCheckboxes.get(7).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("무료장식토큰", status.isWeeklyDecorFreeToken()));
+		dailyTaskCheckboxes.get(8).addActionListener(e->status.setWeeklyDecorFreeToken(dailyTaskCheckboxes.get(8).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("일일업무", status.isDailyQuestReward()));
+		dailyTaskCheckboxes.get(9).addActionListener(e->status.setDailyQuestReward(dailyTaskCheckboxes.get(9).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("석유시설", status.isOilFacility()));
+		dailyTaskCheckboxes.get(10).addActionListener(e->status.setOilFacility(dailyTaskCheckboxes.get(10).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("식량시설", status.isFoodFacility()));
+		dailyTaskCheckboxes.get(11).addActionListener(e->status.setFoodFacility(dailyTaskCheckboxes.get(11).isSelected()));
+		
+		dailyTaskCheckboxes.add(new JCheckBox("오딘시설", status.isOdinFacility()));
+		dailyTaskCheckboxes.get(12).addActionListener(e->status.setOdinFacility(dailyTaskCheckboxes.get(12).isSelected()));
+		
+		for(JCheckBox checkbox : dailyTaskCheckboxes) {
+			dailyTaskPanel.add(checkbox);
+		}
 		
 		dailyPanel.add(dailyTaskPanel);
 		
@@ -498,18 +527,15 @@ public class MainFrame extends JFrame{
 			public void keyReleased(GlobalKeyEvent event) {
 				switch(event.getVirtualKeyCode()) {
 				case GlobalKeyEvent.VK_F2:
-					if(timelines != null && timelines.playing()) return;
 					addScreenRect();
 					break;
 				case GlobalKeyEvent.VK_F3:
-					if(timelines != null && timelines.playing()) return;
 					removeScreenRect();
 					break;
 //				case GlobalKeyEvent.VK_F5:
 //					playDarkforceMacroOnce();
 //					break;
 				case GlobalKeyEvent.VK_ESCAPE:
-					if(timelines == null || !timelines.playing()) return;
 					stopMacro();
 					break;
 //				case GlobalKeyEvent.VK_F7:
@@ -531,12 +557,14 @@ public class MainFrame extends JFrame{
 	}
 	
 	private void addScreenRect() {
+		if(timelinesGroup.isPlaying()) return;
 		Rectangle screenRect = ScreenRectDialog.showDialog(MainFrame.this);
 		status.getScreenList().add(screenRect);
 		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
 		setPlayingState(false);
 	}
 	private void removeScreenRect() {
+		if(timelinesGroup.isPlaying()) return;
 		if(status.getScreenList().isEmpty()) return;
 		status.getScreenList().remove(status.getScreenList().size()-1);
 		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
@@ -545,150 +573,237 @@ public class MainFrame extends JFrame{
 	
 	private void playDarkforceMacroOnce() {
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
+		if(timelinesGroup.isPlaying()) return;
 		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		timelinesGroup.clear();
+		MacroTimelines timelines = new MacroTimelines(true);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.암흑매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.playOnce();
+		timelinesGroup.add(timelines);
+		timelinesGroup.playOnce();
+		setPlayingState(true);
 	}
 	private void playDarkforceMacroLoop(int count) {
 		if(count < 1) return;
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
+		if(timelinesGroup.isPlaying()) return;
 		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		timelinesGroup.clear();
+		
+		MacroTimelines timelines = new MacroTimelines(true);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.암흑반복매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.play(count);
+		timelinesGroup.add(timelines);
+		timelinesGroup.play(count);
+		setPlayingState(true);
 	}
 	private void playDarkforceMacroLoop() {
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
+		if(timelinesGroup.isPlaying()) return;
 		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		timelinesGroup.clear();
+		
+		MacroTimelines timelines = new MacroTimelines(true);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.암흑반복매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.play();
+		timelinesGroup.add(timelines);
+		timelinesGroup.play();
+		setPlayingState(true);
 	}
 	private void playWarhammerMacroOnce() {
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
+		if(timelinesGroup.isPlaying()) return;
 		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		timelinesGroup.clear();
+		
+		MacroTimelines timelines = new MacroTimelines(true);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.워해머매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.playOnce();
+		timelinesGroup.add(timelines);
+		timelinesGroup.playOnce();
+		setPlayingState(true);
 	}
 	private void playWarhammerMacroLoop(int count) {
 		if(count < 1) return;
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
-		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		if(timelinesGroup.isPlaying()) return;
+		timelinesGroup.clear();
+		MacroTimelines timelines = new MacroTimelines(true);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.워해머반복매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.play(count);
+		timelinesGroup.add(timelines);
+		timelinesGroup.play(count);
+		setPlayingState(true);
 	}
 	private void playWarhammerMacroLoop() {
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
-		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		if(timelinesGroup.isPlaying()) return;
+		timelinesGroup.clear();
+		MacroTimelines timelines = new MacroTimelines(true);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.워해머반복매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.play();
+		timelinesGroup.add(timelines);
+		timelinesGroup.play();
+		setPlayingState(true);
 	}
 	private void playTerror4kMacroOnce() {
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
-		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		if(timelinesGroup.isPlaying()) return;
+		timelinesGroup.clear();
+		MacroTimelines timelines = new MacroTimelines(false);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.테러매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.playOnce();
+		timelinesGroup.add(timelines);
+		timelinesGroup.playOnce();
+		setPlayingState(true);
 	}
 	private void playTerror4kMacroLoop(int count) {
 		if(count < 1 || count > 10) return;
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
-		
-		timelines = new MacroTimelines(macroTimelinesListener);
+		if(timelinesGroup.isPlaying()) return;
+		timelinesGroup.clear();
+		MacroTimelines timelines = new MacroTimelines(false);
 		for(Rectangle screenRect : status.getScreenList()) {
 			MacroTimeline timeline = MacroTimelineFactory.테러반복매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
-		
-		timelines.play(count);
+		timelinesGroup.add(timelines);
+		timelinesGroup.play(count);
+		setPlayingState(true);
 	}
 	private void stopMacro() {
-		if(timelines != null) {
-			timelines.stop();
-			timelines = null;
+		if(timelinesGroup.isPlaying()) {
+			timelinesGroup.stop();
 		}
 	}
 	private void playTaskMacro() {
 		if(status.getScreenList().isEmpty()) return;
-		if(timelines != null && timelines.playing()) return;
+		if(timelinesGroup.isPlaying()) return;
+		timelinesGroup.clear();
 		
-		timelines = new MacroTimelines(macroTimelinesListener);
-		for(Rectangle screenRect : status.getScreenList()) {
-//			MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
-//			MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
-//			MacroTimeline timeline = MacroTimelineFactory.고급모집2회매크로(status, screenRect.getLocation());
-//			MacroTimeline timeline = MacroTimelineFactory.미지의작전매크로(status, screenRect.getLocation());
-//			MacroTimeline timeline = MacroTimelineFactory.원정탐험매크로(status, screenRect.getLocation());
-//			MacroTimeline timeline = MacroTimelineFactory.섬대작전매크로(status, screenRect.getLocation());
-//			MacroTimeline timeline = MacroTimelineFactory.주간장식세트쿠폰매크로(status, screenRect.getLocation());
-			MacroTimeline timeline = MacroTimelineFactory.일일매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
+		if(status.isDailyVipReward()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.VIP보상받기매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailyBasketReward()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.장바구니매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailySpecialReward()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.패키지무료보상매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailyGemReward()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailySandTraning()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailyNormalIncrutAndSkill()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.일반모집스킬모집매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailyCrossBattle()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.크로스패배매크로(status, screenRect.getLocation(), 10);
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailyAdvancedIncruit()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.고급모집2회매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isWeeklyDecorFreeToken()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.주간장식세트무료쿠폰매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isDailyQuestReward()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.일일임무매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isOilFacility()) {
+			MacroTimelines timelines = new MacroTimelines(true);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.석유시설매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isFoodFacility()) {
+			MacroTimelines timelines = new MacroTimelines(true);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.식량시설매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isOdinFacility()) {
+			MacroTimelines timelines = new MacroTimelines(true);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
 		}
 		
-		timelines.playOnce();
+		timelinesGroup.playOnce();
+		setPlayingState(true);
 	}
 	
-	private MacroTimelinesListener macroTimelinesListener = new MacroTimelinesListener() {
-		@Override
-		public void start(MacroTimelines timelines) {
-			macroExecuteCount = 0;
-			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
-			setPlayingState(true);
-		}
-		@Override
-		public void finish(MacroTimelines timelines) {
-			setPlayingState(false);
-		}
-		@Override
-		public void cycleStart(MacroTimelines timelines) {
-			macroExecuteCount++;
-			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
-		}
-		@Override
-		public void cycleFinish(MacroTimelines timelines) {
-			
-		}
-	};
 	private void setPlayingState(boolean isPlay) {
 		if(status.getScreenList().isEmpty()) {
 			areaButton.setEnabled(true);

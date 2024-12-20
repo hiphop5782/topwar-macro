@@ -20,4 +20,10 @@ public class MacroDelayAction implements MacroAction{
 			before = now;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return second+"초 정지";
+	}
+	
 }

@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hacademy.topwar.macro.action.MacroAction;
-import com.hacademy.topwar.macro.action.MacroDelayAction;
 
+import lombok.Getter;
 import lombok.Setter;
 
 public class MacroTimeline {
 	
 	private List<MacroAction> actionList = new ArrayList<>();
 	private List<Double> delayList = new ArrayList<>();
-	private boolean playing = false;
 	
 	private MacroActionListener listener;
 	public void setListener(MacroActionListener listener) {
@@ -21,14 +20,11 @@ public class MacroTimeline {
 	
 	@Setter
 	private double delayBetweenAction = 0.3d;
+
 	public MacroTimeline() {}
 	public MacroTimeline(double delayBetweenAction) {
 		this.setDelayBetweenAction(delayBetweenAction);
 	}	
-	
-	public boolean isPlaying() {
-		return this.playing;
-	}
 	
 	public void add(MacroAction action) {
 		add(action, 0d);
@@ -65,17 +61,17 @@ public class MacroTimeline {
 			listener.remove(this);
 		}
 	}
-	public void play() throws InterruptedException {
+	public void play(double delaySecond) throws InterruptedException {
 		if(actionList == null || actionList.size() == 0) return;
-		playing = true;
 		for(int i=0; i < actionList.size(); i++) {
-			if(playing == false) {
-				return;
-			}
-			
 			play(i);
+			if(delaySecond > 0d) {
+				pause(delaySecond);
+			}
 		}
-		playing = false;
+		if(listener != null) {
+			listener.done(this, 0);
+		}
 	}
 	public void play(int index) throws InterruptedException {
 		MacroAction action = actionList.get(index);
@@ -84,14 +80,21 @@ public class MacroTimeline {
 			listener.done(this, index);
 		}
 	}
-	private void pause() {
-		try {
-			Thread.sleep((long)(delayBetweenAction * 1000L));
+	public void play(int index, double delaySecond) throws InterruptedException {
+		MacroAction action = actionList.get(index);
+		System.out.println("action = " + action);
+		action.doSomething();
+		if(listener != null) {
+			listener.done(this, index);
 		}
-		catch(Exception e) {}
+		if(delaySecond > 0d) {
+			pause(delaySecond);
+		}
+	}
+	private void pause(double delaySecond) throws InterruptedException {
+		Thread.sleep((long)(delaySecond * 1000L));
 	}
 	public void stop() {
-		playing = false;
 		Thread.currentThread().interrupt();
 	}
 	

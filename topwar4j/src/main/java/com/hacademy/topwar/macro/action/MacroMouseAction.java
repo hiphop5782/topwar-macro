@@ -55,6 +55,9 @@ public class MacroMouseAction implements MacroAction {
 		else if(type == MacroMouseActionType.WHEELUP) {
 			return "마우스 휠 올리기 ("+x+", "+y+") - "+wheel;
 		}
+		else if(type == MacroMouseActionType.WHEELDOWN) {
+			return "마우스 휠 내리기 ("+x+", "+y+") - "+wheel;
+		}
 		return super.toString();
 	}
 	

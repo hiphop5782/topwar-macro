@@ -25,6 +25,7 @@ public class MacroTimelineFactory {
 		
 		//공격
 		timeline.add(적선택(status, basePoint));//유닛선택
+		timeline.add(randomDelay(status, 2, 2.5));
 		
 		if(status.getDarkforceAttackCount() == 1) {//1회 공격
 			timeline.add(상단창우측공격버튼(status, basePoint));
@@ -45,6 +46,7 @@ public class MacroTimelineFactory {
 		
 		//다시 공격
 		timeline.add(적선택(status, basePoint));//유닛선택
+		timeline.add(randomDelay(status, 2, 2.5));
 		
 		if(status.getDarkforceAttackCount() == 1) {//1회 공격
 			timeline.add(상단창우측공격버튼(status, basePoint));
@@ -93,6 +95,7 @@ public class MacroTimelineFactory {
 		
 		//공격
 		timeline.add(적선택(status, basePoint));//유닛선택
+		timeline.add(randomDelay(status, 2, 2.5));
 		
 		timeline.add(상단창우측공격버튼(status, basePoint));//일반집결
 		
@@ -108,7 +111,9 @@ public class MacroTimelineFactory {
 		
 		//다시 공격
 		timeline.add(적선택(status, basePoint));//유닛선택
+		timeline.add(randomDelay(status, 2, 2.5));
 		timeline.add(상단창우측공격버튼(status, basePoint));//일반집결
+		timeline.add(randomDelay(status, 2, 2.5));
 		
 		//부대선택
 		timeline.add(부대번호선택(status, basePoint));
@@ -146,6 +151,7 @@ public class MacroTimelineFactory {
 		
 		//공격
 		timeline.add(적선택(status, basePoint));//유닛선택
+		timeline.add(randomDelay(status, 2, 2.5));
 		
 		if(status.isTerror4kManual()) {//수동 공격
 			timeline.add(하단창우측공격버튼(status, basePoint));
@@ -173,7 +179,7 @@ public class MacroTimelineFactory {
 		else {//집결 공격
 			timeline.add(하단창좌측공격버튼(status, basePoint));
 		}
-		
+		timeline.add(randomDelay(status, 2, 2.5));
 		//부대선택
 		timeline.add(부대번호선택(status, basePoint));
 		
@@ -280,8 +286,8 @@ public class MacroTimelineFactory {
 		
 		timeline.add(VIP버튼선택(status, basePoint));
 		timeline.add(일일VIP보상클릭(status, basePoint));
+		timeline.add(일일VIP보상클릭(status, basePoint));
 		
-		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
 		
 		return timeline;
@@ -398,7 +404,9 @@ public class MacroTimelineFactory {
 		timeline.add(돋보기버튼클릭(status, basePoint));
 		timeline.add(돋보기버튼클릭(status, basePoint));
 		timeline.add(자원지탭선택(status, basePoint));
+		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(자원지마지막탭으로이동(status, basePoint));
+		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(유전선택(status, basePoint));
 		timeline.add(레벨더하기버튼클릭(status, basePoint));
 		timeline.add(레벨더하기버튼클릭(status, basePoint));
@@ -421,7 +429,9 @@ public class MacroTimelineFactory {
 		timeline.add(돋보기버튼클릭(status, basePoint));
 		timeline.add(돋보기버튼클릭(status, basePoint));
 		timeline.add(자원지탭선택(status, basePoint));
+		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(자원지마지막탭으로이동(status, basePoint));
+		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(농지선택(status, basePoint));
 		timeline.add(레벨더하기버튼클릭(status, basePoint));
 		timeline.add(레벨더하기버튼클릭(status, basePoint));
@@ -444,7 +454,9 @@ public class MacroTimelineFactory {
 		timeline.add(돋보기버튼클릭(status, basePoint));
 		timeline.add(돋보기버튼클릭(status, basePoint));
 		timeline.add(자원지탭선택(status, basePoint));
+		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(자원지마지막탭으로이동(status, basePoint));
+		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(오딘광맥선택(status, basePoint));
 		timeline.add(레벨더하기버튼클릭(status, basePoint));
 		timeline.add(레벨더하기버튼클릭(status, basePoint));
@@ -477,7 +489,9 @@ public class MacroTimelineFactory {
 		MacroTimeline timeline = new MacroTimeline();
 		
 		timeline.add(일일임무버튼(status, basePoint));
+		timeline.add(섬대작전으로이동(status, basePoint));
 		timeline.add(크로스훈련으로이동(status, basePoint));
+		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(크로스훈련선택(status, basePoint));
 		timeline.add(크로스훈련도전버튼(status, basePoint));
 		
@@ -788,7 +802,7 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 415, 603);
 	}
 	private static MacroAction 섬대작전으로이동(MacroStatus status ,Point basePoint) {
-		return new MacroMouseAction(basePoint, 349, 660, MacroMouseActionType.WHEELDOWN, 200);
+		return new MacroMouseAction(basePoint, 349, 660, MacroMouseActionType.WHEELDOWN, 300);
 	}
 	private static MacroAction 섬대작전선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 349, 660);
@@ -908,10 +922,10 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 251, 653);
 	}
 	private static MacroAction 크로스훈련선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 351, 623);
+		return new MacroMouseAction(basePoint, 353, 228);
 	}
 	private static MacroAction 크로스훈련으로이동(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELDOWN, 50);
+		return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELUP, 20);
 	}
 }
 
