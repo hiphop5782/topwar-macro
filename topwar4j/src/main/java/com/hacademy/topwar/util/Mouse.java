@@ -1,9 +1,10 @@
 package com.hacademy.topwar.util;
 
 import java.awt.AWTException;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
-import java.io.IOException;
 
 //import org.bytedeco.opencv.opencv_core.Mat;
 //import org.bytedeco.opencv.opencv_core.Point;
@@ -50,6 +51,40 @@ public class Mouse {
 		move();
 		return this;
 	}
+	public Mouse move(int x1, int y1, int x2, int y2, double segment) {
+		double angle = Math.atan2(y2- y1, x2 - x1);
+		int targetX = x1 + (int)(segment * Math.cos(angle));
+		int targetY = y1 - (int)(segment + Math.sin(angle));
+		
+//		if(x1 < x2)
+//			targetX = Math.min(targetX, x);
+//		else
+//			targetX = Math.max(targetX, x);
+//		if(y1 < y2) 
+//			targetY = Math.min(targetY, y);
+//		else
+//			targetY = Math.max(targetY, y);
+		
+		System.out.println("targetX = " + targetX+", targetY = " + targetY);
+		return move(targetX, targetY);
+	}
+	public Mouse move(int x, int y, double durationSeconds) {
+		int unitMillis = 50; //단위시간
+		int segment = 10;
+		while(true) {
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			double distance = Math.sqrt(Math.pow(x-p.x, 2) + Math.pow(y-p.y, 2));
+			if(distance <= segment) {
+				move(x, y);
+				break;
+			}
+			else {
+				move(p.x, p.y, x, y, segment);
+			}
+			hold(unitMillis / 1000f);
+		}
+		return this;
+	}
 	public Mouse right(int value) {
 		this.x += value;
 		move();
@@ -70,10 +105,23 @@ public class Mouse {
 		move();
 		return this;
 	}
-	public Mouse clickL() {
+	public Mouse pushL() {
 		robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-		hold();
+		return this;
+	}
+	public Mouse releaseL() {
 		robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+		return this;
+	}
+	public Mouse clickL() {
+		return pushL().hold().releaseL();
+	}
+	public Mouse pushR() {
+		robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+		return this;
+	}
+	public Mouse releaseR() {
+		robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
 		return this;
 	}
 	public Mouse clickL(int x, int y) {
@@ -81,10 +129,7 @@ public class Mouse {
 		return move(x, y).hold().clickL();
 	}
 	public Mouse clickR() {
-		robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
-		hold();
-		robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
-		return this;
+		return pushR().hold().releaseR();
 	}
 	public Mouse clickR(int x, int y) {
 		return move(x,y).hold().clickR();
@@ -100,6 +145,10 @@ public class Mouse {
 	private Mouse moveWheel(int offset) {
 		robot.mouseWheel(offset);
 		return this;
+	}
+	
+	public Mouse dragL(int x1, int y1, int x2, int y2, double durationSeconds) {
+		return move(x1, y1).hold().pushL().hold().move(x2, y2, durationSeconds).hold(1.5f).releaseL();
 	}
 	
 //	private Mat capture() throws IOException {

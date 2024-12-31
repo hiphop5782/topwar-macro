@@ -193,8 +193,13 @@ public class MacroTimelineFactory {
 	public static MacroTimeline 테러반복매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = 테러매크로(status, basePoint);
 		
-		//대기 90~100초
-		timeline.add(randomDelay(status, 90, 100));
+		//대기 90~100초(자동), 대기 9~10초(수동)
+		if(status.isTerror4kManual()) {
+			timeline.add(randomDelay(status, 9, 10));
+		}
+		else {
+			timeline.add(randomDelay(status, 90, 100));
+		}
 		
 		return timeline;
 	}
@@ -489,10 +494,11 @@ public class MacroTimelineFactory {
 		MacroTimeline timeline = new MacroTimeline();
 		
 		timeline.add(일일임무버튼(status, basePoint));
-		timeline.add(섬대작전으로이동(status, basePoint));
+//		timeline.add(섬대작전으로이동(status, basePoint));
 		timeline.add(크로스훈련으로이동(status, basePoint));
 		timeline.add(randomDelay(status, 2, 3));
-		timeline.add(크로스훈련선택(status, basePoint));
+//		timeline.add(크로스훈련선택(status, basePoint));
+		timeline.add(크로스훈련적선택(status, basePoint));
 		timeline.add(크로스훈련도전버튼(status, basePoint));
 		
 		for(int i=0; i < count; i++) {
@@ -736,7 +742,8 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 250, 615);
 	}
 	private static MacroAction 사판훈련으로이동(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 354, 640, MacroMouseActionType.WHEELDOWN, 10);
+		//return new MacroMouseAction(basePoint, 354, 640, MacroMouseActionType.WHEELDOWN, 10);
+		return new MacroMouseAction(basePoint, 354, 640, 354, 570, MacroMouseActionType.DRAG);
 	}
 	private static MacroAction 사판훈련(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 353, 640);
@@ -925,7 +932,8 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 353, 228);
 	}
 	private static MacroAction 크로스훈련으로이동(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELUP, 20);
+		//return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELUP, 20);
+		return new MacroMouseAction(basePoint, 351, 623, 351, 165, MacroMouseActionType.DRAG);
 	}
 }
 

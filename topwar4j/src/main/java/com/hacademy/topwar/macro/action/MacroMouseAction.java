@@ -6,9 +6,14 @@ import com.hacademy.topwar.util.Mouse;
 
 public class MacroMouseAction implements MacroAction {
 
-	private int x, y, wheel;
+	private int x, y, wheel, tx, ty;
 	private MacroMouseActionType type;
 	
+	public MacroMouseAction(int x, int y, MacroMouseActionType type) {
+		this.x = x;
+		this.y = y;
+		this.type = type;
+	}
 	public MacroMouseAction(Point point, MacroMouseActionType type) {
 		this(point.x, point.y, type);
 	}
@@ -22,9 +27,10 @@ public class MacroMouseAction implements MacroAction {
 		this(basePoint.x + x, basePoint.y + y, type);
 		this.wheel = wheel;
 	}
-	public MacroMouseAction(int x, int y, MacroMouseActionType type) {
-		this.x = x;
-		this.y = y;
+	public MacroMouseAction(Point basePoint, int x, int y, int tx, int ty, MacroMouseActionType type) {
+		this(basePoint.x + x, basePoint.y + y, type);
+		this.tx = basePoint.x + tx;
+		this.ty = basePoint.y + ty;
 		this.type = type;
 	}
 	
@@ -41,6 +47,9 @@ public class MacroMouseAction implements MacroAction {
 		}
 		else if(type == MacroMouseActionType.WHEELDOWN) {
 			Mouse.create().move(x, y).wheelDown(wheel);
+		}
+		else if(type == MacroMouseActionType.DRAG) {
+			Mouse.create().dragL(x, y, tx, ty, 1d);
 		}
 	}
 	
