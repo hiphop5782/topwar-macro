@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
@@ -89,6 +92,8 @@ public class MainFrame extends JFrame{
 	private JButton terror4kLoopButton = new JButton("10회");
 	
 	private JButton taskRunButton = new JButton("작업 시작");
+	private JButton taskCheckButton = new JButton("전체선택");
+	private JButton taskReleaseButton = new JButton("전체해제");
 	
 	private JCheckBox dummyBox;
 	
@@ -505,11 +510,47 @@ public class MainFrame extends JFrame{
 		
 		dailyPanel.add(dailyTaskPanel);
 		
-		taskRunButton.setBounds(5, 100, dailyPanel.getWidth()-10, 40);
+		taskCheckButton.setBounds(10, 100, 100, 40);
+		taskCheckButton.setFont(buttonFont);
+		taskCheckButton.addActionListener(e->{
+			for(JCheckBox checkbox : dailyTaskCheckboxes) {
+				checkbox.setSelected(true);
+				for(ActionListener listener : checkbox.getActionListeners()) {
+					listener.actionPerformed(new ActionEvent(checkbox, ActionEvent.ACTION_PERFORMED, ""));
+				}
+			}
+		});
+		dailyPanel.add(taskCheckButton);
+		
+		taskReleaseButton.setBounds(115, 100, 100, 40);
+		taskReleaseButton.setFont(buttonFont);
+		taskReleaseButton.addActionListener(e->{
+			for(JCheckBox checkbox : dailyTaskCheckboxes) {
+				checkbox.setSelected(false);
+				for(ActionListener listener : checkbox.getActionListeners()) {
+					listener.actionPerformed(new ActionEvent(checkbox, ActionEvent.ACTION_PERFORMED, ""));
+				}
+			}
+		});
+		dailyPanel.add(taskReleaseButton);
+		
+		taskRunButton.setBounds(265, 100, 200, 40);
 		taskRunButton.setBackground(new Color(46, 204, 113));
 		taskRunButton.setForeground(Color.white);
 		taskRunButton.setFont(buttonFont);
 		taskRunButton.addActionListener(e->{
+			int count = 0;
+			for(JCheckBox checkbox : dailyTaskCheckboxes) {
+				if(checkbox.isSelected()) {
+					count++;
+				}
+			}
+			
+			if(count == 0) {
+				JOptionPane.showMessageDialog(this, "1개 이상의 작업을 선택하세요");
+				return;
+			}
+			
 			playTaskMacro();
 		});
 		dailyPanel.add(taskRunButton);
