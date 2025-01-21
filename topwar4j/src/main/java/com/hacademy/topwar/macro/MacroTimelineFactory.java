@@ -758,7 +758,7 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 327, 66);
 	}
 	private static MacroAction 주간카드무료다이아수령(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 377, 166);
+		return new MacroMouseAction(basePoint, 377, 130);
 	}
 	private static MacroAction 일일임무버튼(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 77, 580);
