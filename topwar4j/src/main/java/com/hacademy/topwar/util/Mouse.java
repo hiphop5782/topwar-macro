@@ -39,7 +39,9 @@ public class Mouse {
 	public Mouse hold(float time) {
 		try {
 			Thread.sleep((long)(time * 1000));
-		} catch (InterruptedException e) {}
+		} catch (InterruptedException e) {
+			throw new RuntimeException(Thread.currentThread().getName()+" is interrupted");
+		}
 		return this;
 	}
 	private void move() {
@@ -71,10 +73,11 @@ public class Mouse {
 	public Mouse move(int x, int y, double durationSeconds) {
 		int unitMillis = 50; //단위시간
 		int segment = 10;
-		while(true) {
+		while(!Thread.currentThread().isInterrupted()) {
+			System.out.println("isInterrupted = " + Thread.currentThread().isInterrupted());
 			Point p = MouseInfo.getPointerInfo().getLocation();
 			double distance = Math.sqrt(Math.pow(x-p.x, 2) + Math.pow(y-p.y, 2));
-			if(distance <= segment) {
+			if(distance <= segment * 2) {
 				move(x, y);
 				break;
 			}

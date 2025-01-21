@@ -79,6 +79,7 @@ public class MacroTimelinesGroup {
 	public void stop() {
 		if(service != null) {
 			service.shutdownNow();
+			System.out.println("service shutdown called");
 		}
 		if(listener != null) listener.finish(null);
 	}

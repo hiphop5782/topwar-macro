@@ -40,6 +40,7 @@ public class MacroStatus implements Serializable{
 	private boolean foodFacility = true;
 	private boolean odinFacility = true;
 	private boolean dailyCrossBattle = true;
+	private boolean goldRequest = true;
 	
 	public static MacroStatus load() {
 		File dir = new File(System.getProperty("user.home"), "tw-macro");

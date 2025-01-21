@@ -423,6 +423,12 @@ public class MacroTimelineFactory {
 		timeline.add(화면중앙클릭(status, basePoint));
 		timeline.add(채집시설버튼클릭(status, basePoint));
 		timeline.add(빠른출전버튼클릭(status, basePoint));
+		timeline.add(슬롯4번선택(status, basePoint));
+		timeline.add(슬롯5번선택(status, basePoint));
+		timeline.add(슬롯6번선택(status, basePoint));
+		timeline.add(슬롯7번선택(status, basePoint));
+		timeline.add(슬롯8번선택(status, basePoint));
+		timeline.add(슬롯9번선택(status, basePoint));
 		timeline.add(출정버튼클릭(status, basePoint));
 		timeline.add(자원건설확인버튼클릭(status, basePoint));
 		
@@ -448,6 +454,12 @@ public class MacroTimelineFactory {
 		timeline.add(화면중앙클릭(status, basePoint));
 		timeline.add(채집시설버튼클릭(status, basePoint));
 		timeline.add(빠른출전버튼클릭(status, basePoint));
+		timeline.add(슬롯4번선택(status, basePoint));
+		timeline.add(슬롯5번선택(status, basePoint));
+		timeline.add(슬롯6번선택(status, basePoint));
+		timeline.add(슬롯7번선택(status, basePoint));
+		timeline.add(슬롯8번선택(status, basePoint));
+		timeline.add(슬롯9번선택(status, basePoint));
 		timeline.add(출정버튼클릭(status, basePoint));
 		timeline.add(자원건설확인버튼클릭(status, basePoint));
 		
@@ -530,6 +542,25 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}	
+	public static MacroTimeline 골드지원요청(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(길드메뉴(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(길드지원(status, basePoint));
+		timeline.add(길드지원요청취소(status, basePoint));
+		timeline.add(길드지원요청취소확인(status, basePoint));
+		timeline.add(길드지원요청시작(status, basePoint));
+		timeline.add(길드지원골드선택(status, basePoint));
+		timeline.add(길드지원요청완료(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(길드지원요청취소(status, basePoint));
+		timeline.add(길드지원요청취소확인(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
 	public static MacroTimeline 일일매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		
@@ -933,7 +964,28 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 크로스훈련으로이동(MacroStatus status, Point basePoint) {
 		//return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELUP, 20);
-		return new MacroMouseAction(basePoint, 351, 623, 351, 165, MacroMouseActionType.DRAG);
+		return new MacroMouseAction(basePoint, 351, 660, 351, 210, MacroMouseActionType.DRAG);
+	}
+	private static MacroAction 길드메뉴(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 471, 469);
+	}
+	private static MacroAction 길드지원(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 348, 398);
+	}
+	private static MacroAction 길드지원요청시작(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 374, 603);
+	}
+	private static MacroAction 길드지원요청취소(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 374, 603);
+	}
+	private static MacroAction 길드지원요청취소확인(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 339, 451);
+	}
+	private static MacroAction 길드지원골드선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 207, 379);
+	}
+	private static MacroAction 길드지원요청완료(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 254, 500);
 	}
 }
 

@@ -504,6 +504,9 @@ public class MainFrame extends JFrame{
 		dailyTaskCheckboxes.add(new JCheckBox("오딘시설", status.isOdinFacility()));
 		dailyTaskCheckboxes.get(12).addActionListener(e->status.setOdinFacility(dailyTaskCheckboxes.get(12).isSelected()));
 		
+		dailyTaskCheckboxes.add(new JCheckBox("골드지원", status.isGoldRequest()));
+		dailyTaskCheckboxes.get(13).addActionListener(e->status.setGoldRequest(dailyTaskCheckboxes.get(13).isSelected()));
+		
 		for(JCheckBox checkbox : dailyTaskCheckboxes) {
 			dailyTaskPanel.add(checkbox);
 		}
@@ -836,6 +839,14 @@ public class MainFrame extends JFrame{
 			MacroTimelines timelines = new MacroTimelines(true);
 			for(Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isGoldRequest()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for(Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.골드지원요청(status, screenRect.getLocation());
 				timelines.add(timeline);
 			}
 			timelinesGroup.add(timelines);
