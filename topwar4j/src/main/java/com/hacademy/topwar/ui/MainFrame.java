@@ -138,6 +138,14 @@ public class MainFrame extends JFrame {
 		this.menu();
 		this.components();
 		this.events();
+		
+		for(JComponent component : waitingComponentList) {
+			if(component instanceof JCheckBox checkbox) {
+				for(ActionListener listener : checkbox.getActionListeners()) {
+					listener.actionPerformed(new ActionEvent(checkbox, ActionEvent.ACTION_PERFORMED, ""));
+				}
+			}
+		}
 	}
 
 	public void menu() {
@@ -648,7 +656,7 @@ public class MainFrame extends JFrame {
 		JPanel etcTaskPanel = new JPanel(new MigLayout("wrap 3", "[]10[]10[]", ""));
 		etcTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "기타 작업"));
 
-		JPanel oilTaskPanel = new JPanel(new MigLayout("", "[grow][]", ""));
+		JPanel oilTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox oilTaskCheckbox = new JCheckBox("석유시설", status.isOilFacility());
 		JComboBox<Integer> oilTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
 		oilTaskLevel.setSelectedItem(status.getOilFacilityLevel());
@@ -666,7 +674,7 @@ public class MainFrame extends JFrame {
 
 		etcTaskPanel.add(oilTaskPanel);
 
-		JPanel foodTaskPanel = new JPanel(new MigLayout("", "[grow][]", ""));
+		JPanel foodTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox foodTaskCheckbox = new JCheckBox("식량시설", status.isFoodFacility());
 		JComboBox<Integer> foodTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
 		foodTaskLevel.setSelectedItem(status.getFoodFacilityLevel());
@@ -684,7 +692,7 @@ public class MainFrame extends JFrame {
 
 		etcTaskPanel.add(foodTaskPanel);
 
-		JPanel odinTaskPanel = new JPanel(new MigLayout("", "[grow][]", ""));
+		JPanel odinTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox odinTaskCheckbox = new JCheckBox("오딘시설", status.isOdinFacility());
 		JComboBox<Integer> odinTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3 });
 		odinTaskLevel.setSelectedItem(status.getOdinFacilityLevel());
@@ -703,7 +711,7 @@ public class MainFrame extends JFrame {
 
 		taskPanel.add(etcTaskPanel, "grow");
 
-		JPanel allianceDonationPanel = new JPanel(new MigLayout("", "", ""));
+		JPanel allianceDonationPanel = new JPanel(new MigLayout("inset 0", "", ""));
 		JCheckBox allianceDonationCheckbox = new JCheckBox("길드기부10회", status.isAllianceDonation()); 
 		allianceDonationCheckbox.addActionListener(e->{
 			JCheckBox checkbox = (JCheckBox) e.getSource();
@@ -712,7 +720,7 @@ public class MainFrame extends JFrame {
 		allianceDonationPanel.add(allianceDonationCheckbox);
 		etcTaskPanel.add(allianceDonationPanel);
 		
-		JPanel materialPanel = new JPanel(new MigLayout("", "[grow][]", ""));
+		JPanel materialPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox materialCheckbox = new JCheckBox("재료생산", status.isProductMaterial());
 		JComboBox<String> materialTypebox = new JComboBox<>(new String[] {"강철","나사","트랜지스터", "고무", "텅스텐", "배터리", "유리"});
 		materialCheckbox.addActionListener(e->{
@@ -857,6 +865,34 @@ public class MainFrame extends JFrame {
 		smartRunButton.setForeground(Color.white);
 		smartRunButton.setFont(buttonFont);
 		smartRunButton.addActionListener(e -> {
+			int count = 0;
+			for (JCheckBox checkbox : dailyTaskCheckboxes) {
+				if (checkbox.isSelected()) {
+					count++;
+				}
+			}
+			for (JCheckBox checkbox : weeklyTaskCheckboxes) {
+				if (checkbox.isSelected()) {
+					count++;
+				}
+			}
+			for (JCheckBox checkbox : trainingTaskCheckboxes) {
+				if (checkbox.isSelected()) {
+					count++;
+				}
+			}
+			for (JCheckBox checkbox : etcTaskCheckboxes) {
+				if (checkbox.isSelected()) {
+					count++;
+				}
+			}
+
+			if (count == 0) {
+				JOptionPane.showMessageDialog(this, "1개 이상의 작업을 선택하세요");
+				return;
+			}
+
+			playSmartTaskMacro();
 		});
 
 		smartButtonPanel.add(smartRunButton, "grow");
