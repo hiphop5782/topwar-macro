@@ -244,14 +244,14 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}
-	public static MacroTimeline 고급모집2회매크로(MacroStatus status, Point basePoint) {
+	public static MacroTimeline 고급모집매크로(MacroStatus status, Point basePoint, int count) {
 		MacroTimeline timeline = new MacroTimeline();
 		
 		timeline.add(영웅메뉴(status, basePoint));
 		timeline.add(영웅모집(status, basePoint));
 		timeline.add(randomDelay(status, 1, 2));
 		
-		for(int i=0; i < 2; i++) {
+		for(int i=0; i < count; i++) {
 			//3회 누르거나 딜레이를 줘야 다시 원래화면으로 옴
 			timeline.add(모집1회(status, basePoint));
 			//timeline.add(모집1회(status, basePoint));//다중화면에서 부적합
@@ -413,10 +413,11 @@ public class MacroTimelineFactory {
 		timeline.add(자원지마지막탭으로이동(status, basePoint));
 		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(유전선택(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		
+		timeline.add(최소레벨선택(status, basePoint));
+		for(int i=1; i < status.getOilFacilityLevel(); i++) {
+			timeline.add(레벨더하기버튼클릭(status, basePoint));
+		}
 		timeline.add(자원지검색버튼(status, basePoint));
 		timeline.add(randomDelay(status, 3, 5));
 		
@@ -444,10 +445,10 @@ public class MacroTimelineFactory {
 		timeline.add(자원지마지막탭으로이동(status, basePoint));
 		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(농지선택(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(최소레벨선택(status, basePoint));
+		for(int i=1; i < status.getFoodFacilityLevel(); i++) {
+			timeline.add(레벨더하기버튼클릭(status, basePoint));
+		}
 		timeline.add(자원지검색버튼(status, basePoint));
 		timeline.add(randomDelay(status, 3, 5));
 		
@@ -475,10 +476,10 @@ public class MacroTimelineFactory {
 		timeline.add(자원지마지막탭으로이동(status, basePoint));
 		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(오딘광맥선택(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
-		timeline.add(레벨더하기버튼클릭(status, basePoint));
+		timeline.add(최소레벨선택(status, basePoint));
+		for(int i=1; i < status.getOdinFacilityLevel(); i++) {
+			timeline.add(레벨더하기버튼클릭(status, basePoint));
+		}
 		timeline.add(자원지검색버튼(status, basePoint));
 		timeline.add(randomDelay(status, 3, 5));
 		
@@ -561,8 +562,93 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}
+	public static MacroTimeline 기지내부로이동(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(월드기지전환버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.5));
+		timeline.add(월드기지전환버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.5));
+		timeline.add(내기지선택(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.5));
+		timeline.add(내기지입장(status, basePoint));
+		timeline.add(randomDelay(status, 3, 3.5));
+		
+		return timeline;
+	}
+	public static MacroTimeline 기지내부에서외부로이동(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(월드기지전환버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.5));
+		
+		return timeline;
+	}
+	public static MacroTimeline 육군훈련(MacroStatus status, Point basePoint, int count) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(좌측사이드메뉴선택(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(좌측사이드메뉴육군훈련버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1.2, 1.5));
+		timeline.add(유닛생산취소버튼(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(유닛생산훈련소클릭(status, basePoint));
+		
+		for(int i=0; i < count; i++) {
+			timeline.add(유닛생산버튼클릭(status, basePoint));
+//			timeline.add(randomDelay(status, 0.5, 0.7));
+		}
+		
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 해군훈련(MacroStatus status, Point basePoint, int count) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(좌측사이드메뉴선택(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(좌측사이드메뉴해군훈련버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1.2, 1.5));
+		timeline.add(유닛생산취소버튼(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(유닛생산훈련소클릭(status, basePoint));
+		
+		for(int i=0; i < count; i++) {
+			timeline.add(유닛생산버튼클릭(status, basePoint));
+//			timeline.add(randomDelay(status, 0.5, 0.7));
+		}
+		
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 공군훈련(MacroStatus status, Point basePoint, int count) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(좌측사이드메뉴선택(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(좌측사이드메뉴공군훈련버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1.2, 1.5));
+		timeline.add(유닛생산취소버튼(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(유닛생산훈련소클릭(status, basePoint));
+		
+		for(int i=0; i < count; i++) {
+			timeline.add(유닛생산버튼클릭(status, basePoint));
+//			timeline.add(randomDelay(status, 0.5, 0.7));
+		}
+		
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
 	public static MacroTimeline 일일매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(기지내부로이동(status, basePoint));
+		timeline.add(randomDelay(status, 3, 3.5));
 		
 		if(status.isDailyVipReward())
 			timeline.add(VIP보상받기매크로(status, basePoint));
@@ -581,7 +667,7 @@ public class MacroTimelineFactory {
 		if(status.isDailyCrossBattle()) 
 			timeline.add(크로스패배매크로(status, basePoint, 10));
 		if(status.isDailyAdvancedIncruit())
-			timeline.add(고급모집2회매크로(status, basePoint));
+			timeline.add(고급모집매크로(status, basePoint, 2));
 		if(status.isWeeklyDecorFreeToken())
 			timeline.add(주간장식세트무료쿠폰매크로(status, basePoint));
 		if(status.isOilFacility())
@@ -986,6 +1072,45 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 길드지원요청완료(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 254, 500);
+	}
+	private static MacroAction 최소레벨선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 175, 594);
+	}
+	private static MacroAction 좌측사이드메뉴선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 10, 349);
+	}
+	private static MacroAction 좌측사이드메뉴육군훈련버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 160, 229);
+	}
+	private static MacroAction 좌측사이드메뉴해군훈련버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 160, 267);
+	}
+	private static MacroAction 좌측사이드메뉴공군훈련버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 160, 302);
+	}
+	private static MacroAction 좌측사이드메뉴재료생산버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 160, 441);
+	}
+	private static MacroAction 좌측사이드메뉴길드기부버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 160, 476);
+	}
+	private static MacroAction 월드기지전환버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 409, 665);
+	}
+	private static MacroAction 내기지선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 248, 347);
+	}
+	private static MacroAction 내기지입장(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 171, 489);
+	}
+	private static MacroAction 유닛생산취소버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 327, 424);
+	}
+	private static MacroAction 유닛생산훈련소클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 250, 366);
+	}
+	private static MacroAction 유닛생산버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 250, 329);
 	}
 }
 

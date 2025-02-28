@@ -37,10 +37,19 @@ public class MacroStatus implements Serializable{
 	private boolean dailyAdvancedIncruit = false;
 	private boolean weeklyDecorFreeToken = true;
 	private boolean oilFacility = true;
+	private int oilFacilityLevel = 5;
 	private boolean foodFacility = true;
+	private int foodFacilityLevel = 5;
 	private boolean odinFacility = true;
+	private int odinFacilityLevel = 3;
 	private boolean dailyCrossBattle = true;
 	private boolean goldRequest = true;
+	private boolean allianceDonation = true;
+	private boolean productMaterial = true;
+	private boolean armyUnitTraining = true;
+	private boolean navyUnitTraining = true;
+	private boolean airforceUnitTraining = true;
+	
 	
 	public static MacroStatus load() {
 		File dir = new File(System.getProperty("user.home"), "tw-macro");
@@ -56,6 +65,9 @@ public class MacroStatus implements Serializable{
 			status.darkforceAttackCount = Math.max(status.darkforceAttackCount, 1);
 			status.darkforceMarchNumber = Math.max(status.darkforceMarchNumber, 1);
 			status.terror4kLevel = Math.max(status.terror4kLevel, 1);
+			status.oilFacilityLevel = Math.max(status.oilFacilityLevel, 1);
+			status.foodFacilityLevel = Math.max(status.foodFacilityLevel, 1);
+			status.odinFacilityLevel = Math.max(status.odinFacilityLevel, 1);
 			in.close();
 			return status;
 		}
