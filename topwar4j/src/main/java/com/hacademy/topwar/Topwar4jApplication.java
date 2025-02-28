@@ -34,7 +34,7 @@ public class Topwar4jApplication {
 			
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			if(response.statusCode() != 200) {
-				throw new Exception("인증 실패");
+				throw new Exception("인증 서버가 응답하지 않습니다");
 			}
 			
 			String jsonStr = response.body();
