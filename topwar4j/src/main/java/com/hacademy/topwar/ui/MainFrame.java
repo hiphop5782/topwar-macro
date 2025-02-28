@@ -703,17 +703,47 @@ public class MainFrame extends JFrame {
 
 		taskPanel.add(etcTaskPanel, "grow");
 
+		JPanel allianceDonationPanel = new JPanel(new MigLayout("", "", ""));
+		JCheckBox allianceDonationCheckbox = new JCheckBox("길드기부10회", status.isAllianceDonation()); 
+		allianceDonationCheckbox.addActionListener(e->{
+			JCheckBox checkbox = (JCheckBox) e.getSource();
+			status.setAllianceDonation(checkbox.isSelected());
+		});
+		allianceDonationPanel.add(allianceDonationCheckbox);
+		etcTaskPanel.add(allianceDonationPanel);
+		
+		JPanel materialPanel = new JPanel(new MigLayout("", "[grow][]", ""));
+		JCheckBox materialCheckbox = new JCheckBox("재료생산", status.isProductMaterial());
+		JComboBox<String> materialTypebox = new JComboBox<>(new String[] {"강철","나사","트랜지스터", "고무", "텅스텐", "배터리", "유리"});
+		materialCheckbox.addActionListener(e->{
+			JCheckBox checkbox = (JCheckBox) e.getSource();
+			status.setProductMaterial(checkbox.isSelected());
+			materialTypebox.setEnabled(checkbox.isSelected());
+		});
+		materialTypebox.addActionListener(e->{
+			status.setProductMaterialType((String)materialTypebox.getSelectedItem());
+		});
+		waitingComponentList.add(materialTypebox);
+		
+		materialPanel.add(materialCheckbox);
+		materialPanel.add(materialTypebox);
+		
+		etcTaskPanel.add(materialPanel);
+
 		List<JCheckBox> etcTaskCheckboxes = new ArrayList<>();
 		etcTaskCheckboxes.add(oilTaskCheckbox);
 		etcTaskCheckboxes.add(foodTaskCheckbox);
 		etcTaskCheckboxes.add(odinTaskCheckbox);
-
-		waitingComponentList.add(oilTaskCheckbox);
+		etcTaskCheckboxes.add(allianceDonationCheckbox);
+		etcTaskCheckboxes.add(materialCheckbox);
+		
 		waitingComponentList.add(oilTaskLevel);
-		waitingComponentList.add(foodTaskCheckbox);
 		waitingComponentList.add(foodTaskLevel);
-		waitingComponentList.add(odinTaskCheckbox);
 		waitingComponentList.add(odinTaskLevel);
+		
+		for(JCheckBox checkbox : etcTaskCheckboxes) {
+			waitingComponentList.add(checkbox);
+		}
 
 		JPanel taskButtonPanel = new JPanel(new MigLayout("align right", "[]10[]", ""));
 
@@ -836,6 +866,7 @@ public class MainFrame extends JFrame {
 
 		waitingComponentList.add(dailyTaskCheckButton);
 		waitingComponentList.add(weeklyTaskCheckButton);
+		waitingComponentList.add(trainingTaskCheckButton);
 		waitingComponentList.add(etcTaskCheckButton);
 		waitingComponentList.add(taskRunButton);
 		waitingComponentList.add(smartRunButton);
@@ -1207,6 +1238,29 @@ public class MainFrame extends JFrame {
 			}
 			timelinesGroup.add(timelines);
 		}
+		
+		tls = new MacroTimelines(false);
+		for (Rectangle screenRect : status.getScreenList()) {
+			MacroTimeline tl = MacroTimelineFactory.기지내부로이동(status, screenRect.getLocation());
+			tls.add(tl);
+		}
+		timelinesGroup.add(tls);
+		if(status.isAllianceDonation()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for (Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.길드기부매크로(status, screenRect.getLocation(), 10);
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isProductMaterial()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for (Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.재료생산매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
 
 		timelinesGroup.playOnce();
 		setPlayingState(true);
@@ -1377,6 +1431,30 @@ public class MainFrame extends JFrame {
 			MacroTimelines timelines = new MacroTimelines(true);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		
+		tls = new MacroTimelines(false);
+		for (Rectangle screenRect : status.getScreenList()) {
+			MacroTimeline tl = MacroTimelineFactory.기지내부로이동(status, screenRect.getLocation());
+			tls.add(tl);
+		}
+		timelinesGroup.add(tls);
+		
+		if(status.isAllianceDonation()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for (Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.길드기부매크로(status, screenRect.getLocation(), 10);
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+		if(status.isProductMaterial()) {
+			MacroTimelines timelines = new MacroTimelines(false);
+			for (Rectangle screenRect : status.getScreenList()) {
+				MacroTimeline timeline = MacroTimelineFactory.재료생산매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
 			}
 			timelinesGroup.add(timelines);

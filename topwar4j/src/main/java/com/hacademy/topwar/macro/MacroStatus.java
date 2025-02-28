@@ -46,6 +46,7 @@ public class MacroStatus implements Serializable{
 	private boolean goldRequest = true;
 	private boolean allianceDonation = true;
 	private boolean productMaterial = true;
+	private String productMaterialType = "강철";
 	private boolean armyUnitTraining = true;
 	private boolean navyUnitTraining = true;
 	private boolean airforceUnitTraining = true;

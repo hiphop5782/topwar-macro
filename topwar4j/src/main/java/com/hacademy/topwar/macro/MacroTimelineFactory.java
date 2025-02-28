@@ -588,7 +588,7 @@ public class MacroTimelineFactory {
 		MacroTimeline timeline = new MacroTimeline();
 		
 		timeline.add(좌측사이드메뉴선택(status, basePoint));
-		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(randomDelay(status, 1.2, 1.5));
 		timeline.add(좌측사이드메뉴육군훈련버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1.2, 1.5));
 		timeline.add(유닛생산취소버튼(status, basePoint));
@@ -608,7 +608,7 @@ public class MacroTimelineFactory {
 		MacroTimeline timeline = new MacroTimeline();
 		
 		timeline.add(좌측사이드메뉴선택(status, basePoint));
-		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(randomDelay(status, 1.2, 1.5));
 		timeline.add(좌측사이드메뉴해군훈련버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1.2, 1.5));
 		timeline.add(유닛생산취소버튼(status, basePoint));
@@ -628,7 +628,7 @@ public class MacroTimelineFactory {
 		MacroTimeline timeline = new MacroTimeline();
 		
 		timeline.add(좌측사이드메뉴선택(status, basePoint));
-		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(randomDelay(status, 1.2, 1.5));
 		timeline.add(좌측사이드메뉴공군훈련버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1.2, 1.5));
 		timeline.add(유닛생산취소버튼(status, basePoint));
@@ -644,6 +644,41 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}
+	public static MacroTimeline 길드기부매크로(MacroStatus status, Point basePoint, int count) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(좌측사이드메뉴선택(status, basePoint));
+		timeline.add(randomDelay(status, 1.2, 1.5));
+		timeline.add(좌측사이드메뉴길드기부버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1.2, 1.5));
+		
+		for(int i=0; i < count; i++) {
+			timeline.add(길드과학기술기부버튼클릭(status, basePoint));
+		}
+		
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 재료생산매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(좌측사이드메뉴선택(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.2));
+		timeline.add(좌측사이드메뉴재료생산버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.2));
+		
+		for(int i=0; i < 6; i++) {
+			timeline.add(재료생산클릭(status, basePoint));
+			timeline.add(randomDelay(status, 0.2, 0.4));
+		}
+		
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
+	
 	public static MacroTimeline 일일매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		
@@ -1112,6 +1147,22 @@ public class MacroTimelineFactory {
 	private static MacroAction 유닛생산버튼클릭(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 250, 329);
 	}
+	private static MacroAction 길드과학기술기부버튼클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 336, 515);
+	}
+	private static MacroAction 재료생산클릭(MacroStatus status, Point basePoint) {
+		switch(status.getProductMaterialType()) {
+		case "강철": 		return new MacroMouseAction(basePoint, 117, 522);
+		case "나사":		return new MacroMouseAction(basePoint, 206, 522);
+		case "트랜지스터":	return new MacroMouseAction(basePoint, 290, 522);
+		case "고무":		return new MacroMouseAction(basePoint, 379, 522);
+		case "텅스텐":	return new MacroMouseAction(basePoint, 122, 606);
+		case "배터리":	return new MacroMouseAction(basePoint, 203, 606);
+		case "유리":		return new MacroMouseAction(basePoint, 294, 606);
+		default:		return new MacroMouseAction(basePoint, 117, 522);
+		}
+	}
+	
 }
 
 
