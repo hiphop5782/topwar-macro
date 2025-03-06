@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\user1\git\topwar-macro\topwar4j\target\topwar4j-0.0.1-SNAPSHOT.jar</jar>
+  <outfile>C:\Users\user1\git\topwar-macro\topwar4j\build\topwar4j.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>%EXEDIR%</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\user1\git\topwar-macro\topwar4j\build\KID.ico</icon>
+  <singleInstance>
+    <mutexName>topwar4j</mutexName>
+    <windowTitle></windowTitle>
+  </singleInstance>
+  <jre>
+    <path>jre</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>true</requires64Bit>
+    <minVersion>17</minVersion>
+  </jre>
+</launch4jConfig>

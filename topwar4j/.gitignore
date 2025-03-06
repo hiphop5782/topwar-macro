@@ -14,6 +14,9 @@
 **/.loadpath
 **/.recommenders
 
+**/jre/
+**/*.exe
+
 # External tool builders
 **/.externalToolBuilders/
 
@@ -322,7 +325,6 @@
 
 ### Gradle ###
 **/.gradle
-**/build/
 **/!src/**/build/
 
 # Ignore Gradle GUI config
