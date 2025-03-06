@@ -6,6 +6,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
 import javax.swing.JOptionPane;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,6 +21,8 @@ public class Topwar4jApplication {
 		FlatMacLightLaf.setup();
 		
 		try {
+			System.setProperty("https.protocols", "TLSv1.2");
+			
 			File keyFile = new File(System.getProperty("user.dir"), ".certkey");
 			String key = "empty";
 			try(Scanner sc = new Scanner(keyFile);) {
@@ -26,7 +30,23 @@ public class Topwar4jApplication {
 			}
 			catch(Exception e) {}
 			
-			HttpClient client = HttpClient.newHttpClient();
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, null, null);
+			
+	        // 강제적으로 TLS 1.2 및 특정 Cipher Suite 설정
+	        SSLParameters sslParameters = new SSLParameters();
+	        sslParameters.setProtocols(new String[]{"TLSv1.2"});
+	        sslParameters.setCipherSuites(new String[]{
+	            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+	            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+	            "TLS_RSA_WITH_AES_256_GCM_SHA384",
+	            "TLS_RSA_WITH_AES_128_GCM_SHA256"
+	        });
+
+			HttpClient client = HttpClient.newBuilder()
+					.sslContext(sslContext)
+					.sslParameters(sslParameters)
+					.build();
 			
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(new URI("https://res.sysout.co.kr/tw-macro/response?key="+key))
