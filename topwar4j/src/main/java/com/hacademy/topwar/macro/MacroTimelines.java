@@ -23,6 +23,9 @@ public class MacroTimelines {
 		timelineList.add(timeline);
 		delayList.add(delayAfter);
 	}
+	public MacroTimeline last() {
+		return timelineList.isEmpty() ? null : timelineList.get(timelineList.size()-1);
+	}
 	public void playOnce() throws InterruptedException {
 		play(1);
 	}
@@ -74,6 +77,18 @@ public class MacroTimelines {
 	}
 	public void pause(double second) throws InterruptedException {
 		Thread.sleep((long)(second * 1000L));
+	}
+	
+	public long getDuration() {
+		long playMs = timelineList.stream()
+				.map(timeline->timeline.getDuration())
+				.reduce(0L, (acc,cur)->acc+cur);
+		double delaySec = delayList.stream().map(v->v.doubleValue())
+				.reduce(0d, (acc, cur)->acc+cur);
+		return playMs + (long)(delaySec * 1000L);
+	}
+	public int size() {
+		return timelineList.size();
 	}
 	
 	//이벤트

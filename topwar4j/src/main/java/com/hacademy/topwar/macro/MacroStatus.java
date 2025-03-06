@@ -27,6 +27,8 @@ public class MacroStatus implements Serializable{
 	
 	private List<Rectangle> screenList = new ArrayList<>();
 	
+	//기지 내부 작업
+	//daily task
 	private boolean dailyVipReward = true;
 	private boolean dailyBasketReward = true;
 	private boolean dailySpecialReward = true;
@@ -35,13 +37,6 @@ public class MacroStatus implements Serializable{
 	private boolean dailySandTraning = true;
 	private boolean dailyNormalIncrutAndSkill = false;
 	private boolean dailyAdvancedIncruit = false;
-	private boolean weeklyDecorFreeToken = true;
-	private boolean oilFacility = true;
-	private int oilFacilityLevel = 5;
-	private boolean foodFacility = true;
-	private int foodFacilityLevel = 5;
-	private boolean odinFacility = true;
-	private int odinFacilityLevel = 3;
 	private boolean dailyCrossBattle = true;
 	private boolean goldRequest = true;
 	private boolean allianceDonation = true;
@@ -51,6 +46,16 @@ public class MacroStatus implements Serializable{
 	private boolean navyUnitTraining = true;
 	private boolean airforceUnitTraining = true;
 	
+	//weekly task
+	private boolean weeklyDecorFreeToken = true;
+	
+	//기지 외부 작업
+	private boolean oilFacility = true;
+	private int oilFacilityLevel = 5;
+	private boolean foodFacility = true;
+	private int foodFacilityLevel = 5;
+	private boolean odinFacility = true;
+	private int odinFacilityLevel = 3;
 	
 	public static MacroStatus load() {
 		File dir = new File(System.getProperty("user.home"), "tw-macro");
@@ -88,5 +93,17 @@ public class MacroStatus implements Serializable{
 			out.writeObject(this);
 		}
 		catch(Exception e) {}
+	}
+	
+	public boolean hasAnyInternalTask() {
+		return dailyVipReward || dailyBasketReward || dailySpecialReward
+				|| dailyGemReward || dailyQuestReward || dailySandTraning
+				|| dailyNormalIncrutAndSkill || dailyAdvancedIncruit
+				|| dailyCrossBattle || goldRequest || allianceDonation
+				|| productMaterial || armyUnitTraining || navyUnitTraining || airforceUnitTraining
+				|| weeklyDecorFreeToken;
+	}
+	public boolean hasAnyExternalTask() {
+		return odinFacility || foodFacility || oilFacility;
 	}
 }

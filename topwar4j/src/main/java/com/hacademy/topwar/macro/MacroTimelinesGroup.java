@@ -38,7 +38,6 @@ public class MacroTimelinesGroup {
 		service = Executors.newSingleThreadExecutor();
 		service.submit(()->{
 			if(listener != null) listener.start(null);
-			
 			try {
 				for(MacroTimelines timelines : timelinesList) {
 					if(listener != null) listener.cycleStart(timelines);
@@ -47,8 +46,8 @@ public class MacroTimelinesGroup {
 				}
 			}
 			catch(Exception e) {
-				System.out.println("Play {"+count+"} is interruted");
 //				e.printStackTrace();
+				System.out.println("Play {"+count+"} is interruted");
 			}
 			finally {
 				playing = false;

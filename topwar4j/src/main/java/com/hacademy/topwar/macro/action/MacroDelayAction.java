@@ -8,6 +8,10 @@ public class MacroDelayAction implements MacroAction{
 		this.second = second;
 	}
 	
+	public long getDuration() {
+		return (long) (this.second * 1000L);
+	}
+	
 	@Override
 	public void doSomething() throws InterruptedException{
 		long time = (long)(second * 1000L);

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.hacademy.topwar.macro.action.MacroAction;
 
-import lombok.Getter;
 import lombok.Setter;
 
 public class MacroTimeline {
@@ -20,7 +19,7 @@ public class MacroTimeline {
 	
 	@Setter
 	private double delayBetweenAction = 0.3d;
-
+	
 	public MacroTimeline() {}
 	public MacroTimeline(double delayBetweenAction) {
 		this.setDelayBetweenAction(delayBetweenAction);
@@ -28,6 +27,7 @@ public class MacroTimeline {
 	
 	public void add(MacroAction action) {
 		add(action, 0d);
+		
 	}
 	public void add(MacroAction action, double afterDelay) {
 		actionList.add(action);
@@ -121,6 +121,12 @@ public class MacroTimeline {
 	}
 	public MacroAction getLast() {
 		return actionList.isEmpty() ? null : actionList.get(actionList.size()-1);
+	}
+	
+	public long getDuration() {
+		return actionList.stream()
+				.map(action->action.getDuration())
+				.reduce(0L, (acc, cur)->acc+cur);
 	}
 	
 }

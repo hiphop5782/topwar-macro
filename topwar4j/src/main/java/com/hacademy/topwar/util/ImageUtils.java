@@ -1,126 +1,172 @@
 package com.hacademy.topwar.util;
 
+import static org.bytedeco.opencv.global.opencv_core.CV_8UC3;
+import static org.bytedeco.opencv.global.opencv_core.minMaxLoc;
+import static org.bytedeco.opencv.global.opencv_imgproc.TM_CCOEFF_NORMED;
+import static org.bytedeco.opencv.global.opencv_imgproc.matchTemplate;
+import static org.bytedeco.opencv.global.opencv_imgproc.resize;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
+import javax.imageio.ImageIO;
+
+import org.bytedeco.javacpp.DoublePointer;
+import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.opencv.opencv_core.Point;
+import org.bytedeco.opencv.opencv_core.Size;
+
+import com.hacademy.topwar.constant.Button;
+
+import lombok.Getter;
+
+/**
+ * 이미지 비교 유틸
+ */
 public class ImageUtils {
-//	
-//	public static final float THRESHOLD = 0.9f;
-//	
-//	private static Map<String, Mat> images = Collections.synchronizedMap(new HashMap<>());
-//	static {
-//		File dir = new File(System.getProperty("user.dir"), "images");
-//		loadImages(dir);
-//	}
-//	private static void loadImages(File file) {
-//		if(file.isFile()) {
-//			String abs = file.getAbsolutePath();
-//			images.put(abs, load(abs));
-//		}
-//		else if(file.isDirectory()){
-//			File[] list = file.listFiles();
-//			if(list != null) {
-//				for(File f : list) {
-//					loadImages(f);
-//				}
-//			}
-//		}
-//	}
-//	
-//	public static Point findImage(Mat origin, Mat find) {
-//		Size size = new Size(origin.cols() - find.cols() + 1, origin.rows() - find.rows() + 1);
-//		Mat result = new Mat(size, CV_32FC1);
-//		matchTemplate(origin, find, result, TM_CCOEFF_NORMED);
-//		DoublePointer minVal = new DoublePointer();
-//		DoublePointer maxVal = new DoublePointer();
-//		Point min = new Point();
-//		Point max = new Point();
-//		opencv_core.minMaxLoc(result, minVal, maxVal, min, max, null);
-//		Rect rect = new Rect(max.x(), max.y(), find.cols(), find.rows());
-//		return new Point(rect.x() + rect.width()/2, rect.y()+rect.height()/2);
-//	}
-//	public static Point findImage(Mat origin, Mat find, float threshold) {
-//		List<Point> points = findImageList(origin, find, threshold);
-//		if(points == null || points.size() == 0) return null;
-//		return points.get(0);
-//	}
-//	
-//	public static List<Point> findImageList(Mat origin, Mat find) {
-//		return findImageList(origin, find, THRESHOLD);
-//	}
-//	public static List<Point> findImageList(Mat origin, Mat find, float threshold) {
-//		int rows = origin.rows() - find.rows() + 1;
-//		int cols = origin.cols() - find.cols() + 1;
-//		Size size = new Size(cols, rows);
-//		Mat result = new Mat(size, opencv_core.CV_32FC1);
-//		opencv_imgproc.matchTemplate(origin, find, result, opencv_imgproc.TM_CCOEFF_NORMED);
-//		return getPointsFromMatAboveThreshold(result, threshold);
-//	}
-//	
-//	/**
-//	 * 임계치(threshold)에 따른 유사지점을 찾아 좌표로 반환하는 메소드
-//	 * @param m - 비교 결과 Mat 데이터
-//	 * @param t - 임계치(threshold)
-//	 * @return Point list of find images
-//	 */
-//	public static List<Point> getPointsFromMatAboveThreshold(Mat m, float t) {
-//		List<Point> matches = new ArrayList<Point>();
-//		FloatIndexer indexer = m.createIndexer();
-//		for (int y = 0; y < m.rows(); y++) {
-//			for (int x = 0; x < m.cols(); x++) {
-//				if (indexer.get(y, x) > t) {
-////					System.out.println("(" + x + "," + y + ") = " + indexer.get(y, x));
-//					matches.add(new Point(x, y));
-//				}
-//			}
-//		}
-//		return matches;
-//	}
-//	
-//	/**
-//	 * imread를 대신 처리하는 함수
-//	 * @param path 이미지 파일의 경로(프로젝트 기준)
-//	 * @return 로드된 Mat 데이터
-//	 */
-//	public static Mat load(String path) {
-//		String base = System.getProperty("user.dir");
-//		String key = path.startsWith(base) ? path : base+path;
-//		if(images.containsKey(key)) {
-//			return images.get(key);
-//		}
-//		Mat origin = opencv_imgcodecs.imread(key);
-//		Mat grayscale = new Mat(origin.size(), CV_8UC1);
-//		cvtColor(origin, grayscale, COLOR_BGR2GRAY);
-//		return grayscale;
-//	}
-//	
-//	/**
-//	 * 이미지 임시 출력 메소드
-//	 * @param mat - 출력할 데이터
-//	 */
-//	public static void display(Mat mat) {
-//		opencv_highgui.imshow("display", mat);
-//		opencv_highgui.waitKey(0);
-//		opencv_highgui.destroyAllWindows();
-//	}
-//	
-//	/**
-//	 * Generate Random Color
-//	 * @return random color Scalar Object
-//	 */
-//	public static Scalar randColor() {
-//		int b, g, r;
-//		b = ThreadLocalRandom.current().nextInt(0, 255 + 1);
-//		g = ThreadLocalRandom.current().nextInt(0, 255 + 1);
-//		r = ThreadLocalRandom.current().nextInt(0, 255 + 1);
-//		return new Scalar(b, g, r, 0);
-//	}
-//	
-//	/**
-//	 * Image resize
-//	 */
-//	public static Mat resize(Mat origin, int rate) {
-//		Size size = origin.size();
-//		Mat dest = new Mat(size.height()*rate/100, size.width()*rate/100, origin.type());
-//		opencv_imgproc.resize(origin, dest, dest.size(), 0, 0, opencv_imgproc.INTER_CUBIC);
-//		return dest;
-//	}
+
+	// root directory
+	@Getter
+	private static final File images = new File(System.getProperty("user.dir"), "images");
+	private static final File buttons = new File(images, "button");
+	
+	private static final double SCALE_MIN = 0.5;
+	private static final double SCALE_MAX = 1.5;
+	private static final double SCALE_STEP = 0.1;
+	private static final double THRESHOLD = 0.8;
+	
+	// ✅ 지정한 영역에서 버튼 찾기
+	public static java.awt.Point searchButton(Rectangle screenRect, Button button) throws Exception {
+		Mat areaMat = captureScreenToMat(screenRect);
+		Mat buttonMat = loadButtonToMat(button);
+		Mat resultMat = new Mat();
+		
+		//탐지
+		Point match = findImageMultiScale(areaMat, buttonMat, resultMat);
+		if(match== null) return null;
+		
+		//중심좌표 계산
+		int x = match.x() + resultMat.cols()/2;
+		int y = match.y() + resultMat.rows()/2;
+		
+		//메모리 정리
+		areaMat.release();
+		buttonMat.release();
+		resultMat.release();
+		
+		return new java.awt.Point(x, y);
+	}
+	
+	// ✅ 지정한 영역 캡쳐
+	public static Mat captureScreenToMat(java.awt.Point point, Dimension dimension) throws Exception {
+		return captureScreenToMat(new Rectangle(point, dimension));
+	}
+	public static Mat captureScreenToMat(Rectangle rectangle) throws Exception {
+		BufferedImage im = captureScreen(rectangle);
+		return bufferedImageToMat(im);
+	}
+	public static BufferedImage captureScreen(java.awt.Point point, Dimension dimension) throws Exception {
+		Rectangle rectangle = new Rectangle(point, dimension);
+		return captureScreen(rectangle);
+	}
+	public static BufferedImage captureScreen(Rectangle rectangle) throws Exception {
+		Robot robot = new Robot();
+		return robot.createScreenCapture(rectangle);
+	}
+	
+	// ✅ 지정한 이미지 로드
+	public static BufferedImage loadButton(Button button) throws FileNotFoundException, IOException {
+		File target = new File(buttons, button.getType()+".png");
+		return ImageIO.read(new FileInputStream(target));
+	}
+	public static Mat loadButtonToMat(Button button) throws FileNotFoundException, IOException {
+		BufferedImage im = loadButton(button);
+		return bufferedImageToMat(im);
+	}
+
+	// ✅ BufferedImage → JavaCV Mat 변환 (파일 없이 비교 가능)
+	public static Mat bufferedImageToMat(BufferedImage image) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+		Mat mat = new Mat(height, width, CV_8UC3);
+		ByteBuffer buffer = ByteBuffer.allocate(width * height * 3);
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				int pixel = image.getRGB(x, y);
+				buffer.put((byte) ((pixel >> 16) & 0xFF)); // R
+				buffer.put((byte) ((pixel >> 8) & 0xFF)); // G
+				buffer.put((byte) (pixel & 0xFF)); // B
+			}
+		}
+		mat.data().put(buffer.array());
+		return mat;
+	}
+
+	// ✅ JavaCV 템플릿 매칭 (이미지를 파일 없이 비교)
+	public static Point findImage(Mat screen, Mat search) {
+		Mat result = new Mat();
+		matchTemplate(screen, search, result, TM_CCOEFF_NORMED);
+
+		// 최대 일치 좌표 찾기
+		DoublePointer minVal = new DoublePointer(1);
+		DoublePointer maxVal = new DoublePointer(1);
+		Point minLoc = new Point();
+		Point maxLoc = new Point();
+		minMaxLoc(result, minVal, maxVal, minLoc, maxLoc, null);
+		if (maxVal.get() > THRESHOLD) { // 유사도 80% 이상만 허용
+			return new Point((int) maxLoc.x(), maxLoc.y());
+		}
+		return null;
+	}
+
+	// ✅ 크기가 다른 이미지도 매칭할 수 있도록 여러 크기로 비교
+	public static Point findImageMultiScale(Mat screen, Mat search, Mat result) {
+		return findImageMultiScale(screen, search, result, SCALE_MIN, SCALE_MAX, SCALE_STEP);
+	}
+	public static Point findImageMultiScale(Mat screen, Mat search, Mat result, double minScale, double maxScale,
+			double scaleStep) {
+		Point bestLoc = null;
+		double bestMatch = 0;
+
+		for (double scale = minScale; scale <= maxScale; scale += scaleStep) {
+			// 🔹 이미지 크기 조절
+			Mat resizedSearch = new Mat();
+			resize(search, resizedSearch, new Size((int) (search.cols() * scale), (int) (search.rows() * scale)));
+
+			if (resizedSearch.cols() > screen.cols() || resizedSearch.rows() > screen.rows()) {
+				resizedSearch.release();
+				continue;
+			}
+
+			// 🔹 템플릿 매칭 수행
+			matchTemplate(screen, resizedSearch, result, TM_CCOEFF_NORMED);
+
+			// 🔹 최대 일치 좌표 찾기
+			DoublePointer minVal = new DoublePointer(1);
+			DoublePointer maxVal = new DoublePointer(1);
+			Point minLoc = new Point();
+			Point maxLoc = new Point();
+
+			minMaxLoc(result, minVal, maxVal, minLoc, maxLoc, null);
+
+			// 🔹 최적의 일치율 업데이트
+			if (maxVal.get() > bestMatch) {
+				bestMatch = maxVal.get();
+				bestLoc = new Point(maxLoc.x(), maxLoc.y());
+			}
+
+			resizedSearch.release();
+		}
+
+		return bestMatch > 0.8 ? bestLoc : null; // 🔥 80% 이상 유사하면 성공!
+	}
+
 }

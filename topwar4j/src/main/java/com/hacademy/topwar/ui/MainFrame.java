@@ -2,6 +2,7 @@ package com.hacademy.topwar.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
@@ -9,17 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -31,12 +28,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
+import com.hacademy.topwar.macro.MacroCreator;
 import com.hacademy.topwar.macro.MacroStatus;
-import com.hacademy.topwar.macro.MacroTimeline;
-import com.hacademy.topwar.macro.MacroTimelineFactory;
 import com.hacademy.topwar.macro.MacroTimelines;
 import com.hacademy.topwar.macro.MacroTimelinesGroup;
 import com.hacademy.topwar.macro.MacroTimelinesListener;
@@ -116,6 +114,9 @@ public class MainFrame extends JFrame {
 
 	private List<JComponent> waitingComponentList = new ArrayList<>();
 	private List<JComponent> runningComponentList = new ArrayList<>();
+	
+	private JScrollPane jsp = new JScrollPane();
+	private JTextArea jtx = new JTextArea();
 
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
@@ -163,7 +164,7 @@ public class MainFrame extends JFrame {
 
 //		file.addSeparator();
 
-		JMenuItem openMacro = new JMenuItem("매크로 열기");
+		JMenuItem openMacro = new JMenuItem("설정 열기");
 		openMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
 		openMacro.addActionListener(e -> {
 			JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
@@ -175,7 +176,7 @@ public class MainFrame extends JFrame {
 		});
 		file.add(openMacro);
 
-		JMenuItem saveMacro = new JMenuItem("매크로 저장");
+		JMenuItem saveMacro = new JMenuItem("설정 저장");
 		saveMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
 		saveMacro.addActionListener(e -> {
 			JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
@@ -236,11 +237,14 @@ public class MainFrame extends JFrame {
 
 	public void components() {
 		Font buttonFont = new Font("", Font.BOLD, 14);
-
+		
 		// 메인 패널
-		JPanel contentPanel = new JPanel(new MigLayout("wrap 1, insets 10", "[grow,fill]", "10[]10[]"));
-		this.setContentPane(contentPanel);
-
+		JPanel mainPanel = new JPanel(new MigLayout("wrap 2, inset 0", "[]5[]", ""));
+		this.setContentPane(mainPanel);
+		
+		JPanel contentPanel = new JPanel(new MigLayout("wrap 1, insets 5", "[grow,fill]", "[]3[]"));
+		mainPanel.add(contentPanel);
+		
 		// 사용할 테두리
 		Border lineBorder2 = BorderFactory.createLineBorder(Color.black, 2, true);
 		Border lineBorder1 = BorderFactory.createLineBorder(Color.gray, 1, true);
@@ -655,7 +659,34 @@ public class MainFrame extends JFrame {
 		// 기타 작업
 		JPanel etcTaskPanel = new JPanel(new MigLayout("wrap 3", "[]10[]10[]", ""));
 		etcTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "기타 작업"));
-
+		
+		JPanel allianceDonationPanel = new JPanel(new MigLayout("inset 0", "", ""));
+		JCheckBox allianceDonationCheckbox = new JCheckBox("길드기부10회", status.isAllianceDonation()); 
+		allianceDonationCheckbox.addActionListener(e->{
+			JCheckBox checkbox = (JCheckBox) e.getSource();
+			status.setAllianceDonation(checkbox.isSelected());
+		});
+		allianceDonationPanel.add(allianceDonationCheckbox);
+		etcTaskPanel.add(allianceDonationPanel);
+		
+		JPanel materialPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
+		JCheckBox materialCheckbox = new JCheckBox("재료생산", status.isProductMaterial());
+		JComboBox<String> materialTypebox = new JComboBox<>(new String[] {"강철","나사","트랜지스터", "고무", "텅스텐", "배터리", "유리"});
+		materialCheckbox.addActionListener(e->{
+			JCheckBox checkbox = (JCheckBox) e.getSource();
+			status.setProductMaterial(checkbox.isSelected());
+			materialTypebox.setEnabled(checkbox.isSelected());
+		});
+		materialTypebox.addActionListener(e->{
+			status.setProductMaterialType((String)materialTypebox.getSelectedItem());
+		});
+		waitingComponentList.add(materialTypebox);
+		
+		materialPanel.add(materialCheckbox);
+		materialPanel.add(materialTypebox);
+		
+		etcTaskPanel.add(materialPanel);
+		
 		JPanel oilTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox oilTaskCheckbox = new JCheckBox("석유시설", status.isOilFacility());
 		JComboBox<Integer> oilTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
@@ -710,33 +741,6 @@ public class MainFrame extends JFrame {
 		etcTaskPanel.add(odinTaskPanel);
 
 		taskPanel.add(etcTaskPanel, "grow");
-
-		JPanel allianceDonationPanel = new JPanel(new MigLayout("inset 0", "", ""));
-		JCheckBox allianceDonationCheckbox = new JCheckBox("길드기부10회", status.isAllianceDonation()); 
-		allianceDonationCheckbox.addActionListener(e->{
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setAllianceDonation(checkbox.isSelected());
-		});
-		allianceDonationPanel.add(allianceDonationCheckbox);
-		etcTaskPanel.add(allianceDonationPanel);
-		
-		JPanel materialPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
-		JCheckBox materialCheckbox = new JCheckBox("재료생산", status.isProductMaterial());
-		JComboBox<String> materialTypebox = new JComboBox<>(new String[] {"강철","나사","트랜지스터", "고무", "텅스텐", "배터리", "유리"});
-		materialCheckbox.addActionListener(e->{
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setProductMaterial(checkbox.isSelected());
-			materialTypebox.setEnabled(checkbox.isSelected());
-		});
-		materialTypebox.addActionListener(e->{
-			status.setProductMaterialType((String)materialTypebox.getSelectedItem());
-		});
-		waitingComponentList.add(materialTypebox);
-		
-		materialPanel.add(materialCheckbox);
-		materialPanel.add(materialTypebox);
-		
-		etcTaskPanel.add(materialPanel);
 
 		List<JCheckBox> etcTaskCheckboxes = new ArrayList<>();
 		etcTaskCheckboxes.add(oilTaskCheckbox);
@@ -854,7 +858,11 @@ public class MainFrame extends JFrame {
 				return;
 			}
 
-			playTaskMacro();
+			try {
+				playTaskMacro();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 
 		taskButtonPanel.add(taskRunButton);
@@ -892,7 +900,11 @@ public class MainFrame extends JFrame {
 				return;
 			}
 
-			playSmartTaskMacro();
+			try {
+				playSmartTaskMacro();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 
 		smartButtonPanel.add(smartRunButton, "grow");
@@ -906,6 +918,14 @@ public class MainFrame extends JFrame {
 		waitingComponentList.add(etcTaskCheckButton);
 		waitingComponentList.add(taskRunButton);
 		waitingComponentList.add(smartRunButton);
+		
+		// 로그 패널
+		JPanel logPanel = new JPanel(new MigLayout("inset 5, fill"));
+		logPanel.setPreferredSize(new Dimension(250, 0));
+		jsp.setViewportView(jtx);
+		logPanel.add(jsp, "grow, push");
+		jtx.setFocusable(false);
+		//mainPanel.add(logPanel, "grow, push");
 	}
 
 	public void events() throws Exception {
@@ -971,13 +991,9 @@ public class MainFrame extends JFrame {
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-
 		timelinesGroup.clear();
-		MacroTimelines timelines = new MacroTimelines(true);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.암흑매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+		
+		MacroTimelines timelines = MacroCreator.darkforce(status);
 		timelinesGroup.add(timelines);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
@@ -990,14 +1006,9 @@ public class MainFrame extends JFrame {
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = new MacroTimelines(true);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.암흑반복매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+		MacroTimelines timelines = MacroCreator.darkforce(status, 300);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
@@ -1008,14 +1019,9 @@ public class MainFrame extends JFrame {
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = new MacroTimelines(true);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.암흑반복매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+		MacroTimelines timelines = MacroCreator.darkforce(status, 300);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play();
 		setPlayingState(true);
@@ -1029,11 +1035,7 @@ public class MainFrame extends JFrame {
 
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = new MacroTimelines(true);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.워해머매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+		MacroTimelines timelines = MacroCreator.warhammer4k(status);
 		timelinesGroup.add(timelines);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
@@ -1047,11 +1049,8 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
-		MacroTimelines timelines = new MacroTimelines(true);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.워해머반복매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+		
+		MacroTimelines timelines = MacroCreator.warhammer4k(status, 100);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
@@ -1063,11 +1062,8 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
-		MacroTimelines timelines = new MacroTimelines(true);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.워해머반복매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+		
+		MacroTimelines timelines = MacroCreator.warhammer4k(status, 100);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play();
 		setPlayingState(true);
@@ -1079,11 +1075,8 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
-		MacroTimelines timelines = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.테러매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+		
+		MacroTimelines timelines = MacroCreator.terror4k(status);
 		timelinesGroup.add(timelines);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
@@ -1097,11 +1090,8 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
-		MacroTimelines timelines = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline timeline = MacroTimelineFactory.테러반복매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
-		}
+
+		MacroTimelines timelines = MacroCreator.terror4k(status, 90);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
@@ -1113,389 +1103,22 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	private void playTaskMacro() {
+	private void playTaskMacro() throws Exception {
 		if (status.getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-		timelinesGroup.clear();
-
-		MacroTimelines tls = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline tl = MacroTimelineFactory.기지내부로이동(status, screenRect.getLocation());
-			tls.add(tl);
-		}
-		timelinesGroup.add(tls);
-
-		if (status.isDailyVipReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.VIP보상받기매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyBasketReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.장바구니매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailySpecialReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.패키지무료보상매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailySandTraning()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyNormalIncrutAndSkill()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.일반모집스킬모집매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyAdvancedIncruit()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.고급모집매크로(status, screenRect.getLocation(), 2);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyQuestReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.일일임무매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isGoldRequest()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.골드지원요청(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isArmyUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.육군훈련(status, screenRect.getLocation(), 15);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isNavyUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.해군훈련(status, screenRect.getLocation(), 15);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isAirforceUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.공군훈련(status, screenRect.getLocation(), 15);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyCrossBattle()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.크로스패배매크로(status, screenRect.getLocation(), 10);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyGemReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-
-		// 주간
-		if (status.isWeeklyDecorFreeToken()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.주간장식세트무료쿠폰매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-
-		tls = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline tl = MacroTimelineFactory.기지내부에서외부로이동(status, screenRect.getLocation());
-			tls.add(tl);
-		}
-		timelinesGroup.add(tls);
-
-		// 시설
-		if (status.isOilFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.석유시설매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isFoodFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.식량시설매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isOdinFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		
-		tls = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline tl = MacroTimelineFactory.기지내부로이동(status, screenRect.getLocation());
-			tls.add(tl);
-		}
-		timelinesGroup.add(tls);
-		if(status.isAllianceDonation()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.길드기부매크로(status, screenRect.getLocation(), 10);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if(status.isProductMaterial()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.재료생산매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-
+		MacroCreator.task(timelinesGroup, status);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}
 
-	private void playSmartTaskMacro() {
+	private void playSmartTaskMacro() throws Exception {
 		if (status.getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-		timelinesGroup.clear();
-		
-		LocalDate today = LocalDate.now();
-		String week = today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREA);
-
-		MacroTimelines tls = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline tl = MacroTimelineFactory.기지내부로이동(status, screenRect.getLocation());
-			tls.add(tl);
-		}
-		timelinesGroup.add(tls);
-
-		if (status.isDailyVipReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.VIP보상받기매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyBasketReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.장바구니매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailySpecialReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.패키지무료보상매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailySandTraning()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyNormalIncrutAndSkill()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.일반모집스킬모집매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyAdvancedIncruit()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			int count = switch(week) {
-			case "월","화"->15;
-			case "수"->30;
-			default->2;
-			};
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.고급모집매크로(status, screenRect.getLocation(), count);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyQuestReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.일일임무매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isGoldRequest()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.골드지원요청(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isArmyUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.육군훈련(status, screenRect.getLocation(), 15);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isNavyUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.해군훈련(status, screenRect.getLocation(), 15);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isAirforceUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.공군훈련(status, screenRect.getLocation(), 15);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyCrossBattle()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.크로스패배매크로(status, screenRect.getLocation(), 10);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isDailyGemReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-
-		// 주간
-		if (status.isWeeklyDecorFreeToken()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.주간장식세트무료쿠폰매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-
-		tls = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline tl = MacroTimelineFactory.기지내부에서외부로이동(status, screenRect.getLocation());
-			tls.add(tl);
-		}
-		timelinesGroup.add(tls);
-
-		// 시설
-		if (status.isOilFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.석유시설매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isFoodFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.식량시설매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if (status.isOdinFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		
-		tls = new MacroTimelines(false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			MacroTimeline tl = MacroTimelineFactory.기지내부로이동(status, screenRect.getLocation());
-			tls.add(tl);
-		}
-		timelinesGroup.add(tls);
-		
-		if(status.isAllianceDonation()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.길드기부매크로(status, screenRect.getLocation(), 10);
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-		if(status.isProductMaterial()) {
-			MacroTimelines timelines = new MacroTimelines(false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				MacroTimeline timeline = MacroTimelineFactory.재료생산매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-			timelinesGroup.add(timelines);
-		}
-
+		MacroCreator.task(timelinesGroup, status, true);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}
