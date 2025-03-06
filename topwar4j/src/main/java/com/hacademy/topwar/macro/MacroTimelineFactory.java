@@ -566,6 +566,7 @@ public class MacroTimelineFactory {
 	public static MacroTimeline 월드기지전환(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		timeline.add(월드기지전환버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.2));
 		return timeline;
 	}
 	public static MacroTimeline 기지내부로이동(MacroStatus status, Point basePoint) {

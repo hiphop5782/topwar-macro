@@ -15,15 +15,21 @@ public class MacroCreator {
 	public static MacroDelayAction delay(long ms) {
 		return new MacroDelayAction(ms/1000d);		
 	}
-	public static MacroTimelines darkforce(MacroStatus status) {
+	public static MacroTimelines darkforce(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines(true);
 		for (Rectangle screenRect : status.getScreenList()) {
+			Point rader = ImageUtils.searchRaderButton(screenRect);
+			if(rader == null) {
+				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			
 			MacroTimeline timeline = MacroTimelineFactory.암흑매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		return timelines;
 	}
-	public static MacroTimelines darkforce(MacroStatus status, int durationSecond) {
+	public static MacroTimelines darkforce(MacroStatus status, int durationSecond) throws Exception {
 		MacroTimelines timelines = darkforce(status);
 		long ms = timelines.getDuration();
 		long remain = durationSecond * 1000L - ms;
@@ -32,15 +38,21 @@ public class MacroCreator {
 		}
 		return timelines;
 	}
-	public static MacroTimelines warhammer4k(MacroStatus status) {
+	public static MacroTimelines warhammer4k(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines(true);
 		for (Rectangle screenRect : status.getScreenList()) {
+			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+			if(rader == null) {
+				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			
 			MacroTimeline timeline = MacroTimelineFactory.워해머매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		return timelines;
 	}
-	public static MacroTimelines warhammer4k(MacroStatus status, int durationSecond) {
+	public static MacroTimelines warhammer4k(MacroStatus status, int durationSecond) throws Exception {
 		MacroTimelines timelines = warhammer4k(status);
 		long ms = timelines.getDuration();
 		long remain = durationSecond * 1000L - ms;
@@ -49,15 +61,21 @@ public class MacroCreator {
 		}
 		return timelines;
 	}
-	public static MacroTimelines terror4k(MacroStatus status) {
+	public static MacroTimelines terror4k(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines(false);
 		for (Rectangle screenRect : status.getScreenList()) {
+			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+			if(rader == null) {
+				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			
 			MacroTimeline timeline = MacroTimelineFactory.테러매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
 		}
 		return timelines;
 	}
-	public static MacroTimelines terror4k(MacroStatus status, int durationSecond) {
+	public static MacroTimelines terror4k(MacroStatus status, int durationSecond) throws Exception {
 		MacroTimelines timelines = terror4k(status);
 		if(!status.isTerror4kManual()) {//집결 시
 			long ms = timelines.getDuration();

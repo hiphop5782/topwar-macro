@@ -345,7 +345,11 @@ public class MainFrame extends JFrame {
 		darkforceOnceButton.setForeground(Color.white);
 		darkforceOnceButton.setFont(buttonFont);
 		darkforceOnceButton.addActionListener(e -> {
-			playDarkforceMacroOnce();
+			try {
+				playDarkforceMacroOnce();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		darkforceButtonPanel.add(darkforceOnceButton);
 
@@ -353,7 +357,11 @@ public class MainFrame extends JFrame {
 		darkforceTenButton.setForeground(Color.white);
 		darkforceTenButton.setFont(buttonFont);
 		darkforceTenButton.addActionListener(e -> {
-			playDarkforceMacroLoop(10);
+			try {
+				playDarkforceMacroLoop(10);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		darkforceButtonPanel.add(darkforceTenButton);
 
@@ -376,7 +384,11 @@ public class MainFrame extends JFrame {
 		darkforceLoopButton.setForeground(Color.white);
 		darkforceLoopButton.setFont(buttonFont);
 		darkforceLoopButton.addActionListener(e -> {
-			playDarkforceMacroLoop();
+			try {
+				playDarkforceMacroLoop();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		darkforceButtonPanel.add(darkforceLoopButton);
 
@@ -399,7 +411,11 @@ public class MainFrame extends JFrame {
 		warhammer1Button.setForeground(Color.white);
 		warhammer1Button.setFont(buttonFont);
 		warhammer1Button.addActionListener(e -> {
-			playWarhammerMacroOnce();
+			try {
+				playWarhammerMacroOnce();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		warhammer4kPanel.add(warhammer1Button);
 
@@ -407,7 +423,11 @@ public class MainFrame extends JFrame {
 		warhammer10Button.setForeground(Color.white);
 		warhammer10Button.setFont(buttonFont);
 		warhammer10Button.addActionListener(e -> {
-			playWarhammerMacroLoop(10);
+			try {
+				playWarhammerMacroLoop(10);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		warhammer4kPanel.add(warhammer10Button);
 
@@ -415,7 +435,11 @@ public class MainFrame extends JFrame {
 		warhammer15Button.setForeground(Color.white);
 		warhammer15Button.setFont(buttonFont);
 		warhammer15Button.addActionListener(e -> {
-			playWarhammerMacroLoop(15);
+			try {
+				playWarhammerMacroLoop(15);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		warhammer4kPanel.add(warhammer15Button);
 
@@ -438,7 +462,11 @@ public class MainFrame extends JFrame {
 		warhammerLoopButton.setForeground(Color.white);
 		warhammerLoopButton.setFont(buttonFont);
 		warhammerLoopButton.addActionListener(e -> {
-			playWarhammerMacroLoop();
+			try {
+				playWarhammerMacroLoop();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		warhammer4kPanel.add(warhammerLoopButton);
 
@@ -502,21 +530,33 @@ public class MainFrame extends JFrame {
 		terror4kOnceButton.setForeground(Color.white);
 		terror4kOnceButton.setFont(buttonFont);
 		terror4kOnceButton.addActionListener(e -> {
-			playTerror4kMacroOnce();
+			try {
+				playTerror4kMacroOnce();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 
 		terror4kFiveButton.setBackground(new Color(46, 204, 113));
 		terror4kFiveButton.setForeground(Color.white);
 		terror4kFiveButton.setFont(buttonFont);
 		terror4kFiveButton.addActionListener(e -> {
-			playTerror4kMacroLoop(5);
+			try {
+				playTerror4kMacroLoop(5);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 
 		terror4kLoopButton.setBackground(new Color(9, 132, 227));
 		terror4kLoopButton.setForeground(Color.white);
 		terror4kLoopButton.setFont(buttonFont);
 		terror4kLoopButton.addActionListener(e -> {
-			playTerror4kMacroLoop(10);
+			try {
+				playTerror4kMacroLoop(10);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 
 		terror4kButtonPanel.add(terror4kOnceButton);
@@ -986,7 +1026,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(false);
 	}
 
-	private void playDarkforceMacroOnce() {
+	private void playDarkforceMacroOnce() throws Exception {
 		if (status.getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
@@ -999,7 +1039,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 
-	private void playDarkforceMacroLoop(int count) {
+	private void playDarkforceMacroLoop(int count) throws Exception {
 		if (count < 1)
 			return;
 		if (status.getScreenList().isEmpty())
@@ -1014,7 +1054,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 
-	private void playDarkforceMacroLoop() {
+	private void playDarkforceMacroLoop() throws Exception {
 		if (status.getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
@@ -1027,7 +1067,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 
-	private void playWarhammerMacroOnce() {
+	private void playWarhammerMacroOnce() throws Exception {
 		if (status.getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
@@ -1041,7 +1081,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 
-	private void playWarhammerMacroLoop(int count) {
+	private void playWarhammerMacroLoop(int count) throws Exception {
 		if (count < 1)
 			return;
 		if (status.getScreenList().isEmpty())
@@ -1056,7 +1096,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 
-	private void playWarhammerMacroLoop() {
+	private void playWarhammerMacroLoop() throws Exception {
 		if (status.getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
@@ -1069,7 +1109,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 
-	private void playTerror4kMacroOnce() {
+	private void playTerror4kMacroOnce() throws Exception {
 		if (status.getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
@@ -1082,7 +1122,7 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 
-	private void playTerror4kMacroLoop(int count) {
+	private void playTerror4kMacroLoop(int count) throws Exception {
 		if (count < 1 || count > 10)
 			return;
 		if (status.getScreenList().isEmpty())

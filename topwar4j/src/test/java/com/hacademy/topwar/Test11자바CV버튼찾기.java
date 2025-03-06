@@ -11,7 +11,8 @@ public class Test11자바CV버튼찾기 {
 	public static void main(String[] args) throws Exception {
 		long begin = System.currentTimeMillis();
 		Rectangle rect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-		Point p = ImageUtils.searchButton(rect, Button.HERO);
+		//Point p = ImageUtils.searchButton(rect, Button.HERO);
+		Point p = ImageUtils.searchRaderButton(rect);
 		long end = System.currentTimeMillis();
 		
 		System.out.println(p);
