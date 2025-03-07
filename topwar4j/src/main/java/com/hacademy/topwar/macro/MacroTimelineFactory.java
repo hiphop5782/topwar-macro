@@ -416,7 +416,7 @@ public class MacroTimelineFactory {
 		timeline.add(유전선택(status, basePoint));				
 		
 		timeline.add(최소레벨선택(status, basePoint));			
-		for(int i=1; i < status.getOilFacilityLevel(); i++) {
+		for(int i=2; i < status.getOilFacilityLevel(); i++) {
 			timeline.add(레벨더하기버튼클릭(status, basePoint));	
 		}
 		timeline.add(자원지검색버튼(status, basePoint));			
@@ -447,7 +447,7 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(농지선택(status, basePoint));
 		timeline.add(최소레벨선택(status, basePoint));
-		for(int i=1; i < status.getFoodFacilityLevel(); i++) {
+		for(int i=2; i < status.getFoodFacilityLevel(); i++) {
 			timeline.add(레벨더하기버튼클릭(status, basePoint));
 		}
 		timeline.add(자원지검색버튼(status, basePoint));

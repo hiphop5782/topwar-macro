@@ -2,17 +2,22 @@ package com.hacademy.topwar.macro;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+import lombok.Data;
 import lombok.Setter;
 
+@Data
 public class MacroTimelines {
+	private String name;
 	private List<MacroTimeline> timelineList = new ArrayList<>();
 	private List<Double> delayList = new ArrayList<>();
 	private boolean seperate;
-	public MacroTimelines() {}
-	public MacroTimelines(boolean seperate) {
+	public MacroTimelines(String name) {
+		this.name = name;
+		this.seperate = false;
+	}
+	public MacroTimelines(String name, boolean seperate) {
+		this.name = name;
 		this.seperate = seperate;
 	}
 	public void add(MacroTimeline timeline) {

@@ -16,7 +16,7 @@ public class MacroCreator {
 		return new MacroDelayAction(ms/1000d);		
 	}
 	public static MacroTimelines darkforce(MacroStatus status) throws Exception {
-		MacroTimelines timelines = new MacroTimelines(true);
+		MacroTimelines timelines = new MacroTimelines("암흑", true);
 		for (Rectangle screenRect : status.getScreenList()) {
 			Point rader = ImageUtils.searchRaderButton(screenRect);
 			if(rader == null) {
@@ -41,7 +41,7 @@ public class MacroCreator {
 		return timelines;
 	}
 	public static MacroTimelines warhammer4k(MacroStatus status) throws Exception {
-		MacroTimelines timelines = new MacroTimelines(true);
+		MacroTimelines timelines = new MacroTimelines("워해머", true);
 		for (Rectangle screenRect : status.getScreenList()) {
 			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
 			if(rader == null) {
@@ -64,7 +64,7 @@ public class MacroCreator {
 		return timelines;
 	}
 	public static MacroTimelines terror4k(MacroStatus status) throws Exception {
-		MacroTimelines timelines = new MacroTimelines(false);
+		MacroTimelines timelines = new MacroTimelines("테러", false);
 		for (Rectangle screenRect : status.getScreenList()) {
 			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
 			if(rader == null) {
@@ -102,7 +102,7 @@ public class MacroCreator {
 		//기지 내부로 모두 이동시키기(화면 반응속도를 향상시키기 위해)
 		//- 레이더 버튼이 보이면 월드 맵에 위치한 것으로 판정
 		if(status.hasAnyInternalTask()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("기지내부로이동", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
 				if(rader != null) {
@@ -114,7 +114,7 @@ public class MacroCreator {
 		}
 
 		if (status.isDailyVipReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("VIP보상", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.VIP보상받기매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -122,7 +122,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isDailyBasketReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("장바구니", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.장바구니매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -130,7 +130,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isDailySpecialReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("특별패키지", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.패키지무료보상매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -138,7 +138,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isDailySandTraning()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("사판훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -146,7 +146,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isDailyNormalIncrutAndSkill()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("일반/스킬모집", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.일반모집스킬모집매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -162,7 +162,7 @@ public class MacroCreator {
 				default->2;
 				};
 			}
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("고급모집", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.고급모집매크로(status, screenRect.getLocation(), count);
 				timelines.add(timeline);
@@ -170,7 +170,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isDailyQuestReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("일일임무", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.일일임무매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -178,7 +178,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isGoldRequest()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("골드지원", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.골드지원요청(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -186,7 +186,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isDailyCrossBattle()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("크로스패배", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.크로스패배매크로(status, screenRect.getLocation(), 10);
 				timelines.add(timeline);
@@ -194,7 +194,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isDailyGemReward()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("무료보석", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -202,7 +202,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isArmyUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("육군훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.육군훈련(status, screenRect.getLocation(), 15);
 				timelines.add(timeline);
@@ -210,7 +210,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isNavyUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("해군훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.해군훈련(status, screenRect.getLocation(), 15);
 				timelines.add(timeline);
@@ -218,7 +218,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isAirforceUnitTraining()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("공군훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.공군훈련(status, screenRect.getLocation(), 15);
 				timelines.add(timeline);
@@ -229,7 +229,7 @@ public class MacroCreator {
 		// 주간
 		if (status.isWeeklyDecorFreeToken()) {
 			if(considerWeek==false || week.equals("월")) {
-				MacroTimelines timelines = new MacroTimelines(false);
+				MacroTimelines timelines = new MacroTimelines("주간장식세트무료토큰", false);
 				for (Rectangle screenRect : status.getScreenList()) {
 					MacroTimeline timeline = MacroTimelineFactory.주간장식세트무료쿠폰매크로(status, screenRect.getLocation());
 					timelines.add(timeline);
@@ -240,7 +240,7 @@ public class MacroCreator {
 
 		//외부 작업이 있으면 기지 전환
 		if(status.hasAnyExternalTask()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("기지외부로이동", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
 				if(rader == null) {
@@ -248,10 +248,12 @@ public class MacroCreator {
 					timelines.add(timeline);
 				}
 			}
-			timelinesGroup.add(timelines);
+			if(timelines.size() > 0) {
+				timelinesGroup.add(timelines);
+			}
 		}
 		if(status.isAllianceDonation()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("길드기부", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.길드기부매크로(status, screenRect.getLocation(), 10);
 				timelines.add(timeline);
@@ -259,7 +261,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if(status.isProductMaterial()) {
-			MacroTimelines timelines = new MacroTimelines(false);
+			MacroTimelines timelines = new MacroTimelines("재료생산", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.재료생산매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -269,7 +271,7 @@ public class MacroCreator {
 
 		// 시설
 		if (status.isOilFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
+			MacroTimelines timelines = new MacroTimelines("석유시설", true);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.석유시설매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -277,7 +279,7 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isFoodFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
+			MacroTimelines timelines = new MacroTimelines("식량시설", true);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.식량시설매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -285,12 +287,17 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 		if (status.isOdinFacility()) {
-			MacroTimelines timelines = new MacroTimelines(true);
+			MacroTimelines timelines = new MacroTimelines("오딘시설", true);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
 			}
 			timelinesGroup.add(timelines);
+		}
+		
+		System.out.println(timelinesGroup.size());
+		for(MacroTimelines timelines : timelinesGroup.getTimelinesList()) {
+			System.out.println("→ "+timelines.getName()+" : " + timelines.size());
 		}
 		
 		return timelinesGroup;

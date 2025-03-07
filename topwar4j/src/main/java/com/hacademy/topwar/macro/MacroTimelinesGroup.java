@@ -46,7 +46,7 @@ public class MacroTimelinesGroup {
 				}
 			}
 			catch(Exception e) {
-//				e.printStackTrace();
+				e.printStackTrace();
 				System.out.println("Play {"+count+"} is interruted");
 			}
 			finally {
