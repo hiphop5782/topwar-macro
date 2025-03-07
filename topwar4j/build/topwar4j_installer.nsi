@@ -15,6 +15,13 @@ RequestExecutionLevel admin
 ; 🚀 설치 디렉토리
 InstallDir ${INSTALL_DIR}
 
+; 기존 설치 경로 확인 후 삭제
+Section "UninstallPrevious"
+    IfFileExists "$INSTDIR\topwar4j.exe" 0 +3
+    MessageBox MB_OK "기존 버전을 삭제하고 새로 설치합니다."
+    RMDir /r "$INSTDIR"
+SectionEnd
+
 ; 사용자가 직접 설치 경로 선택 가능
 ShowInstDetails show
 ShowUninstDetails show
@@ -24,11 +31,17 @@ Section "Install"
 
     ; 📌 실행 파일 복사
     File "topwar4j.exe"
-
-    ; 📌 JRE 폴더 복사 
-
+    
     ; 📌 아이콘 파일 복사
     File "KID.ico"
+    
+    ; 📌 이미지 폴더 복사
+    SetOutPath "$INSTDIR\images"
+    File /r "..\images\*"
+    
+    ; 📌 JRE 폴더 복사 
+    setOutPath "$INSTDIR\jre"
+   	File /r "jre\*"
 
     ; 📌 바탕화면 및 시작 메뉴에 바로가기 추가
     CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
@@ -50,7 +63,8 @@ Section "Uninstall"
 
     ; 📌 프로그램 파일 삭제
     Delete "$INSTDIR\topwar4j.exe"
-    RMDir /r "$INSTDIR\jre"   
+    RMDir /r "$INSTDIR\jre"
+    RMDir /r "$INSTDIR\images"   
     Delete "$INSTDIR\KID.ico"
     Delete "$INSTDIR\Uninstall.exe"
 

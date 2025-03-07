@@ -228,6 +228,7 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -244,6 +245,7 @@ public class MacroTimelineFactory {
 		}
 		
 		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -264,6 +266,7 @@ public class MacroTimelineFactory {
 		
 		timeline.add(randomDelay(status, 1, 2));
 		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -286,6 +289,7 @@ public class MacroTimelineFactory {
 		
 		timeline.add(randomDelay(status, 1, 2));
 		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -297,7 +301,8 @@ public class MacroTimelineFactory {
 		timeline.add(일일VIP보상클릭(status, basePoint));	
 		timeline.add(일일VIP보상클릭(status, basePoint));	
 		
-		timeline.add(뒤로가기(status, basePoint));			
+		timeline.add(뒤로가기(status, basePoint));		
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -313,7 +318,8 @@ public class MacroTimelineFactory {
 		
 		timeline.add(뒤로가기(status, basePoint));			
 		timeline.add(뒤로가기(status, basePoint));			
-		timeline.add(뒤로가기(status, basePoint));			
+		timeline.add(뒤로가기(status, basePoint));		
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -328,7 +334,8 @@ public class MacroTimelineFactory {
 		
 		timeline.add(뒤로가기(status, basePoint));			
 		timeline.add(뒤로가기(status, basePoint));			
-		timeline.add(뒤로가기(status, basePoint));			
+		timeline.add(뒤로가기(status, basePoint));	
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -350,7 +357,8 @@ public class MacroTimelineFactory {
 		timeline.add(원정탐험보상수령(status, basePoint));	
 		
 		timeline.add(뒤로가기(status, basePoint));			
-		timeline.add(뒤로가기(status, basePoint));			
+		timeline.add(뒤로가기(status, basePoint));		
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -373,7 +381,8 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 2, 3));
 		
 		timeline.add(섬대작전나가기(status, basePoint));		
-		timeline.add(뒤로가기(status, basePoint));			
+		timeline.add(뒤로가기(status, basePoint));		
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -400,7 +409,8 @@ public class MacroTimelineFactory {
 		timeline.add(장식세트무료토큰받기클릭(status, basePoint));	
 		timeline.add(뒤로가기(status, basePoint));				
 		timeline.add(뒤로가기(status, basePoint));				
-		timeline.add(뒤로가기(status, basePoint));				
+		timeline.add(뒤로가기(status, basePoint));		
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -541,6 +551,7 @@ public class MacroTimelineFactory {
 		timeline.add(크로스훈련X버튼(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}	
@@ -560,6 +571,7 @@ public class MacroTimelineFactory {
 		timeline.add(길드지원요청취소확인(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -588,6 +600,7 @@ public class MacroTimelineFactory {
 		
 		timeline.add(월드기지전환버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1, 1.5));
+		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}

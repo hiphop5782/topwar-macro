@@ -91,29 +91,31 @@ public class MacroCreator {
 		}
 		return timelines;
 	}
-	public static MacroTimelinesGroup task(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		return task(timelinesGroup, status, false);
-	}
-	public static MacroTimelinesGroup task(MacroTimelinesGroup timelinesGroup, MacroStatus status, boolean considerWeek) throws Exception {
-		timelinesGroup.clear();
-		
-		String week = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-		
-		//기지 내부로 모두 이동시키기(화면 반응속도를 향상시키기 위해)
-		//- 레이더 버튼이 보이면 월드 맵에 위치한 것으로 판정
-		if(status.hasAnyInternalTask()) {
-			MacroTimelines timelines = new MacroTimelines("기지내부로이동", false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
-				if(rader != null) {
-					MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
-					timelines.add(timeline);
-				}
+	public static void moveIntoBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		MacroTimelines timelines = new MacroTimelines("기지내부로이동", false);
+		for (Rectangle screenRect : status.getScreenList()) {
+			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+			if(rader != null) {
+				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+				timelines.add(timeline);
 			}
-			if(timelines.size() > 0) timelinesGroup.add(timelines);
 		}
-
+		if(timelines.size() > 0) timelinesGroup.add(timelines);
+	}
+	public static void moveOutofBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		MacroTimelines timelines = new MacroTimelines("기지외부로이동", false);
+		for (Rectangle screenRect : status.getScreenList()) {
+			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+			if(rader == null) {
+				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+		}
+		if(timelines.size() > 0) timelinesGroup.add(timelines);
+	}
+	public static void VIP보상(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyVipReward()) {
+			moveIntoBase(timelinesGroup, status);//기지내부로이동
 			MacroTimelines timelines = new MacroTimelines("VIP보상", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.VIP보상받기매크로(status, screenRect.getLocation());
@@ -121,7 +123,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 장바구니(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyBasketReward()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("장바구니", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.장바구니매크로(status, screenRect.getLocation());
@@ -129,7 +134,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 특별패키지(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailySpecialReward()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("특별패키지", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.패키지무료보상매크로(status, screenRect.getLocation());
@@ -137,7 +145,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 사판훈련(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailySandTraning()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("사판훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
@@ -145,7 +156,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 일반스킬모집(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyNormalIncrutAndSkill()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("일반/스킬모집", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.일반모집스킬모집매크로(status, screenRect.getLocation());
@@ -153,15 +167,16 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 고급모집(MacroTimelinesGroup timelinesGroup, MacroStatus status, boolean considerWeek) throws Exception {
 		if (status.isDailyAdvancedIncruit()) {
-			int count = 2;
-			if(considerWeek == true) {
-				count = switch(week) {
-				case "월","화"->15;
-				case "수"->30;
-				default->2;
-				};
-			}
+			moveIntoBase(timelinesGroup, status);
+			String week = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+			int count = considerWeek ? 2 : switch(week) {
+											case "월","화"->15;
+											case "수"->30;
+											default->2;
+											};
 			MacroTimelines timelines = new MacroTimelines("고급모집", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.고급모집매크로(status, screenRect.getLocation(), count);
@@ -169,7 +184,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 일일임무(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyQuestReward()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("일일임무", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.일일임무매크로(status, screenRect.getLocation());
@@ -177,7 +195,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 골드지원(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isGoldRequest()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("골드지원", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.골드지원요청(status, screenRect.getLocation());
@@ -185,7 +206,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 크로스패배(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyCrossBattle()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("크로스패배", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.크로스패배매크로(status, screenRect.getLocation(), 10);
@@ -193,7 +217,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 무료보석(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyGemReward()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("무료보석", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
@@ -201,7 +228,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 육군훈련(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isArmyUnitTraining()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("육군훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.육군훈련(status, screenRect.getLocation(), 15);
@@ -209,7 +239,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 해군훈련(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isNavyUnitTraining()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("해군훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.해군훈련(status, screenRect.getLocation(), 15);
@@ -217,7 +250,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 공군훈련(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isAirforceUnitTraining()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("공군훈련", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.공군훈련(status, screenRect.getLocation(), 15);
@@ -225,9 +261,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
-
-		// 주간
+	}
+	public static void 주간장식세트무료토큰(MacroTimelinesGroup timelinesGroup, MacroStatus status, boolean considerWeek) throws Exception {
 		if (status.isWeeklyDecorFreeToken()) {
+			String week = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
 			if(considerWeek==false || week.equals("월")) {
 				MacroTimelines timelines = new MacroTimelines("주간장식세트무료토큰", false);
 				for (Rectangle screenRect : status.getScreenList()) {
@@ -237,22 +274,10 @@ public class MacroCreator {
 				timelinesGroup.add(timelines);
 			}
 		}
-
-		//외부 작업이 있으면 기지 전환
-		if(status.hasAnyExternalTask()) {
-			MacroTimelines timelines = new MacroTimelines("기지외부로이동", false);
-			for (Rectangle screenRect : status.getScreenList()) {
-				Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
-				if(rader == null) {
-					MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
-					timelines.add(timeline);
-				}
-			}
-			if(timelines.size() > 0) {
-				timelinesGroup.add(timelines);
-			}
-		}
+	}
+	public static void 길드기부(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if(status.isAllianceDonation()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("길드기부", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.길드기부매크로(status, screenRect.getLocation(), 10);
@@ -260,7 +285,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 재료생산(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if(status.isProductMaterial()) {
+			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("재료생산", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.재료생산매크로(status, screenRect.getLocation());
@@ -268,9 +296,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
-
-		// 시설
+	}
+	public static void 석유시설(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isOilFacility()) {
+			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("석유시설", true);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.석유시설매크로(status, screenRect.getLocation());
@@ -278,7 +307,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 식량시설(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isFoodFacility()) {
+			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("식량시설", true);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.식량시설매크로(status, screenRect.getLocation());
@@ -286,7 +318,10 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 오딘시설(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isOdinFacility()) {
+			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("오딘시설", true);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
@@ -294,11 +329,36 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static MacroTimelinesGroup task(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		return task(timelinesGroup, status, false);
+	}
+	public static MacroTimelinesGroup task(MacroTimelinesGroup timelinesGroup, MacroStatus status, boolean considerWeek) throws Exception {
+		timelinesGroup.clear();
 		
-		System.out.println(timelinesGroup.size());
-		for(MacroTimelines timelines : timelinesGroup.getTimelinesList()) {
-			System.out.println("→ "+timelines.getName()+" : " + timelines.size());
-		}
+		VIP보상(timelinesGroup, status);
+		장바구니(timelinesGroup, status);
+		특별패키지(timelinesGroup, status);
+		사판훈련(timelinesGroup, status);
+		고급모집(timelinesGroup, status, considerWeek);
+		일일임무(timelinesGroup, status);
+		골드지원(timelinesGroup, status);
+		크로스패배(timelinesGroup, status);
+		무료보석(timelinesGroup, status);
+
+		// 주간
+		주간장식세트무료토큰(timelinesGroup, status, considerWeek);
+		
+		길드기부(timelinesGroup, status);
+		재료생산(timelinesGroup, status);
+		육군훈련(timelinesGroup, status);
+		해군훈련(timelinesGroup, status);
+		공군훈련(timelinesGroup, status);
+		
+		// 시설
+		석유시설(timelinesGroup, status);
+		식량시설(timelinesGroup, status);
+		오딘시설(timelinesGroup, status);
 		
 		return timelinesGroup;
 	}
