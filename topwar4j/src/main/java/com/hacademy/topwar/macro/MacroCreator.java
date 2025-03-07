@@ -3,11 +3,11 @@ package com.hacademy.topwar.macro;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
 import com.hacademy.topwar.constant.Button;
+import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
 import com.hacademy.topwar.util.ImageUtils;
 
@@ -29,10 +29,12 @@ public class MacroCreator {
 		}
 		return timelines;
 	}
-	public static MacroTimelines darkforce(MacroStatus status, int durationSecond) throws Exception {
+	public static MacroTimelines darkforceLoop(MacroStatus status) throws Exception {
 		MacroTimelines timelines = darkforce(status);
 		long ms = timelines.getDuration();
-		long remain = durationSecond * 1000L - ms;
+		Delay delay = status.getDarkforceAttackCount() == 1 ? Delay.DARKFORCE1 : Delay.DARKFORCE5;
+		long remain = delay.getDurationMillis() - ms;
+		System.out.println("remain = " + remain);
 		if(remain > 0) {//마지막 잔여 딜레이 추가
 			timelines.last().add(delay(remain));
 		}
@@ -83,6 +85,9 @@ public class MacroCreator {
 			if(remain > 0) {//마지막 잔여 딜레이 추가
 				timelines.last().add(delay(remain));
 			}
+		}
+		else {//공격일 때도 딜레이 추가
+			timelines.last().add(delay(5000L));
 		}
 		return timelines;
 	}

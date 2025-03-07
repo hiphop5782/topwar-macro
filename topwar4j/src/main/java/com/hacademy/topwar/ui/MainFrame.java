@@ -33,6 +33,7 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
+import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.MacroCreator;
 import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimelines;
@@ -1048,7 +1049,7 @@ public class MainFrame extends JFrame {
 			return;
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = MacroCreator.darkforce(status, 300);
+		MacroTimelines timelines = MacroCreator.darkforceLoop(status);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
@@ -1061,7 +1062,7 @@ public class MainFrame extends JFrame {
 			return;
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = MacroCreator.darkforce(status, 300);
+		MacroTimelines timelines = MacroCreator.darkforceLoop(status);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play();
 		setPlayingState(true);
