@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
+import com.hacademy.topwar.constant.Area;
 import com.hacademy.topwar.constant.Button;
 import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
@@ -94,7 +95,8 @@ public class MacroCreator {
 	public static void moveIntoBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("기지내부로이동", false);
 		for (Rectangle screenRect : status.getScreenList()) {
-			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+			Point rader = ImageUtils.searchButton(Area.RADER.getRect(), Button.RADER);
+			System.out.println("move into base = " + rader);
 			if(rader != null) {
 				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -105,7 +107,8 @@ public class MacroCreator {
 	public static void moveOutofBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("기지외부로이동", false);
 		for (Rectangle screenRect : status.getScreenList()) {
-			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+			Point rader = ImageUtils.searchButton(Area.RADER.getRect(), Button.RADER);
+			System.out.println("move out of base = " + rader);
 			if(rader == null) {
 				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
 				timelines.add(timeline);

@@ -48,30 +48,28 @@ public class ImageUtils {
 		return searchImage(screenRect, button.getImage());
 	}
 	// ✅ 지정한 영역에서 이미지 찾기
-		public static java.awt.Point searchImage(Rectangle screenRect, BufferedImage buf) throws Exception {
-			Mat areaMat = captureScreenToMat(screenRect);
-			Mat buttonMat = bufferedImageToMat(buf);
-			Mat resultMat = new Mat();
-			
-			//탐지
-			Point match = findImageMultiScale(areaMat, buttonMat, resultMat);
-			if(match== null) return null;
-			
-			//중심좌표 계산
-			int x = match.x() + resultMat.cols()/2;
-			int y = match.y() + resultMat.rows()/2;
-			
-			//메모리 정리
-			areaMat.release();
-			buttonMat.release();
-			resultMat.release();
-			
-			return new java.awt.Point(x, y);
-		}
-	//x=400, y=300, w=100, h=350
+	public static java.awt.Point searchImage(Rectangle screenRect, BufferedImage buf) throws Exception {
+		Mat areaMat = captureScreenToMat(screenRect);
+		Mat buttonMat = bufferedImageToMat(buf);
+		Mat resultMat = new Mat();
+		
+		//탐지
+		Point match = findImageMultiScale(areaMat, buttonMat, resultMat);
+		if(match== null) return null;
+		
+		//중심좌표 계산
+		int x = match.x() + resultMat.cols()/2;
+		int y = match.y() + resultMat.rows()/2;
+		
+		//메모리 정리
+		areaMat.release();
+		buttonMat.release();
+		resultMat.release();
+		
+		return new java.awt.Point(x, y);
+	}
 	public static java.awt.Point searchRaderButton(Rectangle baseRect) throws Exception {
-		Rectangle buttonArea = new Rectangle(baseRect.x + 400, baseRect.y + 300, 100, 350);
-		return searchButton(buttonArea, Button.RADER);
+		return searchButton(baseRect, Button.RADER);
 	}
 	
 	// ✅ 지정한 영역 캡쳐

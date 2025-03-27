@@ -48,7 +48,6 @@ public class Test10오픈CV {
 		// 4. 결과 출력
 		if (matchPoint != null) {
 			System.out.println("이미지 발견! 좌표: X=" + matchPoint.x() + ", Y=" + matchPoint.y());
-			System.out.println("이미지 발견! 크기(" + resultMat.cols() + ", Y=" + resultMat.rows());
 			Robot r = new Robot();
 			r.mouseMove(matchPoint.x(), matchPoint.y());
 			r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -60,14 +59,16 @@ public class Test10오픈CV {
 
 	// ✅ 화면 캡처 메서드 (파일 저장 없이 처리)
 	public static BufferedImage captureScreen() throws Exception {
-		Robot robot = new Robot();
-		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-		return robot.createScreenCapture(screenRect);
+//		Robot robot = new Robot();
+//		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+//		return robot.createScreenCapture(screenRect);
+		File target = new File(root, "demo/base.png");
+		return ImageIO.read(new FileInputStream(target));
 	}
 
 	// ✅ BufferedImage로 대상 이미지 로드 (파일 저장 없이 가능)
 	public static BufferedImage loadTargetImage() throws Exception {
-		File target = new File(root, "button/hero.png");
+		File target = new File(root, "button/rader.png");
 		return ImageIO.read(new FileInputStream(target));
 	}
 
