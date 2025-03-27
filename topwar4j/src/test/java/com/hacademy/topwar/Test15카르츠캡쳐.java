@@ -23,7 +23,7 @@ public class Test15카르츠캡쳐 {
 		LocalDate today = LocalDate.now();
 		String dateStr = today.format(DateTimeFormatter.ofPattern("yyyy-MM"));
 		
-		int size = 100;
+		int size = 500;
 		int offsetX = 84;
 		int beginY = 144;
 		int offsetY = 85;
@@ -37,13 +37,17 @@ public class Test15카르츠캡쳐 {
 		}
 		
 		//1명씩 찍을 수가 없기 때문에 4명씩 캡쳐
-		for(int i=0; i < size; i+=4) {
+		for(int i=0; i < size / 4; i+=4) {
 			for(int k=0; k < 4 && i + k < size; k++) {
 				BufferedImage bm = ImageUtils.captureScreen(
 						new Rectangle(baseRect.x + offsetX, baseRect.y + beginY + offsetY*k, 332, 80));
 				//ImageIO.write(bm, "png", new File(dir, "kartz-"+dateStr+"-"+i+".png"));
 				BufferedImage info = crop(bm, 124, 3, 135, 70);
 				ImageIO.write(info, "png", new File(dir, "kartz-"+dateStr+"-"+i+".png"));
+			}
+			if(i >= size-8) {
+				//beginY += 71;
+				beginY = 215;
 			}
 			Mouse.create().move(baseRect.x+offsetX + 250, baseRect.y+offsetY+350)
 					.wheelDown(46).hold(0.2f);
