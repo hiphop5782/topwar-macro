@@ -11,7 +11,7 @@ import com.hacademy.topwar.util.Mouse;
 
 public class Test14스크롤캡쳐 {
 	public static void main(String[] args) throws Exception {
-		Rectangle baseRect = new Rectangle(2, 33, 500, 700);
+		Rectangle baseRect = new Rectangle(8, 82, 500, 700);
 		
 		File dir = new File("ocr/debug");
 		remove(dir);
@@ -21,9 +21,9 @@ public class Test14스크롤캡쳐 {
 		int end = 100;
 		int y = 55;
 		for(int i=begin; i <= end; i++) {
-			System.out.println("y = " + (baseRect.y + y));
+			//System.out.println("y = " + (baseRect.y + y));
 			BufferedImage bm = ImageUtils.captureScreen(new Rectangle(baseRect.x + 48, baseRect.y + y, 400, 69));
-			BufferedImage cpImage = crop(bm, 195, 43, 53, 24);
+			BufferedImage cpImage = crop(bm, 195, 43, 53, 18);
 			ImageIO.write(cpImage, "png", new File(dir, "cp-"+i+".png"));
 			if(i <= 91) {
 				Mouse.create().move(200, 200).wheelDown(10);
