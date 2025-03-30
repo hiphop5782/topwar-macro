@@ -19,6 +19,8 @@ import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 
 import org.bytedeco.javacpp.DoublePointer;
+import org.bytedeco.javacv.Java2DFrameUtils;
+import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Point;
 import org.bytedeco.opencv.opencv_core.Size;
@@ -183,6 +185,11 @@ public class ImageUtils {
 		}
 
 		return bestMatch > 0.8 ? bestLoc : null; // 🔥 80% 이상 유사하면 성공!
+	}
+	
+	public static BufferedImage matToBufferedImage(Mat mat) {
+	    OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
+	    return Java2DFrameUtils.toBufferedImage(converter.convert(mat));
 	}
 
 }
