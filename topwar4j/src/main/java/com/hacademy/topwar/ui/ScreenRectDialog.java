@@ -20,6 +20,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import com.hacademy.topwar.util.MonitorUtils;
+
 public class ScreenRectDialog extends JDialog {
 	
 	private BufferedImage background;
@@ -79,18 +81,9 @@ public class ScreenRectDialog extends JDialog {
 		super(parent);
 		this.setAlwaysOnTop(true);
 		this.setModal(true);
-		this.setSize(500, 700);
-		int x = parent.getX();
-		if(parent.getWidth() > this.getWidth()) 
-			x += (parent.getWidth() - this.getWidth()) / 2;
-		else if(parent.getWidth() < this.getWidth())
-			x -= (parent.getWidth() - this.getWidth()) / 2;
-		int y = parent.getY();
-		if(parent.getHeight() > this.getHeight())
-			y += ((parent.getHeight() - this.getHeight()) / 2);
-		else if(parent.getHeight() < this.getHeight())
-			y -= ((parent.getHeight() - this.getHeight()) / 2);
-		this.setLocation(x, y);
+		//Rectangle rect = MonitorUtils.getCurrentMonitorCenterBounds(500, 700);
+		Rectangle rect = MonitorUtils.getAppLocatedMonitorCenterBounds(parent.getX(), parent.getY(), 500, 700);
+		this.setBounds(rect);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);
 		this.setBackground(new Color(0, 0, 0, 0.5f));

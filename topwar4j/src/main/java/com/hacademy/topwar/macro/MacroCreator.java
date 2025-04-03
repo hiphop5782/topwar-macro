@@ -35,7 +35,7 @@ public class MacroCreator {
 		long ms = timelines.getDuration();
 		Delay delay = status.getDarkforceAttackCount() == 1 ? Delay.DARKFORCE1 : Delay.DARKFORCE5;
 		long remain = delay.getDurationMillis() - ms;
-		System.out.println("remain = " + remain);
+		//System.out.println("remain = " + remain);
 		if(remain > 0) {//마지막 잔여 딜레이 추가
 			timelines.last().add(delay(remain));
 		}

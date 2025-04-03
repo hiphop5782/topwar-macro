@@ -33,7 +33,6 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
-import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.MacroCreator;
 import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimelines;
@@ -46,7 +45,7 @@ import lc.kra.system.keyboard.event.GlobalKeyEvent;
 import net.miginfocom.swing.MigLayout;
 
 public class MainFrame extends JFrame {
-
+	
 	private MacroStatus status;
 	{
 		status = MacroStatus.load();
@@ -118,6 +117,9 @@ public class MainFrame extends JFrame {
 	
 	private JScrollPane jsp = new JScrollPane();
 	private JTextArea jtx = new JTextArea();
+	
+	private List<JComponent> maximizeComponents = new ArrayList<>();
+	private List<JComponent> minimizeComponents = new ArrayList<>();
 
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
@@ -197,8 +199,38 @@ public class MainFrame extends JFrame {
 		});
 		file.add(exit);
 
-//		JMenu setting = new JMenu("설정");
-//		bar.add(setting);
+		JMenu setting = new JMenu("설정");
+		bar.add(setting);
+		
+		JMenuItem minimize = new JMenuItem("미니모드");
+		minimize.setAccelerator(KeyStroke.getKeyStroke("F11"));
+		minimize.addActionListener(e->{
+			for(JComponent component : minimizeComponents) {
+				component.setVisible(true);
+			}
+			for(JComponent component : maximizeComponents) {
+				component.setVisible(false);
+			}
+			this.revalidate();
+			this.repaint();
+			this.pack();
+		});
+		setting.add(minimize);
+		
+		JMenuItem maximize = new JMenuItem("일반모드");
+		maximize.setAccelerator(KeyStroke.getKeyStroke("F12"));
+		maximize.addActionListener(e->{
+			for(JComponent component : minimizeComponents) {
+				component.setVisible(false);
+			}
+			for(JComponent component : maximizeComponents) {
+				component.setVisible(true);
+			}
+			this.revalidate();
+			this.repaint();
+			this.pack();
+		});
+		setting.add(maximize);
 //		
 //		JMenuItem startMacro = new JMenuItem("매크로 시작");
 //		startMacro.setAccelerator(KeyStroke.getKeyStroke("F5"));
@@ -240,10 +272,16 @@ public class MainFrame extends JFrame {
 		Font buttonFont = new Font("", Font.BOLD, 14);
 		
 		// 메인 패널
-		JPanel mainPanel = new JPanel(new MigLayout("wrap 2, inset 0", "[]5[]", ""));
+		JPanel mainPanel = new JPanel(new MigLayout("wrap 2, inset 0, hidemode 3", "[]5[]", ""));
 		this.setContentPane(mainPanel);
 		
-		JPanel contentPanel = new JPanel(new MigLayout("wrap 1, insets 5", "[grow,fill]", "[]3[]"));
+		JPanel minimizePanel = new JPanel(new MigLayout("insets 5, hidemode 3", "[grow]".repeat(6), ""));
+		minimizeComponents.add(minimizePanel);
+		mainPanel.add(minimizePanel);
+		minimizePanel.setVisible(false);
+		
+		JPanel contentPanel = new JPanel(new MigLayout("wrap 1, insets 5, hidemode 3", "[grow,fill]", "[]3[]"));
+		maximizeComponents.add(contentPanel);
 		mainPanel.add(contentPanel);
 		
 		// 사용할 테두리
@@ -256,22 +294,36 @@ public class MainFrame extends JFrame {
 		areaButton.setBackground(new Color(99, 110, 114));
 		areaButton.setForeground(Color.white);
 		areaButton.setFont(buttonFont);
-		areaButton.addActionListener(e -> {
-			addScreenRect();
-		});
+		areaButton.addActionListener(e ->addScreenRect());
 		waitingComponentList.add(areaButton);
+		
+		//minimizePanel용 클론
+		JButton areaButton2 = new JButton("영역추가");
+		areaButton2.setBackground(areaButton.getBackground());
+		areaButton2.setForeground(areaButton.getForeground());
+		areaButton2.setFont(areaButton.getFont());
+		areaButton2.addActionListener(e->addScreenRect());
+		waitingComponentList.add(areaButton2);
+		minimizePanel.add(areaButton2);
 
 		areaRemoveButton.setBackground(new Color(243, 156, 18));
 		areaRemoveButton.setForeground(Color.white);
 		areaRemoveButton.setFont(buttonFont);
-		areaRemoveButton.addActionListener(e -> {
-			removeScreenRect();
-		});
+		areaRemoveButton.addActionListener(e -> removeScreenRect());
 		waitingComponentList.add(areaRemoveButton);
+		
+		//minize
+		JButton areaRemoveButton2 = new JButton("영역제거");
+		areaRemoveButton2.setBackground(new Color(243, 156, 18));
+		areaRemoveButton2.setForeground(Color.white);
+		areaRemoveButton2.setFont(buttonFont);
+		areaRemoveButton2.addActionListener(e -> removeScreenRect());
+		waitingComponentList.add(areaRemoveButton2);
+		minimizePanel.add(areaRemoveButton2);
 
 		screenCountLabel = new JLabel("현재 설정된 화면 : " + status.getScreenList().size(), JLabel.LEFT);
 		macroExecuteCountLabel = new JLabel("매크로 실행 횟수 : 0", JLabel.LEFT);
-
+		
 		statusPanel.add(screenCountLabel);
 		statusPanel.add(macroExecuteCountLabel);
 		statusPanel.add(areaButton);
@@ -282,12 +334,17 @@ public class MainFrame extends JFrame {
 		macroStopButton.setBackground(new Color(214, 48, 49));
 		macroStopButton.setForeground(Color.white);
 		macroStopButton.setFont(buttonFont);
-		macroStopButton.addActionListener(e -> {
-			stopMacro();
-		});
+		macroStopButton.addActionListener(e ->stopMacro());
 		runningComponentList.add(macroStopButton);
-
 		contentPanel.add(macroStopButton);
+		
+		JButton macroStopButton2 = new JButton("실행중지");
+		macroStopButton2.setBackground(macroStopButton.getBackground());
+		macroStopButton2.setForeground(macroStopButton.getForeground());
+		macroStopButton2.setFont(macroStopButton.getFont());
+		macroStopButton2.addActionListener(e -> stopMacro());
+		runningComponentList.add(macroStopButton2);
+		minimizePanel.add(macroStopButton2);
 
 		// 부대번호
 		JPanel darkforceMarchPanel = new JPanel(new MigLayout("", "[grow]10[grow]"));
@@ -380,6 +437,24 @@ public class MainFrame extends JFrame {
 			}
 		});
 		darkforceButtonPanel.add(darkforceInputButton);
+		
+		//minimize
+		JButton darkforceInputButton2 = new JButton("암흑");
+		darkforceInputButton2.setBackground(darkforceInputButton.getBackground());
+		darkforceInputButton2.setForeground(darkforceInputButton.getForeground());
+		darkforceInputButton2.setFont(darkforceInputButton.getFont());
+		darkforceInputButton2.addActionListener(e -> {
+			try {
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playDarkforceMacroLoop(count);
+				}
+			} catch (Exception ex) {
+			}
+		});
+		minimizePanel.add(darkforceInputButton2);
+		waitingComponentList.add(darkforceInputButton2);
 
 		darkforceLoopButton.setBackground(new Color(9, 132, 227));
 		darkforceLoopButton.setForeground(Color.white);
@@ -458,6 +533,25 @@ public class MainFrame extends JFrame {
 			}
 		});
 		warhammer4kPanel.add(warhammerCustomButton);
+		
+		//minimize
+		JButton warhammerCustomButton2 = new JButton("워해머");
+		warhammerCustomButton2.setBackground(warhammerCustomButton.getBackground());
+		warhammerCustomButton2.setForeground(warhammerCustomButton.getForeground());
+		warhammerCustomButton2.setFont(warhammerCustomButton.getFont());
+		warhammerCustomButton2.addActionListener(e -> {
+			try {
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playWarhammerMacroLoop(count);
+				}
+			} catch (Exception ex) {
+			}
+		});
+		minimizePanel.add(warhammerCustomButton2);
+		waitingComponentList.add(warhammerCustomButton2);
+		
 
 		warhammerLoopButton.setBackground(new Color(9, 132, 227));
 		warhammerLoopButton.setForeground(Color.white);
@@ -570,6 +664,20 @@ public class MainFrame extends JFrame {
 		waitingComponentList.add(terror4kLoopButton);
 
 		contentPanel.add(terror4kPanel);
+		
+		JButton terror4kLoopButton2 = new JButton("테러");
+		terror4kLoopButton2.setBackground(terror4kLoopButton.getBackground());
+		terror4kLoopButton2.setForeground(terror4kLoopButton.getForeground());
+		terror4kLoopButton2.setFont(terror4kLoopButton.getFont());
+		terror4kLoopButton2.addActionListener(e -> {
+			try {
+				playTerror4kMacroLoop(10);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		minimizePanel.add(terror4kLoopButton2);
+		waitingComponentList.add(terror4kLoopButton2);
 
 		JPanel taskPanel = new JPanel(new MigLayout("wrap 1", "[grow]", ""));
 		taskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "반복 작업"));
@@ -620,11 +728,11 @@ public class MainFrame extends JFrame {
 			status.setDailyQuestReward(checkbox.isSelected());
 		});
 
-		dailyTaskCheckboxes.add(new JCheckBox("골드지원", status.isGoldRequest()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setGoldRequest(checkbox.isSelected());
-		});
+//		dailyTaskCheckboxes.add(new JCheckBox("골드지원", status.isGoldRequest()));
+//		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
+//			JCheckBox checkbox = (JCheckBox) e.getSource();
+//			status.setGoldRequest(checkbox.isSelected());
+//		});
 
 		dailyTaskCheckboxes.add(new JCheckBox("크로스패배10회", status.isDailyCrossBattle()));
 		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
@@ -670,23 +778,23 @@ public class MainFrame extends JFrame {
 		trainingTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "유닛 훈련"));
 
 		List<JCheckBox> trainingTaskCheckboxes = new ArrayList<>();
-		trainingTaskCheckboxes.add(new JCheckBox("육군훈련(15기)", status.isArmyUnitTraining()));
-		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setArmyUnitTraining(checkbox.isSelected());
-		});
-
-		trainingTaskCheckboxes.add(new JCheckBox("해군훈련(15기)", status.isNavyUnitTraining()));
-		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setNavyUnitTraining(checkbox.isSelected());
-		});
-
-		trainingTaskCheckboxes.add(new JCheckBox("공군훈련(15기)", status.isAirforceUnitTraining()));
-		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setAirforceUnitTraining(checkbox.isSelected());
-		});
+//		trainingTaskCheckboxes.add(new JCheckBox("육군훈련(15기)", status.isArmyUnitTraining()));
+//		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
+//			JCheckBox checkbox = (JCheckBox) e.getSource();
+//			status.setArmyUnitTraining(checkbox.isSelected());
+//		});
+//
+//		trainingTaskCheckboxes.add(new JCheckBox("해군훈련(15기)", status.isNavyUnitTraining()));
+//		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
+//			JCheckBox checkbox = (JCheckBox) e.getSource();
+//			status.setNavyUnitTraining(checkbox.isSelected());
+//		});
+//
+//		trainingTaskCheckboxes.add(new JCheckBox("공군훈련(15기)", status.isAirforceUnitTraining()));
+//		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
+//			JCheckBox checkbox = (JCheckBox) e.getSource();
+//			status.setAirforceUnitTraining(checkbox.isSelected());
+//		});
 
 		for (JCheckBox checkbox : trainingTaskCheckboxes) {
 			trainingTaskPanel.add(checkbox);
