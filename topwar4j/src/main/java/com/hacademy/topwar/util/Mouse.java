@@ -27,12 +27,7 @@ public class Mouse {
 	
 	private int x, y;
 	private float delay = 0.25f;
-	private int monitor = -1;
 	
-	public Mouse monitor(int monitor) {
-		this.monitor = monitor;
-		return this;
-	}
 	public Mouse hold() {
 		return hold(delay);
 	}

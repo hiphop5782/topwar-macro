@@ -1,19 +1,14 @@
 package com.hacademy.topwar;
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLParameters;
 import javax.swing.JOptionPane;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.hacademy.topwar.ui.MainFrame;
+import com.hacademy.topwar.ui.WindowStatus;
 import com.hacademy.topwar.util.GraphicUtils;
 
 public class Topwar4jApplication {

@@ -20,7 +20,9 @@ public class MacroDelayAction implements MacroAction{
 		while(time > acc) {
 			Thread.sleep(100);
 			long now = System.currentTimeMillis();
-			acc += now - before;
+			long diff = now - before;
+			acc += diff;
+			System.out.println("acc = " + acc + ", diff = " + diff);
 			before = now;
 		}
 	}

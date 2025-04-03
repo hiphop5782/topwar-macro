@@ -42,8 +42,10 @@ import com.hacademy.topwar.macro.MacroTimelinesListener;
 import lc.kra.system.keyboard.GlobalKeyboardHook;
 import lc.kra.system.keyboard.event.GlobalKeyAdapter;
 import lc.kra.system.keyboard.event.GlobalKeyEvent;
+import lombok.Getter;
 import net.miginfocom.swing.MigLayout;
 
+@Getter
 public class MainFrame extends JFrame {
 	
 	private MacroStatus status;
@@ -120,10 +122,15 @@ public class MainFrame extends JFrame {
 	
 	private List<JComponent> maximizeComponents = new ArrayList<>();
 	private List<JComponent> minimizeComponents = new ArrayList<>();
+	private boolean mini = false;
 
 	public MainFrame() throws Exception {
+		WindowStatus status = WindowStatus.load();
 		this.setAlwaysOnTop(false);
-		this.setLocationByPlatform(true);
+		if(status == null) 
+			this.setLocationByPlatform(true);
+		else 
+			this.setLocation(status.getX(), status.getY());
 		this.setResizable(false);
 		this.setTitle("TW-Macro");
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -133,8 +140,23 @@ public class MainFrame extends JFrame {
 				exitProgram();
 			}
 		});
-
 		this.init();
+		this.pack();
+		if(status != null) {
+			this.setMinimode(status.isMini());
+		}
+	}
+	
+	public void setMinimode(boolean mini) {
+		this.mini = mini;
+		for(JComponent component : minimizeComponents) {
+			component.setVisible(mini);
+		}
+		for(JComponent component : maximizeComponents) {
+			component.setVisible(!mini);
+		}
+		this.revalidate();
+		this.repaint();
 		this.pack();
 	}
 
@@ -204,34 +226,14 @@ public class MainFrame extends JFrame {
 		
 		JMenuItem minimize = new JMenuItem("미니모드");
 		minimize.setAccelerator(KeyStroke.getKeyStroke("F11"));
-		minimize.addActionListener(e->{
-			for(JComponent component : minimizeComponents) {
-				component.setVisible(true);
-			}
-			for(JComponent component : maximizeComponents) {
-				component.setVisible(false);
-			}
-			this.revalidate();
-			this.repaint();
-			this.pack();
-		});
+		minimize.addActionListener(e->setMinimode(true));
 		setting.add(minimize);
 		
 		JMenuItem maximize = new JMenuItem("일반모드");
 		maximize.setAccelerator(KeyStroke.getKeyStroke("F12"));
-		maximize.addActionListener(e->{
-			for(JComponent component : minimizeComponents) {
-				component.setVisible(false);
-			}
-			for(JComponent component : maximizeComponents) {
-				component.setVisible(true);
-			}
-			this.revalidate();
-			this.repaint();
-			this.pack();
-		});
+		maximize.addActionListener(e->setMinimode(false));
 		setting.add(maximize);
-//		
+		
 //		JMenuItem startMacro = new JMenuItem("매크로 시작");
 //		startMacro.setAccelerator(KeyStroke.getKeyStroke("F5"));
 //		setting.add(startMacro);
@@ -1113,6 +1115,7 @@ public class MainFrame extends JFrame {
 	// 상태 저장 및 프로그램 종료
 	public void exitProgram() {
 		status.save();
+		WindowStatus.save(this);
 		System.exit(0);
 	}
 
