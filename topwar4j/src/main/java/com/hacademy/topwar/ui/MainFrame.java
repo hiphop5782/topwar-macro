@@ -8,6 +8,9 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -30,8 +33,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.DocumentFilter;
 
 import com.hacademy.topwar.macro.MacroCreator;
 import com.hacademy.topwar.macro.MacroStatus;
@@ -385,7 +393,7 @@ public class MainFrame extends JFrame {
 		// [암흑사냥] 횟수
 		JPanel darkforceCountPanel = new JPanel(new MigLayout("", "[]10[]", ""));
 		darkforceCountPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "횟수"));
-
+		
 		JRadioButton darkforceCount1 = new JRadioButton("1회", status.getDarkforceAttackCount() == 1);
 		JRadioButton darkforceCount2 = new JRadioButton("5회", status.getDarkforceAttackCount() == 5);
 		darkforceCount1.addActionListener(e -> status.setDarkforceAttackCount(1));
@@ -397,9 +405,46 @@ public class MainFrame extends JFrame {
 		darkforceCountGroup.add(darkforceCount2);
 		waitingComponentList.add(darkforceCount1);
 		waitingComponentList.add(darkforceCount2);
-
+		
+		// [암흑사냥] 레벨 - 영땅용
+		JPanel darkforceLevelPanel = new JPanel(new MigLayout("", "[]10[]", ""));
+		darkforceLevelPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "레벨(영땅용)"));
+		
+		JComboBox<String> darkforceLevelBox = new JComboBox<>(new String[] {"random", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"});
+		darkforceLevelBox.setSelectedItem(status.getDarkforceLevel());
+		darkforceLevelBox.addActionListener(e->status.setDarkforceLevel((String) darkforceLevelBox.getSelectedItem()));
+		waitingComponentList.add(darkforceLevelBox);
+		darkforceLevelPanel.add(darkforceLevelBox);
+		
+		// [암흑사냥] 시간 - 영땅용
+		JPanel darkforceDurationPanel = new JPanel(new MigLayout("", "", ""));
+		darkforceDurationPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "후딜레이(초)"));
+		
+		JTextField durationField = new JTextField();
+		((AbstractDocument)durationField.getDocument()).setDocumentFilter(new DocumentFilter() {
+			public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
+				if(string.matches("\\d+")) {
+					super.insertString(fb, offset, string, attr);
+				}
+			};
+			public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attrs) throws javax.swing.text.BadLocationException {
+				if(text.matches("\\d+")) {
+					super.replace(fb, offset, length, text, attrs);
+				}
+			};
+		});
+		durationField.setText(String.valueOf(status.getDarkforceDuration()));
+		durationField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				status.setDarkforceDuration(Integer.parseInt(durationField.getText()));
+			}
+		});
+		darkforceDurationPanel.add(durationField);
+		waitingComponentList.add(durationField);
+		
 		// [암흑사냥] 실행버튼
-		JPanel darkforceButtonPanel = new JPanel(new MigLayout("align right", "[]10[]", ""));
+		JPanel darkforceButtonPanel = new JPanel(new MigLayout("wrap 2, align right", "[]10[]", ""));
 
 		darkforceOnceButton.setBackground(new Color(46, 204, 113));
 		darkforceOnceButton.setForeground(Color.white);
@@ -471,6 +516,8 @@ public class MainFrame extends JFrame {
 		darkforceButtonPanel.add(darkforceLoopButton);
 
 		darkforcePanel.add(darkforceCountPanel);
+		darkforcePanel.add(darkforceLevelPanel);
+		darkforcePanel.add(darkforceDurationPanel);
 		darkforcePanel.add(darkforceButtonPanel);
 
 		waitingComponentList.add(darkforceOnceButton);

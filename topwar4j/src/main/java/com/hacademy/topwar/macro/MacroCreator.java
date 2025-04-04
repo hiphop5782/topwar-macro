@@ -19,11 +19,11 @@ public class MacroCreator {
 	public static MacroTimelines darkforce(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("암흑", true);
 		for (Rectangle screenRect : status.getScreenList()) {
-			Point rader = ImageUtils.searchRaderButton(screenRect);
-			if(rader == null) {
-				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
+//			Point rader = ImageUtils.searchRaderButton(screenRect);
+//			if(rader == null) {
+//				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+//				timelines.add(timeline);
+//			}
 			
 			MacroTimeline timeline = MacroTimelineFactory.암흑매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
@@ -33,9 +33,9 @@ public class MacroCreator {
 	public static MacroTimelines darkforceLoop(MacroStatus status) throws Exception {
 		MacroTimelines timelines = darkforce(status);
 		long ms = timelines.getDuration();
-		Delay delay = status.getDarkforceAttackCount() == 1 ? Delay.DARKFORCE1 : Delay.DARKFORCE5;
-		long remain = delay.getDurationMillis() - ms;
-		//System.out.println("remain = " + remain);
+		//Delay delay = status.getDarkforceAttackCount() == 1 ? Delay.DARKFORCE1 : Delay.DARKFORCE5;
+		//long remain = delay.getDurationMillis() - ms;
+		long remain = status.getDarkforceDuration() * 1000L;
 		if(remain > 0) {//마지막 잔여 딜레이 추가
 			timelines.last().add(delay(remain));
 		}
@@ -44,11 +44,11 @@ public class MacroCreator {
 	public static MacroTimelines warhammer4k(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("워해머", true);
 		for (Rectangle screenRect : status.getScreenList()) {
-			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
-			if(rader == null) {
-				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
+//			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+//			if(rader == null) {
+//				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+//				timelines.add(timeline);
+//			}
 			
 			MacroTimeline timeline = MacroTimelineFactory.워해머매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
@@ -67,11 +67,11 @@ public class MacroCreator {
 	public static MacroTimelines terror4k(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("테러", false);
 		for (Rectangle screenRect : status.getScreenList()) {
-			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
-			if(rader == null) {
-				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
+//			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
+//			if(rader == null) {
+//				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+//				timelines.add(timeline);
+//			}
 			
 			MacroTimeline timeline = MacroTimelineFactory.테러매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
@@ -93,28 +93,26 @@ public class MacroCreator {
 		return timelines;
 	}
 	public static void moveIntoBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		MacroTimelines timelines = new MacroTimelines("기지내부로이동", false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			Point rader = ImageUtils.searchButton(Area.RADER.getRect(), Button.RADER);
-			System.out.println("move into base = " + rader);
-			if(rader != null) {
-				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-		}
-		if(timelines.size() > 0) timelinesGroup.add(timelines);
+//		MacroTimelines timelines = new MacroTimelines("기지내부로이동", false);
+//		for (Rectangle screenRect : status.getScreenList()) {
+//			Point rader = ImageUtils.searchButton(Area.RADER.getRect(), Button.RADER);
+//			if(rader != null) {
+//				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+//				timelines.add(timeline);
+//			}
+//		}
+//		if(timelines.size() > 0) timelinesGroup.add(timelines);
 	}
 	public static void moveOutofBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		MacroTimelines timelines = new MacroTimelines("기지외부로이동", false);
-		for (Rectangle screenRect : status.getScreenList()) {
-			Point rader = ImageUtils.searchButton(Area.RADER.getRect(), Button.RADER);
-			System.out.println("move out of base = " + rader);
-			if(rader == null) {
-				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
-		}
-		if(timelines.size() > 0) timelinesGroup.add(timelines);
+//		MacroTimelines timelines = new MacroTimelines("기지외부로이동", false);
+//		for (Rectangle screenRect : status.getScreenList()) {
+//			Point rader = ImageUtils.searchButton(Area.RADER.getRect(), Button.RADER);
+//			if(rader == null) {
+//				MacroTimeline timeline = MacroTimelineFactory.월드기지전환(status, screenRect.getLocation());
+//				timelines.add(timeline);
+//			}
+//		}
+//		if(timelines.size() > 0) timelinesGroup.add(timelines);
 	}
 	public static void VIP보상(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyVipReward()) {
@@ -175,11 +173,11 @@ public class MacroCreator {
 		if (status.isDailyAdvancedIncruit()) {
 			moveIntoBase(timelinesGroup, status);
 			String week = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-			int count = considerWeek ? 2 : switch(week) {
-											case "월","화"->15;
-											case "수"->30;
-											default->2;
-											};
+			int count = considerWeek ? switch(week) {
+										case "월","화"->15;
+										case "수"->30;
+										default->2;
+										} : 2;
 			MacroTimelines timelines = new MacroTimelines("고급모집", false);
 			for (Rectangle screenRect : status.getScreenList()) {
 				MacroTimeline timeline = MacroTimelineFactory.고급모집매크로(status, screenRect.getLocation(), count);

@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 
+import lombok.Getter;
+
 //import org.bytedeco.opencv.opencv_core.Mat;
 //import org.bytedeco.opencv.opencv_core.Point;
 //import org.bytedeco.opencv.opencv_core.Size;
@@ -26,7 +28,7 @@ public class Mouse {
 	}
 	
 	private int x, y;
-	private float delay = 0.25f;
+	public static float delay = 0.25f;
 	
 	public Mouse hold() {
 		return hold(delay);

@@ -22,7 +22,7 @@ public class MacroDelayAction implements MacroAction{
 			long now = System.currentTimeMillis();
 			long diff = now - before;
 			acc += diff;
-			System.out.println("acc = " + acc + ", diff = " + diff);
+			//System.out.println("acc = " + acc + ", diff = " + diff);
 			before = now;
 		}
 	}

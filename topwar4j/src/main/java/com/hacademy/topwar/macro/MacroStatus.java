@@ -19,6 +19,8 @@ public class MacroStatus implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int darkforceAttackCount = 1;
+	private String darkforceLevel = "random";
+	private int darkforceDuration = 300;
 	private int darkforceMarchNumber = 1;
 	private boolean potion = true;
 	
@@ -74,6 +76,8 @@ public class MacroStatus implements Serializable{
 			status.oilFacilityLevel = Math.max(status.oilFacilityLevel, 1);
 			status.foodFacilityLevel = Math.max(status.foodFacilityLevel, 1);
 			status.odinFacilityLevel = Math.max(status.odinFacilityLevel, 1);
+			if(status.darkforceLevel == null)
+				status.darkforceLevel = "random";
 			in.close();
 			return status;
 		}

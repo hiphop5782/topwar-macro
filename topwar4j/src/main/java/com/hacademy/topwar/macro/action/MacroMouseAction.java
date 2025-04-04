@@ -12,7 +12,7 @@ public class MacroMouseAction implements MacroAction {
 	private int x, y, wheel, tx, ty;
 	private MacroMouseActionType type;
 	private boolean single;
-	private long singleDelay = 500L;
+	private long singleDelay = 100L;
 	
 	public MacroMouseAction(int x, int y, MacroMouseActionType type, boolean single) {
 		this.x = x;
@@ -82,16 +82,17 @@ public class MacroMouseAction implements MacroAction {
 	}
 	@Override
 	public long getDuration() {
+		long delay = (long)(Mouse.delay * 1000L);
 		long duration = switch(type) {
-		case CLICK->500L;
-		case MOVE->250L;
-		case WHEELUP, WHEELDOWN->750L;
-		case DRAG->1200L;
-		default->1000L;
+		case CLICK-> delay * 2;//move + (hold) + push + (hold) + release
+		case MOVE -> delay;//no delay
+		case WHEELUP, WHEELDOWN -> delay;//no delay
+		case DRAG -> delay * 2 + 1500L + 1000L;//move + (hold) + push + (hold) + drag(duration) + (hold 1.5f) + release
+		default -> 1000L;
 		};
 		
 		if(single) {
-			duration += 500;
+			duration += singleDelay;
 		}
 		return duration;
 	}
