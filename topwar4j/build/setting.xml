@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\user1\git\topwar-macro\topwar4j\target\topwar4j-0.0.1-SNAPSHOT.jar</jar>
+  <jar>C:\Users\user1\git\topwar-macro\topwar4j\target\topwar4j-0.0.1-SNAPSHOT-jar-with-dependencies.jar</jar>
   <outfile>C:\Users\user1\git\topwar-macro\topwar4j\build\topwar4j.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
@@ -18,10 +18,14 @@
     <mutexName>topwar4j</mutexName>
     <windowTitle></windowTitle>
   </singleInstance>
+  <classPath>
+    <mainClass>com.hacademy.topwar.Topwar4jApplication</mainClass>
+  </classPath>
   <jre>
     <path>jre</path>
     <requiresJdk>false</requiresJdk>
     <requires64Bit>true</requires64Bit>
     <minVersion>17</minVersion>
+    <maxVersion></maxVersion>
   </jre>
 </launch4jConfig>

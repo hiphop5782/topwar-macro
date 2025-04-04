@@ -282,7 +282,7 @@ public class MainFrame extends JFrame {
 		JPanel mainPanel = new JPanel(new MigLayout("wrap 2, inset 0, hidemode 3", "[]5[]", ""));
 		this.setContentPane(mainPanel);
 		
-		JPanel minimizePanel = new JPanel(new MigLayout("insets 5, hidemode 3", "[grow]".repeat(6), ""));
+		JPanel minimizePanel = new JPanel(new MigLayout("insets 5, hidemode 3", "[grow]".repeat(7), ""));
 		minimizeComponents.add(minimizePanel);
 		mainPanel.add(minimizePanel);
 		minimizePanel.setVisible(false);
@@ -1062,12 +1062,8 @@ public class MainFrame extends JFrame {
 
 		taskButtonPanel.add(taskRunButton);
 		taskPanel.add(taskButtonPanel, "growx");
-
-		JPanel smartButtonPanel = new JPanel(new MigLayout("align right", "[]"));
-		smartRunButton.setBackground(new Color(9, 132, 227));
-		smartRunButton.setForeground(Color.white);
-		smartRunButton.setFont(buttonFont);
-		smartRunButton.addActionListener(e -> {
+		
+		ActionListener smartRunTask = e -> {
 			int count = 0;
 			for (JCheckBox checkbox : dailyTaskCheckboxes) {
 				if (checkbox.isSelected()) {
@@ -1100,7 +1096,13 @@ public class MainFrame extends JFrame {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-		});
+		};
+
+		JPanel smartButtonPanel = new JPanel(new MigLayout("align right", "[]"));
+		smartRunButton.setBackground(new Color(9, 132, 227));
+		smartRunButton.setForeground(Color.white);
+		smartRunButton.setFont(buttonFont);
+		smartRunButton.addActionListener(smartRunTask);
 
 		smartButtonPanel.add(smartRunButton, "grow");
 		taskPanel.add(smartButtonPanel, "grow");
@@ -1113,6 +1115,14 @@ public class MainFrame extends JFrame {
 		waitingComponentList.add(etcTaskCheckButton);
 		waitingComponentList.add(taskRunButton);
 		waitingComponentList.add(smartRunButton);
+		
+		JButton smartRunButton2 = new JButton("일일업무");
+		smartRunButton2.setBackground(smartRunButton.getBackground());
+		smartRunButton2.setForeground(smartRunButton.getForeground());
+		smartRunButton2.setFont(smartRunButton.getFont());
+		smartRunButton2.addActionListener(smartRunTask);
+		minimizePanel.add(smartRunButton2);
+		waitingComponentList.add(smartRunButton2);
 		
 		// 로그 패널
 		JPanel logPanel = new JPanel(new MigLayout("inset 5, fill"));
