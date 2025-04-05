@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public enum Delay {
 	DARKFORCE1(45), DARKFORCE5(300), 
-	WARHAMMER(60), TERROR(60),
+	WARHAMMER(90), TERROR(90),
 	;
 
 	@Getter

@@ -1,13 +1,14 @@
 package com.hacademy.topwar.macro;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import lombok.Data;
 import lombok.Setter;
 
 @Data
-public class MacroTimelines {
+public class MacroTimelines implements Iterable<MacroTimeline> {
 	private String name;
 	private List<MacroTimeline> timelineList = new ArrayList<>();
 	private List<Double> delayList = new ArrayList<>();
@@ -46,14 +47,24 @@ public class MacroTimelines {
 				}
 			}
 			else {//종속 매크로
-				int size = timelineList.get(0).size();
-				for(int i=0; i < size; i++) {
-					for(int j=0; j < timelineList.size(); j++) {
-						MacroTimeline timeline = timelineList.get(j);
-						double delay = delayList.get(j);
-						timeline.play(i, delay);
+				int size = 0;//가장 긴 행의 개수
+				for(int i=0; i < timelineList.size(); i++) {
+					if(timelineList.get(i).size() > size) {
+						size = timelineList.get(i).size();
 					}
 				}
+				
+				for(int i=0; i < size; i++) {
+					//i 위치에 대하여 모든 매크로를 반복
+					for(int j=0; j < timelineList.size(); j++) {
+						MacroTimeline timeline = timelineList.get(j);
+						if(i < timeline.size()) {
+							double delay = delayList.get(j);
+							timeline.play(i, delay);
+						}
+					}
+				}
+				
 			}
 		}
 		
@@ -99,4 +110,8 @@ public class MacroTimelines {
 	//이벤트
 	@Setter
 	private MacroTimelinesListener listener;
+	@Override
+	public Iterator<MacroTimeline> iterator() {
+		return timelineList.iterator();
+	}
 }

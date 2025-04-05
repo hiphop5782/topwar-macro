@@ -1,16 +1,11 @@
 package com.hacademy.topwar.macro;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-import com.hacademy.topwar.constant.Area;
-import com.hacademy.topwar.constant.Button;
-import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
-import com.hacademy.topwar.util.ImageUtils;
 
 public class MacroCreator {
 	public static MacroDelayAction delay(long ms) {

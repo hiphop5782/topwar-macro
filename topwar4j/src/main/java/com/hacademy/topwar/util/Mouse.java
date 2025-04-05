@@ -28,7 +28,7 @@ public class Mouse {
 	}
 	
 	private int x, y;
-	public static float delay = 0.25f;
+	public static float delay = 0.1f;
 	
 	public Mouse hold() {
 		return hold(delay);

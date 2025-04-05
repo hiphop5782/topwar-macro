@@ -38,6 +38,7 @@ import javax.swing.border.Border;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.DocumentFilter;
 
+import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.MacroCreator;
 import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimelines;
@@ -1297,7 +1298,7 @@ public class MainFrame extends JFrame {
 			return;
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = MacroCreator.terror4k(status, 90);
+		MacroTimelines timelines = MacroCreator.terror4k(status, Delay.TERROR.getDuration());
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
