@@ -20,6 +20,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import com.hacademy.topwar.Topwar4jApplication;
+import com.hacademy.topwar.util.ImageUtils;
 import com.hacademy.topwar.util.MonitorUtils;
 
 public class ScreenRectDialog extends JDialog {
@@ -90,8 +92,7 @@ public class ScreenRectDialog extends JDialog {
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.setLayout(null);
 		try {
-			String path = System.getProperty("user.dir")+"/images/bg.png";
-			background = ImageIO.read(new File(path));
+			background = ImageUtils.load("/images/bg.png");
 			
 			JPanel panel = new JPanel(true) {
 				@Override
@@ -110,7 +111,9 @@ public class ScreenRectDialog extends JDialog {
 			this.addKeyListener(keyAdapter);
 			this.setVisible(true);
 		}
-		catch(Exception e) {}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

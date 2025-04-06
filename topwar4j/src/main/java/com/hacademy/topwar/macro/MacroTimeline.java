@@ -75,6 +75,7 @@ public class MacroTimeline {
 	}
 	public void play(int index) throws InterruptedException {
 		MacroAction action = actionList.get(index);
+		System.out.println("<"+action.getClass().getName()+"> " + action + "(no delay)");
 		action.doSomething();
 		if(listener != null) {
 			listener.done(this, index);
@@ -83,8 +84,7 @@ public class MacroTimeline {
 	public void play(int index, double delaySecond) throws InterruptedException {
 		MacroAction action = actionList.get(index);
 		//System.out.println("action = " + action);
-		System.out.println("<"+action.getClass()+">");
-		System.out.println("action("+index+") - delay("+delaySecond+")");
+		System.out.println("<"+action.getClass().getName()+"> " + action + "(delay "+delaySecond+"s)");
 		action.doSomething();
 		if(listener != null) {
 			listener.done(this, index);

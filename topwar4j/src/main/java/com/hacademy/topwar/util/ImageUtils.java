@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Point;
 import org.bytedeco.opencv.opencv_core.Size;
 
+import com.hacademy.topwar.Topwar4jApplication;
 import com.hacademy.topwar.constant.Button;
 
 import lombok.Getter;
@@ -35,8 +37,15 @@ import lombok.Getter;
 public class ImageUtils {
 
 	// root directory
+	private static File dir;
+	static {
+		try {
+			dir = new File(Topwar4jApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+		}
+		catch(Exception e) {}
+	}
 	@Getter
-	private static final File images = new File(System.getProperty("user.dir"), "images");
+	private static final File images = new File(dir, "images");
 	private static final File buttons = new File(images, "button");
 	
 	private static final double SCALE_MIN = 0.8;
@@ -190,6 +199,22 @@ public class ImageUtils {
 	public static BufferedImage matToBufferedImage(Mat mat) {
 	    OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
 	    return Java2DFrameUtils.toBufferedImage(converter.convert(mat));
+	}
+	
+	public static BufferedImage load(String path) throws IOException, URISyntaxException {
+		File devImage = new File(System.getProperty("user.dir"), path);
+		if(devImage.exists()) {
+			return ImageIO.read(devImage);
+		}
+		
+		String jarPath = new File(Topwar4jApplication.class
+				.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent();
+		File productionImage = new File(jarPath, path);
+		if(productionImage.exists()) {
+			return ImageIO.read(productionImage);
+		}
+		
+		throw new FileNotFoundException();
 	}
 
 }

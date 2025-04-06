@@ -90,8 +90,9 @@ public class MainFrame extends JFrame {
 	private MacroTimelinesGroup timelinesGroup = new MacroTimelinesGroup(macroTimelinesListener);
 
 	private JButton macroStopButton = new JButton("실행중인 매크로 중지(ESC)");
-
-	private JButton areaButton = new JButton("영역설정(F2)");
+	
+	private List<JComponent> areaComponentList = new ArrayList<>();
+	
 	private JButton areaRemoveButton = new JButton("영역삭제(F3)");
 	private JButton darkforceOnceButton = new JButton("1회");
 	private JButton darkforceTenButton = new JButton("10회");
@@ -283,11 +284,6 @@ public class MainFrame extends JFrame {
 		JPanel mainPanel = new JPanel(new MigLayout("wrap 2, inset 0, hidemode 3", "[]5[]", ""));
 		this.setContentPane(mainPanel);
 		
-		JPanel minimizePanel = new JPanel(new MigLayout("insets 5, hidemode 3", "[grow]".repeat(7), ""));
-		minimizeComponents.add(minimizePanel);
-		mainPanel.add(minimizePanel);
-		minimizePanel.setVisible(false);
-		
 		JPanel contentPanel = new JPanel(new MigLayout("wrap 1, insets 5, hidemode 3", "[grow,fill]", "[]3[]"));
 		maximizeComponents.add(contentPanel);
 		mainPanel.add(contentPanel);
@@ -299,20 +295,13 @@ public class MainFrame extends JFrame {
 		// 라벨 영역
 		JPanel statusPanel = new JPanel(new GridLayout(2, 2));
 
+		JButton areaButton = new JButton("영역설정(F2)");
 		areaButton.setBackground(new Color(99, 110, 114));
 		areaButton.setForeground(Color.white);
 		areaButton.setFont(buttonFont);
 		areaButton.addActionListener(e ->addScreenRect());
 		waitingComponentList.add(areaButton);
-		
-		//minimizePanel용 클론
-		JButton areaButton2 = new JButton("영역추가");
-		areaButton2.setBackground(areaButton.getBackground());
-		areaButton2.setForeground(areaButton.getForeground());
-		areaButton2.setFont(areaButton.getFont());
-		areaButton2.addActionListener(e->addScreenRect());
-		waitingComponentList.add(areaButton2);
-		minimizePanel.add(areaButton2);
+		areaComponentList.add(areaButton);
 
 		areaRemoveButton.setBackground(new Color(243, 156, 18));
 		areaRemoveButton.setForeground(Color.white);
@@ -320,15 +309,6 @@ public class MainFrame extends JFrame {
 		areaRemoveButton.addActionListener(e -> removeScreenRect());
 		waitingComponentList.add(areaRemoveButton);
 		
-		//minize
-		JButton areaRemoveButton2 = new JButton("영역제거");
-		areaRemoveButton2.setBackground(new Color(243, 156, 18));
-		areaRemoveButton2.setForeground(Color.white);
-		areaRemoveButton2.setFont(buttonFont);
-		areaRemoveButton2.addActionListener(e -> removeScreenRect());
-		waitingComponentList.add(areaRemoveButton2);
-		minimizePanel.add(areaRemoveButton2);
-
 		screenCountLabel = new JLabel("현재 설정된 화면 : " + status.getScreenList().size(), JLabel.LEFT);
 		macroExecuteCountLabel = new JLabel("매크로 실행 횟수 : 0", JLabel.LEFT);
 		
@@ -346,14 +326,6 @@ public class MainFrame extends JFrame {
 		runningComponentList.add(macroStopButton);
 		contentPanel.add(macroStopButton);
 		
-		JButton macroStopButton2 = new JButton("실행중지");
-		macroStopButton2.setBackground(macroStopButton.getBackground());
-		macroStopButton2.setForeground(macroStopButton.getForeground());
-		macroStopButton2.setFont(macroStopButton.getFont());
-		macroStopButton2.addActionListener(e -> stopMacro());
-		runningComponentList.add(macroStopButton2);
-		minimizePanel.add(macroStopButton2);
-
 		// 부대번호
 		JPanel darkforceMarchPanel = new JPanel(new MigLayout("", "[grow]10[grow]"));
 		darkforceMarchPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "부대번호 설정"));
@@ -483,24 +455,6 @@ public class MainFrame extends JFrame {
 		});
 		darkforceButtonPanel.add(darkforceInputButton);
 		
-		//minimize
-		JButton darkforceInputButton2 = new JButton("암흑");
-		darkforceInputButton2.setBackground(darkforceInputButton.getBackground());
-		darkforceInputButton2.setForeground(darkforceInputButton.getForeground());
-		darkforceInputButton2.setFont(darkforceInputButton.getFont());
-		darkforceInputButton2.addActionListener(e -> {
-			try {
-				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
-				int count = Integer.parseInt(input);
-				if (count > 0) {
-					playDarkforceMacroLoop(count);
-				}
-			} catch (Exception ex) {
-			}
-		});
-		minimizePanel.add(darkforceInputButton2);
-		waitingComponentList.add(darkforceInputButton2);
-
 		darkforceLoopButton.setBackground(new Color(9, 132, 227));
 		darkforceLoopButton.setForeground(Color.white);
 		darkforceLoopButton.setFont(buttonFont);
@@ -581,25 +535,6 @@ public class MainFrame extends JFrame {
 		});
 		warhammer4kPanel.add(warhammerCustomButton);
 		
-		//minimize
-		JButton warhammerCustomButton2 = new JButton("워해머");
-		warhammerCustomButton2.setBackground(warhammerCustomButton.getBackground());
-		warhammerCustomButton2.setForeground(warhammerCustomButton.getForeground());
-		warhammerCustomButton2.setFont(warhammerCustomButton.getFont());
-		warhammerCustomButton2.addActionListener(e -> {
-			try {
-				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
-				int count = Integer.parseInt(input);
-				if (count > 0) {
-					playWarhammerMacroLoop(count);
-				}
-			} catch (Exception ex) {
-			}
-		});
-		minimizePanel.add(warhammerCustomButton2);
-		waitingComponentList.add(warhammerCustomButton2);
-		
-
 		warhammerLoopButton.setBackground(new Color(9, 132, 227));
 		warhammerLoopButton.setForeground(Color.white);
 		warhammerLoopButton.setFont(buttonFont);
@@ -712,20 +647,6 @@ public class MainFrame extends JFrame {
 
 		contentPanel.add(terror4kPanel);
 		
-		JButton terror4kLoopButton2 = new JButton("테러");
-		terror4kLoopButton2.setBackground(terror4kLoopButton.getBackground());
-		terror4kLoopButton2.setForeground(terror4kLoopButton.getForeground());
-		terror4kLoopButton2.setFont(terror4kLoopButton.getFont());
-		terror4kLoopButton2.addActionListener(e -> {
-			try {
-				playTerror4kMacroLoop(10);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		});
-		minimizePanel.add(terror4kLoopButton2);
-		waitingComponentList.add(terror4kLoopButton2);
-
 		JPanel taskPanel = new JPanel(new MigLayout("wrap 1", "[grow]", ""));
 		taskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "반복 작업"));
 
@@ -822,7 +743,7 @@ public class MainFrame extends JFrame {
 
 		// 유닛훈련
 		JPanel trainingTaskPanel = new JPanel(new MigLayout("", "[grow]5[grow]", ""));
-		trainingTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "유닛 훈련"));
+//		trainingTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "유닛 훈련"));
 
 		List<JCheckBox> trainingTaskCheckboxes = new ArrayList<>();
 //		trainingTaskCheckboxes.add(new JCheckBox("육군훈련(15기)", status.isArmyUnitTraining()));
@@ -989,22 +910,22 @@ public class MainFrame extends JFrame {
 		});
 		taskButtonPanel.add(weeklyTaskCheckButton);
 
-		trainingTaskCheckButton.setFont(buttonFont);
-		trainingTaskCheckButton.addActionListener(e -> {
-			trainingTaskCheck = !trainingTaskCheck;
-			for (JCheckBox checkbox : trainingTaskCheckboxes) {
-				checkbox.setSelected(trainingTaskCheck);
-				for (ActionListener listener : checkbox.getActionListeners()) {
-					listener.actionPerformed(new ActionEvent(checkbox, ActionEvent.ACTION_PERFORMED, ""));
-				}
-			}
-			JButton target = (JButton) e.getSource();
-			Color background = target.getBackground();
-			Color foreground = target.getForeground();
-			target.setBackground(foreground);
-			target.setForeground(background);
-		});
-		taskButtonPanel.add(trainingTaskCheckButton);
+//		trainingTaskCheckButton.setFont(buttonFont);
+//		trainingTaskCheckButton.addActionListener(e -> {
+//			trainingTaskCheck = !trainingTaskCheck;
+//			for (JCheckBox checkbox : trainingTaskCheckboxes) {
+//				checkbox.setSelected(trainingTaskCheck);
+//				for (ActionListener listener : checkbox.getActionListeners()) {
+//					listener.actionPerformed(new ActionEvent(checkbox, ActionEvent.ACTION_PERFORMED, ""));
+//				}
+//			}
+//			JButton target = (JButton) e.getSource();
+//			Color background = target.getBackground();
+//			Color foreground = target.getForeground();
+//			target.setBackground(foreground);
+//			target.setForeground(background);
+//		});
+//		taskButtonPanel.add(trainingTaskCheckButton);
 
 		etcTaskCheckButton.setFont(buttonFont);
 		etcTaskCheckButton.addActionListener(e -> {
@@ -1112,18 +1033,10 @@ public class MainFrame extends JFrame {
 
 		waitingComponentList.add(dailyTaskCheckButton);
 		waitingComponentList.add(weeklyTaskCheckButton);
-		waitingComponentList.add(trainingTaskCheckButton);
+//		waitingComponentList.add(trainingTaskCheckButton);
 		waitingComponentList.add(etcTaskCheckButton);
 		waitingComponentList.add(taskRunButton);
 		waitingComponentList.add(smartRunButton);
-		
-		JButton smartRunButton2 = new JButton("일일업무");
-		smartRunButton2.setBackground(smartRunButton.getBackground());
-		smartRunButton2.setForeground(smartRunButton.getForeground());
-		smartRunButton2.setFont(smartRunButton.getFont());
-		smartRunButton2.addActionListener(smartRunTask);
-		minimizePanel.add(smartRunButton2);
-		waitingComponentList.add(smartRunButton2);
 		
 		// 로그 패널
 		JPanel logPanel = new JPanel(new MigLayout("inset 5, fill"));
@@ -1132,6 +1045,89 @@ public class MainFrame extends JFrame {
 		logPanel.add(jsp, "grow, push");
 		jtx.setFocusable(false);
 		//mainPanel.add(logPanel, "grow, push");
+		
+		
+		//최소화 패널
+		JPanel minimizePanel = new JPanel(new MigLayout("insets 5, hidemode 3", "[grow]".repeat(7), ""));
+		minimizeComponents.add(minimizePanel);
+		mainPanel.add(minimizePanel);
+		minimizePanel.setVisible(false);
+		
+		JButton areaButton2 = new JButton("영역추가");
+		areaButton2.setBackground(areaButton.getBackground());
+		areaButton2.setForeground(areaButton.getForeground());
+		areaButton2.setFont(areaButton.getFont());
+		areaButton2.addActionListener(e->addScreenRect());
+		waitingComponentList.add(areaButton2);
+		areaComponentList.add(areaButton2);
+		minimizePanel.add(areaButton2);
+		
+		JButton areaRemoveButton2 = new JButton("영역제거");
+		areaRemoveButton2.setBackground(new Color(243, 156, 18));
+		areaRemoveButton2.setForeground(Color.white);
+		areaRemoveButton2.setFont(buttonFont);
+		areaRemoveButton2.addActionListener(e -> removeScreenRect());
+		waitingComponentList.add(areaRemoveButton2);
+		minimizePanel.add(areaRemoveButton2);
+		
+		JButton darkforceInputButton2 = new JButton("암흑");
+		darkforceInputButton2.setBackground(darkforceInputButton.getBackground());
+		darkforceInputButton2.setForeground(darkforceInputButton.getForeground());
+		darkforceInputButton2.setFont(darkforceInputButton.getFont());
+		darkforceInputButton2.addActionListener(e -> {
+			try {
+				playDarkforceMacroLoop();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		minimizePanel.add(darkforceInputButton2);
+		waitingComponentList.add(darkforceInputButton2);
+		
+		JButton warhammerCustomButton2 = new JButton("워해머");
+		warhammerCustomButton2.setBackground(warhammerCustomButton.getBackground());
+		warhammerCustomButton2.setForeground(warhammerCustomButton.getForeground());
+		warhammerCustomButton2.setFont(warhammerCustomButton.getFont());
+		warhammerCustomButton2.addActionListener(e -> {
+			try {
+				playWarhammerMacroLoop();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		minimizePanel.add(warhammerCustomButton2);
+		waitingComponentList.add(warhammerCustomButton2);
+		
+		JButton smartRunButton2 = new JButton("일일업무");
+		smartRunButton2.setBackground(smartRunButton.getBackground());
+		smartRunButton2.setForeground(smartRunButton.getForeground());
+		smartRunButton2.setFont(smartRunButton.getFont());
+		smartRunButton2.addActionListener(smartRunTask);
+		minimizePanel.add(smartRunButton2);
+		waitingComponentList.add(smartRunButton2);
+
+		JButton terror4kLoopButton2 = new JButton("테러");
+		terror4kLoopButton2.setBackground(terror4kLoopButton.getBackground());
+		terror4kLoopButton2.setForeground(terror4kLoopButton.getForeground());
+		terror4kLoopButton2.setFont(terror4kLoopButton.getFont());
+		terror4kLoopButton2.addActionListener(e -> {
+			try {
+				playTerror4kMacroLoop(10);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		minimizePanel.add(terror4kLoopButton2);
+		waitingComponentList.add(terror4kLoopButton2);
+		
+		JButton macroStopButton2 = new JButton("실행중지");
+		macroStopButton2.setBackground(macroStopButton.getBackground());
+		macroStopButton2.setForeground(macroStopButton.getForeground());
+		macroStopButton2.setFont(macroStopButton.getFont());
+		macroStopButton2.addActionListener(e -> stopMacro());
+		runningComponentList.add(macroStopButton2);
+		minimizePanel.add(macroStopButton2);
+		
 	}
 
 	public void events() throws Exception {
@@ -1338,7 +1334,9 @@ public class MainFrame extends JFrame {
 			for (JComponent component : runningComponentList) {
 				component.setEnabled(false);
 			}
-			areaButton.setEnabled(true);
+			for(JComponent component : areaComponentList) {
+				component.setEnabled(true);
+			}
 		} else {
 			for (JComponent component : waitingComponentList) {
 				component.setEnabled(isPlay == false);

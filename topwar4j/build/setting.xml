@@ -2,18 +2,18 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\user1\git\topwar-macro\topwar4j\target\topwar4j-0.0.1-SNAPSHOT-jar-with-dependencies.jar</jar>
-  <outfile>C:\Users\user1\git\topwar-macro\topwar4j\build\topwar4j.exe</outfile>
+  <jar>C:\Users\hwang\git\topwar-macro\topwar4j\target\topwar4j-0.0.1-SNAPSHOT-jar-with-dependencies.jar</jar>
+  <outfile>C:\Users\hwang\git\topwar-macro\topwar4j\build\topwar4j.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>%EXEDIR%</chdir>
-  <priority>normal</priority>
+  <priority>high</priority>
   <downloadUrl></downloadUrl>
   <supportUrl></supportUrl>
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
-  <manifest></manifest>
-  <icon>C:\Users\user1\git\topwar-macro\topwar4j\build\KID.ico</icon>
+  <manifest>C:\Users\hwang\git\topwar-macro\topwar4j\build\app.manifest</manifest>
+  <icon>C:\Users\hwang\git\topwar-macro\topwar4j\build\KID.ico</icon>
   <singleInstance>
     <mutexName>topwar4j</mutexName>
     <windowTitle></windowTitle>

@@ -44,8 +44,10 @@ Section "Install"
    	File /r "jre\*"
 
     ; 📌 바탕화면 및 시작 메뉴에 바로가기 추가
-    CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
-    CreateShortcut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
+    ; CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
+    ; CreateShortcut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
+    CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico" 0 "" "" "$INSTDIR"
+    CreateShortcut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico" 0 "" "" "$INSTDIR"
 
     ; 📌 레지스트리에 설치 정보 기록
     WriteRegStr HKLM "Software\${APPNAME}" "InstallDir" "$INSTDIR"

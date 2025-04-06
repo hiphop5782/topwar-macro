@@ -22,8 +22,8 @@ public class Topwar4jApplication {
 		
 		try {
 			System.setProperty("https.protocols", "TLSv1.2");
-			
-			File keyFile = new File(System.getProperty("user.dir"), ".certkey");
+			File dir = new File(Topwar4jApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+			File keyFile = new File(dir, ".certkey");
 			String key = "empty";
 			try(Scanner sc = new Scanner(keyFile);) {
 				key = sc.nextLine();
