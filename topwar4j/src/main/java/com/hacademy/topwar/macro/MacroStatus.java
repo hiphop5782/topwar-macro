@@ -20,6 +20,7 @@ public class MacroStatus implements Serializable{
 	private String darkforceLevel = "random";
 	private int darkforceDuration = 300;
 	private int darkforceMarchNumber = 1;
+	private String warhammerLevel = "random";
 	private boolean potion = true;
 	
 	private int terror4kLevel = 5;
@@ -76,6 +77,8 @@ public class MacroStatus implements Serializable{
 			status.odinFacilityLevel = Math.max(status.odinFacilityLevel, 1);
 			if(status.darkforceLevel == null)
 				status.darkforceLevel = "random";
+			if(status.warhammerLevel == null)
+				status.warhammerLevel = "random";
 			return status;
 		}
 		catch(Exception e) {

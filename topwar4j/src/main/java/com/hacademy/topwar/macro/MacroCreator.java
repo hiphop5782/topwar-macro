@@ -349,11 +349,21 @@ public class MacroCreator {
 		
 		길드기부(timelinesGroup, status);
 		재료생산(timelinesGroup, status);
-		육군훈련(timelinesGroup, status);
-		해군훈련(timelinesGroup, status);
-		공군훈련(timelinesGroup, status);
+//		육군훈련(timelinesGroup, status);
+//		해군훈련(timelinesGroup, status);
+//		공군훈련(timelinesGroup, status);
 		
 		// 시설
+		석유시설(timelinesGroup, status);
+		식량시설(timelinesGroup, status);
+		오딘시설(timelinesGroup, status);
+		
+		return timelinesGroup;
+	}
+	
+	public static MacroTimelinesGroup facility(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		timelinesGroup.clear();
+		
 		석유시설(timelinesGroup, status);
 		식량시설(timelinesGroup, status);
 		오딘시설(timelinesGroup, status);

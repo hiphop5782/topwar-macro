@@ -242,40 +242,6 @@ public class MainFrame extends JFrame {
 		maximize.addActionListener(e->setMinimode(false));
 		setting.add(maximize);
 		
-//		JMenuItem startMacro = new JMenuItem("매크로 시작");
-//		startMacro.setAccelerator(KeyStroke.getKeyStroke("F5"));
-//		setting.add(startMacro);
-//		
-//		JMenuItem stopMacro = new JMenuItem("매크로 종료");
-//		stopMacro.setAccelerator(KeyStroke.getKeyStroke("F6"));
-//		setting.add(stopMacro);
-//		
-//		JMenuItem addMouseClick = new JMenuItem("마우스클릭 추가");
-//		addMouseClick.setAccelerator(KeyStroke.getKeyStroke("F7"));
-//		setting.add(addMouseClick);
-//		
-//		JMenuItem clearMacro = new JMenuItem("매크로 삭제");
-//		clearMacro.setAccelerator(KeyStroke.getKeyStroke("F8"));
-//		clearMacro.addActionListener(e->{
-//			timeline.clear();
-//			list.setListData(new String[] {});
-//		});
-//		setting.add(clearMacro);
-
-//		JMenu demo = new JMenu("데모");
-//		bar.add(demo);
-//		
-//		JMenuItem darkForce = new JMenuItem("암흑사냥");
-//		darkForce.addActionListener(e->{
-//			DarkForceDialog dialog = new DarkForceDialog(this);
-//		});
-//		demo.add(darkForce);
-//		
-//		JMenuItem warHammer = new JMenuItem("워해머-4K");
-//		demo.add(warHammer);
-//		
-//		JMenuItem terror = new JMenuItem("테러-4K");
-//		demo.add(terror);
 	}
 
 	public void components() {
@@ -875,6 +841,7 @@ public class MainFrame extends JFrame {
 			CheckButton btn = (CheckButton)e.getSource();
 			boolean current = btn.isChecked();
 			btn.setChecked(!current);
+			btn.dispatchChecked();
 		});
 		dailyTaskCheckButton.setConcernedCheckboxes(dailyTaskCheckboxes);
 		taskButtonPanel.add(dailyTaskCheckButton);
@@ -883,6 +850,7 @@ public class MainFrame extends JFrame {
 			CheckButton btn = (CheckButton)e.getSource();
 			boolean current = btn.isChecked();
 			btn.setChecked(!current);
+			btn.dispatchChecked();
 		});
 		weeklyTaskCheckButton.setConcernedCheckboxes(weeklyTaskCheckboxes);
 		taskButtonPanel.add(weeklyTaskCheckButton);
@@ -891,6 +859,7 @@ public class MainFrame extends JFrame {
 			CheckButton btn = (CheckButton)e.getSource();
 			boolean current = btn.isChecked();
 			btn.setChecked(!current);
+			btn.dispatchChecked();
 		});
 		etcTaskCheckButton.setConcernedCheckboxes(etcTaskCheckboxes);
 		taskButtonPanel.add(etcTaskCheckButton);
@@ -899,6 +868,7 @@ public class MainFrame extends JFrame {
 			CheckButton btn = (CheckButton)e.getSource();
 			boolean current = btn.isChecked();
 			btn.setChecked(!current);
+			btn.dispatchChecked();
 		});
 		facilityTaskCheckButton.setConcernedCheckboxes(facilityTaskCheckboxes);
 		taskButtonPanel.add(facilityTaskCheckButton);
@@ -1078,6 +1048,18 @@ public class MainFrame extends JFrame {
 		});
 		minimizePanel.add(terror4kLoopButton2);
 		waitingComponentList.add(terror4kLoopButton2);
+		
+		JButton facilityButton = new JButton("시설");
+		facilityButton.setBackground(new Color(42, 52, 54));
+		facilityButton.setForeground(Color.white);
+		facilityButton.setFont(buttonFont);
+		facilityButton.addActionListener(e->{
+			try {
+				playFacilityMacro();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
 
 		
 		JButton macroStopButton2 = new JButton("실행중지");
@@ -1256,6 +1238,16 @@ public class MainFrame extends JFrame {
 		MacroTimelines timelines = MacroCreator.terror4k(status, Delay.TERROR.getDuration());
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
+		setPlayingState(true);
+	}
+	
+	private void playFacilityMacro() throws Exception {
+		if (status.getScreenList().isEmpty())
+			return;
+		if (timelinesGroup.isPlaying())
+			return;
+		MacroCreator.facility(timelinesGroup, status);
+		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}
 

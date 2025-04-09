@@ -31,22 +31,19 @@ public class CheckButton extends JButton {
 		this.checked = checked;
 		this.setBackground(!checked ? taskButtonBackground : taskButtonForeground);
 		this.setForeground(!checked ? taskButtonForeground : taskButtonBackground);
-		
-		if(concernedCheckboxes != null) {
-			for(JCheckBox checkbox : concernedCheckboxes) {
-				checkbox.setSelected(checked);
-				for (ActionListener listener : checkbox.getActionListeners()) {
-					listener.actionPerformed(new ActionEvent(checkbox, ActionEvent.ACTION_PERFORMED, ""));
-				}
-			}
-		}
 	}
 	public void setConcernedCheckboxes(List<JCheckBox> concernedCheckboxes) {
 		this.concernedCheckboxes = concernedCheckboxes;
-		this.refreshChecked();
 	}
 	public void refreshChecked() {
 		this.setChecked(getConcernedCheckboxesChecked());
+	}
+	public void dispatchChecked() {
+		if(concernedCheckboxes != null) {
+			for(JCheckBox checkbox : concernedCheckboxes) {
+				checkbox.setSelected(checked);
+			}
+		}
 	}
 	public boolean getConcernedCheckboxesChecked() {
 		if(concernedCheckboxes == null) return false;
