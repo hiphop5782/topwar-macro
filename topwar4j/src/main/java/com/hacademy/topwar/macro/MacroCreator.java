@@ -155,6 +155,7 @@ public class MacroCreator {
 	}
 	public static void 일반스킬모집(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyNormalIncrutAndSkill()) {
+			System.out.println("일반모집");
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("일반/스킬모집", false);
 			for (Rectangle screenRect : status.getScreenList()) {
@@ -336,6 +337,7 @@ public class MacroCreator {
 		장바구니(timelinesGroup, status);
 		특별패키지(timelinesGroup, status);
 		사판훈련(timelinesGroup, status);
+		일반스킬모집(timelinesGroup, status);
 		고급모집(timelinesGroup, status, considerWeek);
 		일일임무(timelinesGroup, status);
 		골드지원(timelinesGroup, status);

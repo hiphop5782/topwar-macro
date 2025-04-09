@@ -3,9 +3,7 @@ package com.hacademy.topwar.macro;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -65,8 +63,8 @@ public class MacroStatus implements Serializable{
 		return load(target);
 	}
 	public static MacroStatus load(File target) {
-		try {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(target));
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(target));){
+			
 			MacroStatus status = (MacroStatus) in.readObject();
 			if(status.screenList == null) 
 				status.screenList = new ArrayList<>();
@@ -78,12 +76,12 @@ public class MacroStatus implements Serializable{
 			status.odinFacilityLevel = Math.max(status.odinFacilityLevel, 1);
 			if(status.darkforceLevel == null)
 				status.darkforceLevel = "random";
-			in.close();
 			return status;
 		}
-		catch(Exception e) {}
+		catch(Exception e) {
+			return new MacroStatus();
+		}
 		
-		return new MacroStatus();
 	}
 	public void save() {
 		File dir = new File(System.getProperty("user.home"), "tw-macro");
@@ -98,16 +96,5 @@ public class MacroStatus implements Serializable{
 		}
 		catch(Exception e) {}
 	}
-	
-	public boolean hasAnyInternalTask() {
-		return dailyVipReward || dailyBasketReward || dailySpecialReward
-				|| dailyGemReward || dailyQuestReward || dailySandTraning
-				|| dailyNormalIncrutAndSkill || dailyAdvancedIncruit
-				|| dailyCrossBattle || goldRequest || allianceDonation
-				|| productMaterial || armyUnitTraining || navyUnitTraining || airforceUnitTraining
-				|| weeklyDecorFreeToken;
-	}
-	public boolean hasAnyExternalTask() {
-		return odinFacility || foodFacility || oilFacility;
-	}
+
 }
