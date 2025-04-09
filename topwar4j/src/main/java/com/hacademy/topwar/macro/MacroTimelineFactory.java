@@ -271,6 +271,7 @@ public class MacroTimelineFactory {
 			//timeline.add(모집1회(status, basePoint));//다중화면에서 부적합
 			timeline.add(randomDelay(status, 5, 6));//다중화면에서 적합
 			timeline.add(모집1회(status, basePoint));
+			timeline.add(randomDelay(status, 1, 2));
 		}
 		
 		timeline.add(randomDelay(status, 1, 2));

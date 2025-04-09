@@ -13,7 +13,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -877,27 +879,10 @@ public class MainFrame extends JFrame {
 		taskRunButton.setForeground(Color.white);
 		taskRunButton.setFont(buttonFont);
 		taskRunButton.addActionListener(e -> {
-			int count = 0;
-			for (JCheckBox checkbox : dailyTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
-			for (JCheckBox checkbox : weeklyTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
-//			for (JCheckBox checkbox : trainingTaskCheckboxes) {
-//				if (checkbox.isSelected()) {
-//					count++;
-//				}
-//			}
-			for (JCheckBox checkbox : etcTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
+			long count = Stream.of(dailyTaskCheckboxes, weeklyTaskCheckboxes, facilityTaskCheckboxes, etcTaskCheckboxes)
+				.flatMap(Collection::stream)
+				.filter(checkbox->checkbox.isSelected())
+				.count();
 
 			if (count == 0) {
 				JOptionPane.showMessageDialog(this, "1개 이상의 작업을 선택하세요");
@@ -915,33 +900,14 @@ public class MainFrame extends JFrame {
 		taskPanel.add(taskButtonPanel, "growx");
 		
 		ActionListener smartRunTask = e -> {
-			int count = 0;
-			for (JCheckBox checkbox : dailyTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
-			for (JCheckBox checkbox : weeklyTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
-//			for (JCheckBox checkbox : trainingTaskCheckboxes) {
-//				if (checkbox.isSelected()) {
-//					count++;
-//				}
-//			}
-			for (JCheckBox checkbox : etcTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
-
+			long count = Stream.of(dailyTaskCheckboxes, weeklyTaskCheckboxes, facilityTaskCheckboxes, etcTaskCheckboxes)
+					.flatMap(Collection::stream)
+					.filter(checkbox->checkbox.isSelected())
+					.count();
 			if (count == 0) {
 				JOptionPane.showMessageDialog(this, "1개 이상의 작업을 선택하세요");
 				return;
 			}
-
 			try {
 				playSmartTaskMacro();
 			} catch (Exception e1) {
