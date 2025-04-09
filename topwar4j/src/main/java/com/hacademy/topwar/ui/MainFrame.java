@@ -740,39 +740,7 @@ public class MainFrame extends JFrame {
 		}
 
 		rowPanel.add(weeklyTaskPanel);
-
-		// 유닛훈련
-		JPanel trainingTaskPanel = new JPanel(new MigLayout("", "[grow]5[grow]", ""));
-//		trainingTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "유닛 훈련"));
-
-		List<JCheckBox> trainingTaskCheckboxes = new ArrayList<>();
-//		trainingTaskCheckboxes.add(new JCheckBox("육군훈련(15기)", status.isArmyUnitTraining()));
-//		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
-//			JCheckBox checkbox = (JCheckBox) e.getSource();
-//			status.setArmyUnitTraining(checkbox.isSelected());
-//		});
-//
-//		trainingTaskCheckboxes.add(new JCheckBox("해군훈련(15기)", status.isNavyUnitTraining()));
-//		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
-//			JCheckBox checkbox = (JCheckBox) e.getSource();
-//			status.setNavyUnitTraining(checkbox.isSelected());
-//		});
-//
-//		trainingTaskCheckboxes.add(new JCheckBox("공군훈련(15기)", status.isAirforceUnitTraining()));
-//		trainingTaskCheckboxes.get(trainingTaskCheckboxes.size() - 1).addActionListener(e -> {
-//			JCheckBox checkbox = (JCheckBox) e.getSource();
-//			status.setAirforceUnitTraining(checkbox.isSelected());
-//		});
-
-		for (JCheckBox checkbox : trainingTaskCheckboxes) {
-			trainingTaskPanel.add(checkbox);
-			waitingComponentList.add(checkbox);
-		}
-
-		rowPanel.add(trainingTaskPanel, "grow");
-
-		taskPanel.add(rowPanel, "grow");
-
+		
 		// 기타 작업
 		JPanel etcTaskPanel = new JPanel(new MigLayout("wrap 3", "[]10[]10[]", ""));
 		etcTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "기타 작업"));
@@ -804,6 +772,13 @@ public class MainFrame extends JFrame {
 		
 		etcTaskPanel.add(materialPanel);
 		
+		rowPanel.add(etcTaskPanel, "grow");
+		
+
+		// 시설
+		JPanel facilityTaskPanel = new JPanel(new MigLayout("", "[grow]5[grow]", ""));
+		facilityTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "자원 시설"));
+		
 		JPanel oilTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox oilTaskCheckbox = new JCheckBox("석유시설", status.isOilFacility());
 		JComboBox<Integer> oilTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
@@ -820,7 +795,7 @@ public class MainFrame extends JFrame {
 		oilTaskPanel.add(oilTaskCheckbox);
 		oilTaskPanel.add(oilTaskLevel);
 
-		etcTaskPanel.add(oilTaskPanel);
+		facilityTaskPanel.add(oilTaskPanel);
 
 		JPanel foodTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox foodTaskCheckbox = new JCheckBox("식량시설", status.isFoodFacility());
@@ -838,7 +813,7 @@ public class MainFrame extends JFrame {
 		foodTaskPanel.add(foodTaskCheckbox);
 		foodTaskPanel.add(foodTaskLevel);
 
-		etcTaskPanel.add(foodTaskPanel);
+		facilityTaskPanel.add(foodTaskPanel);
 
 		JPanel odinTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JCheckBox odinTaskCheckbox = new JCheckBox("오딘시설", status.isOdinFacility());
@@ -855,9 +830,13 @@ public class MainFrame extends JFrame {
 		odinTaskPanel.add(odinTaskCheckbox);
 		odinTaskPanel.add(odinTaskLevel);
 
-		etcTaskPanel.add(odinTaskPanel);
+		facilityTaskPanel.add(odinTaskPanel);
+		
+		rowPanel.add(facilityTaskPanel);
 
-		taskPanel.add(etcTaskPanel, "grow");
+		taskPanel.add(rowPanel, "grow");
+
+		taskPanel.add(facilityTaskPanel, "grow");
 
 		List<JCheckBox> etcTaskCheckboxes = new ArrayList<>();
 		etcTaskCheckboxes.add(oilTaskCheckbox);
@@ -959,11 +938,11 @@ public class MainFrame extends JFrame {
 					count++;
 				}
 			}
-			for (JCheckBox checkbox : trainingTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
+//			for (JCheckBox checkbox : trainingTaskCheckboxes) {
+//				if (checkbox.isSelected()) {
+//					count++;
+//				}
+//			}
 			for (JCheckBox checkbox : etcTaskCheckboxes) {
 				if (checkbox.isSelected()) {
 					count++;
@@ -997,11 +976,11 @@ public class MainFrame extends JFrame {
 					count++;
 				}
 			}
-			for (JCheckBox checkbox : trainingTaskCheckboxes) {
-				if (checkbox.isSelected()) {
-					count++;
-				}
-			}
+//			for (JCheckBox checkbox : trainingTaskCheckboxes) {
+//				if (checkbox.isSelected()) {
+//					count++;
+//				}
+//			}
 			for (JCheckBox checkbox : etcTaskCheckboxes) {
 				if (checkbox.isSelected()) {
 					count++;
