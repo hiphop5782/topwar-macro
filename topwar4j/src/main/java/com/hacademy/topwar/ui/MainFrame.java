@@ -618,8 +618,6 @@ public class MainFrame extends JFrame {
 		dailyTaskCheckboxes.add(new StatusCheckBox("일일업무", "dailyQuestReward", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("크로스패배(10회)", "dailyCrossBattle", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("무료다이아(20회)", "dailyGemReward", dailyTaskCheckButton));
-		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
-		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
 		for (StatusCheckBox checkbox : dailyTaskCheckboxes) {
 			dailyTaskPanel.add(checkbox);
 			waitingComponentList.add(checkbox);
