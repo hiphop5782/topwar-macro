@@ -15,6 +15,13 @@ import lombok.Data;
 @Data
 public class MacroStatus implements Serializable{
 	private static final long serialVersionUID = 1L;
+	private static MacroStatus instance;
+	static {
+		instance = load();
+	}
+	public static MacroStatus getInstance() {
+		return instance;
+	}
 	
 	private int darkforceAttackCount = 1;
 	private String darkforceLevel = "random";

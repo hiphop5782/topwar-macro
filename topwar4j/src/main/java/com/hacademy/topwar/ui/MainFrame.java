@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +24,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -55,21 +53,16 @@ import net.miginfocom.swing.MigLayout;
 
 @Getter
 public class MainFrame extends JFrame {
-	
-	private MacroStatus status;
-	{
-		status = MacroStatus.load();
-	}
+	private static final long serialVersionUID = 1L;
 
-	private JLabel screenCountLabel;
-	private JLabel macroExecuteCountLabel;
+	private MacroStatus status = MacroStatus.getInstance();
+
 	private int macroExecuteCount = 0;
 
 	private MacroTimelinesListener macroTimelinesListener = new MacroTimelinesListener() {
 		@Override
 		public void start(MacroTimelines timelines) {
 			macroExecuteCount = 0;
-			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
 			setPlayingState(true);
 		}
 
@@ -81,7 +74,6 @@ public class MainFrame extends JFrame {
 		@Override
 		public void cycleStart(MacroTimelines timelines) {
 			macroExecuteCount++;
-			macroExecuteCountLabel.setText("매크로 실행 횟수 : " + macroExecuteCount);
 		}
 
 		@Override
@@ -117,7 +109,6 @@ public class MainFrame extends JFrame {
 	private CheckButton etcTaskCheckButton = new CheckButton("기타 작업");
 	private CheckButton facilityTaskCheckButton = new CheckButton("시설 작업");
 	private JButton taskRunButton = new JButton("작업 시작");
-//	private JButton smartRunButton = new JButton("요일을 고려하여 스마트 실행(Smart Run)");
 
 	private List<JComponent> waitingComponentList = new ArrayList<>();
 	private List<JComponent> runningComponentList = new ArrayList<>();
@@ -129,20 +120,20 @@ public class MainFrame extends JFrame {
 	private List<JComponent> minimizeComponents = new ArrayList<>();
 	private boolean mini = false;
 	
-	private List<JCheckBox> dailyTaskCheckboxes = new ArrayList<>();
-	private List<JCheckBox> weeklyTaskCheckboxes = new ArrayList<>();
-	private List<JCheckBox> etcTaskCheckboxes = new ArrayList<>();
-	private List<JCheckBox> facilityTaskCheckboxes = new ArrayList<>();
+	private List<StatusCheckBox> dailyTaskCheckboxes = new ArrayList<>();
+	private List<StatusCheckBox> weeklyTaskCheckboxes = new ArrayList<>();
+	private List<StatusCheckBox> etcTaskCheckboxes = new ArrayList<>();
+	private List<StatusCheckBox> facilityTaskCheckboxes = new ArrayList<>();
 	
 	public MainFrame() throws Exception {
-		WindowStatus status = WindowStatus.load();
+		WindowStatus ws = WindowStatus.load();
 		this.setAlwaysOnTop(false);
-		if(status == null) 
+		if(ws == null) 
 			this.setLocationByPlatform(true);
 		else 
-			this.setLocation(status.getX(), status.getY());
+			this.setLocation(ws.getX(), ws.getY());
 		this.setResizable(false);
-		this.setTitle("TW-Macro");
+		this.setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -153,7 +144,7 @@ public class MainFrame extends JFrame {
 		this.init();
 		this.pack();
 		if(status != null) {
-			this.setMinimode(status.isMini());
+			this.setMinimode(ws.isMini());
 		}
 	}
 	
@@ -206,7 +197,7 @@ public class MainFrame extends JFrame {
 			int choose = chooser.showOpenDialog(this);
 			if (choose == JFileChooser.APPROVE_OPTION) {
 				status = MacroStatus.load(chooser.getSelectedFile());
-				screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
+				setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
 			}
 		});
 		file.add(openMacro);
@@ -262,7 +253,7 @@ public class MainFrame extends JFrame {
 		Border lineBorder1 = BorderFactory.createLineBorder(Color.gray, 1, true);
 
 		// 라벨 영역
-		JPanel statusPanel = new JPanel(new GridLayout(2, 2));
+		JPanel statusPanel = new JPanel(new MigLayout("wrap 2", "[grow,fill]15[grow,fill]"));
 
 		JButton areaButton = new JButton("영역설정(F2)");
 		areaButton.setBackground(new Color(99, 110, 114));
@@ -278,11 +269,6 @@ public class MainFrame extends JFrame {
 		areaRemoveButton.addActionListener(e -> removeScreenRect());
 		waitingComponentList.add(areaRemoveButton);
 		
-		screenCountLabel = new JLabel("현재 설정된 화면 : " + status.getScreenList().size(), JLabel.LEFT);
-		macroExecuteCountLabel = new JLabel("매크로 실행 횟수 : 0", JLabel.LEFT);
-		
-		statusPanel.add(screenCountLabel);
-		statusPanel.add(macroExecuteCountLabel);
 		statusPanel.add(areaButton);
 		statusPanel.add(areaRemoveButton);
 
@@ -316,10 +302,11 @@ public class MainFrame extends JFrame {
 		// 물약사용 체크박스
 		JPanel useVitPanel = new JPanel(new BorderLayout());
 
-		JCheckBox useVit = new JCheckBox("물약 사용", status.isPotion());
-		useVit.addActionListener(e -> {
-			status.setPotion(useVit.isSelected());
-		});
+//		JCheckBox useVit = new JCheckBox("물약 사용", status.isPotion());
+//		useVit.addActionListener(e -> {
+//			status.setPotion(useVit.isSelected());
+//		});
+		StatusCheckBox useVit = new StatusCheckBox("물약 사용", "potion");
 
 		useVitPanel.add(useVit);
 		contentPanel.add(useVitPanel);
@@ -622,81 +609,21 @@ public class MainFrame extends JFrame {
 		JPanel dailyTaskPanel = new JPanel(new MigLayout("wrap 5", "[][][][][]", ""));
 		dailyTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "일일 작업"));
 
-		
-		dailyTaskCheckboxes.add(new JCheckBox("VIP보상", status.isDailyVipReward()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailyVipReward(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("장바구니", status.isDailyBasketReward()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailyBasketReward(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("특별패키지", status.isDailySpecialReward()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailySpecialReward(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("사판훈련", status.isDailySandTraning()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailySandTraning(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("일반&스킬모집", status.isDailyNormalIncrutAndSkill()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailyNormalIncrutAndSkill(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("고급모집(2회)", status.isDailyAdvancedIncruit()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailyAdvancedIncruit(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("일일업무", status.isDailyQuestReward()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailyQuestReward(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-//		dailyTaskCheckboxes.add(new JCheckBox("골드지원", status.isGoldRequest()));
-//		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-//			JCheckBox checkbox = (JCheckBox) e.getSource();
-//			status.setGoldRequest(checkbox.isSelected());
-//		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("크로스패배10회", status.isDailyCrossBattle()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailyCrossBattle(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		dailyTaskCheckboxes.add(new JCheckBox("무료다이아20회", status.isDailyGemReward()));
-		dailyTaskCheckboxes.get(dailyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setDailyGemReward(checkbox.isSelected());
-			dailyTaskCheckButton.refreshChecked();
-		});
-
-		for (JCheckBox checkbox : dailyTaskCheckboxes) {
+		dailyTaskCheckboxes.add(new StatusCheckBox("VIP보상", "dailyVipReward", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("장바구니", "dailyBasketReward", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("특별패키지", "dailySpecialReward", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("사판훈련", "dailySandTraning", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("일반&스킬모집", "dailyNormalIncrutAndSkill", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("일일업무", "dailyQuestReward", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("크로스패배(10회)", "dailyCrossBattle", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("무료다이아(20회)", "dailyGemReward", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
+		for (StatusCheckBox checkbox : dailyTaskCheckboxes) {
 			dailyTaskPanel.add(checkbox);
 			waitingComponentList.add(checkbox);
 		}
-
 		taskPanel.add(dailyTaskPanel, "grow");
 
 		JPanel rowPanel = new JPanel(new MigLayout("inset 0", "[fill,grow][fill,grow]", ""));
@@ -705,12 +632,8 @@ public class MainFrame extends JFrame {
 		JPanel weeklyTaskPanel = new JPanel(new MigLayout("", "[]", ""));
 		weeklyTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "주간 작업"));
 
-		weeklyTaskCheckboxes.add(new JCheckBox("무료장식토큰", status.isWeeklyDecorFreeToken()));
-		weeklyTaskCheckboxes.get(weeklyTaskCheckboxes.size() - 1).addActionListener(e -> {
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setWeeklyDecorFreeToken(checkbox.isSelected());
-			weeklyTaskCheckButton.refreshChecked();
-		});
+		weeklyTaskCheckboxes.add(new StatusCheckBox("무료장식토큰", "weeklyDecorFreeToken", weeklyTaskCheckButton));
+		
 		for (JCheckBox checkbox : weeklyTaskCheckboxes) {
 			weeklyTaskPanel.add(checkbox);
 			waitingComponentList.add(checkbox);
@@ -723,24 +646,13 @@ public class MainFrame extends JFrame {
 		etcTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "기타 작업"));
 		
 		JPanel allianceDonationPanel = new JPanel(new MigLayout("inset 0", "", ""));
-		JCheckBox allianceDonationCheckbox = new JCheckBox("길드기부10회", status.isAllianceDonation()); 
-		allianceDonationCheckbox.addActionListener(e->{
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setAllianceDonation(checkbox.isSelected());
-			etcTaskCheckButton.refreshChecked();
-		});
+		StatusCheckBox allianceDonationCheckbox = new StatusCheckBox("길드기부(10회)", "allianceDonation", etcTaskCheckButton); 
 		allianceDonationPanel.add(allianceDonationCheckbox);
 		etcTaskPanel.add(allianceDonationPanel);
 		
 		JPanel materialPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
-		JCheckBox materialCheckbox = new JCheckBox("재료생산", status.isProductMaterial());
 		JComboBox<String> materialTypebox = new JComboBox<>(new String[] {"강철","나사","트랜지스터", "고무", "텅스텐", "배터리", "유리"});
-		materialCheckbox.addActionListener(e->{
-			JCheckBox checkbox = (JCheckBox) e.getSource();
-			status.setProductMaterial(checkbox.isSelected());
-			materialTypebox.setEnabled(checkbox.isSelected());
-			etcTaskCheckButton.refreshChecked();
-		});
+		StatusCheckBox materialCheckbox = new StatusCheckBox("재료생산", "productMaterial", etcTaskCheckButton, materialTypebox);
 		materialTypebox.addActionListener(e->{
 			status.setProductMaterialType((String)materialTypebox.getSelectedItem());
 		});
@@ -763,15 +675,9 @@ public class MainFrame extends JFrame {
 		facilityTaskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "자원 시설"));
 		
 		JPanel oilTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
-		JCheckBox oilTaskCheckbox = new JCheckBox("석유시설", status.isOilFacility());
 		JComboBox<Integer> oilTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
+		StatusCheckBox oilTaskCheckbox = new StatusCheckBox("석유시설", "oilFacility", facilityTaskCheckButton, oilTaskLevel);
 		oilTaskLevel.setSelectedItem(status.getOilFacilityLevel());
-
-		oilTaskCheckbox.addActionListener(e -> {
-			status.setOilFacility(oilTaskCheckbox.isSelected());
-			oilTaskLevel.setEnabled(oilTaskCheckbox.isSelected());
-			facilityTaskCheckButton.refreshChecked();
-		});
 		oilTaskLevel.addActionListener(e -> {
 			status.setOilFacilityLevel((int) oilTaskLevel.getSelectedItem());
 		});
@@ -782,15 +688,9 @@ public class MainFrame extends JFrame {
 		facilityTaskPanel.add(oilTaskPanel);
 
 		JPanel foodTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
-		JCheckBox foodTaskCheckbox = new JCheckBox("식량시설", status.isFoodFacility());
 		JComboBox<Integer> foodTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
+		StatusCheckBox foodTaskCheckbox = new StatusCheckBox("식량시설", "foodFacility", facilityTaskCheckButton, foodTaskLevel);
 		foodTaskLevel.setSelectedItem(status.getFoodFacilityLevel());
-
-		foodTaskCheckbox.addActionListener(e -> {
-			status.setFoodFacility(foodTaskCheckbox.isSelected());
-			foodTaskLevel.setEnabled(foodTaskCheckbox.isSelected());
-			facilityTaskCheckButton.refreshChecked();
-		});
 		foodTaskLevel.addActionListener(e -> {
 			status.setFoodFacilityLevel((int) foodTaskLevel.getSelectedItem());
 		});
@@ -801,14 +701,9 @@ public class MainFrame extends JFrame {
 		facilityTaskPanel.add(foodTaskPanel);
 
 		JPanel odinTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
-		JCheckBox odinTaskCheckbox = new JCheckBox("오딘시설", status.isOdinFacility());
 		JComboBox<Integer> odinTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3 });
+		StatusCheckBox odinTaskCheckbox = new StatusCheckBox("오딘시설", "odinFacility", facilityTaskCheckButton, odinTaskLevel);
 		odinTaskLevel.setSelectedItem(status.getOdinFacilityLevel());
-		odinTaskCheckbox.addActionListener(e -> {
-			status.setOdinFacility(odinTaskCheckbox.isSelected());
-			odinTaskLevel.setEnabled(odinTaskCheckbox.isSelected());
-			facilityTaskCheckButton.refreshChecked();
-		});
 		odinTaskLevel.addActionListener(e -> {
 			status.setOdinFacilityLevel((int) odinTaskLevel.getSelectedItem());
 		});
@@ -839,50 +734,32 @@ public class MainFrame extends JFrame {
 
 		JPanel taskButtonPanel = new JPanel(new MigLayout("align right", "[]10[]", ""));
 
-		dailyTaskCheckButton.addActionListener(e->{
-			CheckButton btn = (CheckButton)e.getSource();
-			boolean current = btn.isChecked();
-			btn.setChecked(!current);
-			btn.dispatchChecked();
-		});
 		dailyTaskCheckButton.setConcernedCheckboxes(dailyTaskCheckboxes);
-		taskButtonPanel.add(dailyTaskCheckButton);
-
-		weeklyTaskCheckButton.addActionListener(e -> {
-			CheckButton btn = (CheckButton)e.getSource();
-			boolean current = btn.isChecked();
-			btn.setChecked(!current);
-			btn.dispatchChecked();
-		});
 		weeklyTaskCheckButton.setConcernedCheckboxes(weeklyTaskCheckboxes);
-		taskButtonPanel.add(weeklyTaskCheckButton);
-
-		etcTaskCheckButton.addActionListener(e -> {
-			CheckButton btn = (CheckButton)e.getSource();
-			boolean current = btn.isChecked();
-			btn.setChecked(!current);
-			btn.dispatchChecked();
-		});
 		etcTaskCheckButton.setConcernedCheckboxes(etcTaskCheckboxes);
-		taskButtonPanel.add(etcTaskCheckButton);
-		
-		facilityTaskCheckButton.addActionListener(e -> {
-			CheckButton btn = (CheckButton)e.getSource();
-			boolean current = btn.isChecked();
-			btn.setChecked(!current);
-			btn.dispatchChecked();
-		});
 		facilityTaskCheckButton.setConcernedCheckboxes(facilityTaskCheckboxes);
+		taskButtonPanel.add(dailyTaskCheckButton);
+		taskButtonPanel.add(weeklyTaskCheckButton);
+		taskButtonPanel.add(etcTaskCheckButton);
 		taskButtonPanel.add(facilityTaskCheckButton);
+		
+		waitingComponentList.add(dailyTaskCheckButton);
+		waitingComponentList.add(weeklyTaskCheckButton);
+		waitingComponentList.add(etcTaskCheckButton);
+		waitingComponentList.add(facilityTaskCheckButton);
+		dailyTaskCheckButton.refreshChecked();
+		weeklyTaskCheckButton.refreshChecked();
+		etcTaskCheckButton.refreshChecked();
+		facilityTaskCheckButton.refreshChecked();
 
 		taskRunButton.setBackground(new Color(46, 204, 113));
 		taskRunButton.setForeground(Color.white);
 		taskRunButton.setFont(buttonFont);
 		ActionListener runTask = e->{
 			long count = Stream.of(dailyTaskCheckboxes, weeklyTaskCheckboxes, facilityTaskCheckboxes, etcTaskCheckboxes)
-				.flatMap(Collection::stream)
-				.filter(checkbox->checkbox.isSelected())
-				.count();
+					.flatMap(Collection::stream)
+					.filter(checkbox->checkbox.isSelected())
+					.count();
 
 			if (count == 0) {
 				JOptionPane.showMessageDialog(this, "1개 이상의 작업을 선택하세요");
@@ -895,44 +772,17 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		};
+		taskRunButton.setBackground(new Color(46, 204, 113));
+		taskRunButton.setForeground(Color.white);
+		taskRunButton.setFont(buttonFont);
 		taskRunButton.addActionListener(runTask);
 
 		taskButtonPanel.add(taskRunButton);
 		taskPanel.add(taskButtonPanel, "growx");
 		
-		ActionListener smartRunTask = e -> {
-			long count = Stream.of(dailyTaskCheckboxes, weeklyTaskCheckboxes, facilityTaskCheckboxes, etcTaskCheckboxes)
-					.flatMap(Collection::stream)
-					.filter(checkbox->checkbox.isSelected())
-					.count();
-			if (count == 0) {
-				JOptionPane.showMessageDialog(this, "1개 이상의 작업을 선택하세요");
-				return;
-			}
-			try {
-				playSmartTaskMacro();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		};
-
-//		JPanel smartButtonPanel = new JPanel(new MigLayout("align right", "[]"));
-//		smartRunButton.setBackground(new Color(9, 132, 227));
-//		smartRunButton.setForeground(Color.white);
-//		smartRunButton.setFont(buttonFont);
-//		smartRunButton.addActionListener(smartRunTask);
-//
-//		smartButtonPanel.add(smartRunButton, "grow");
-//		taskPanel.add(smartButtonPanel, "grow");
-
 		contentPanel.add(taskPanel);
 
-		waitingComponentList.add(dailyTaskCheckButton);
-		waitingComponentList.add(weeklyTaskCheckButton);
-//		waitingComponentList.add(trainingTaskCheckButton);
-		waitingComponentList.add(etcTaskCheckButton);
 		waitingComponentList.add(taskRunButton);
-//		waitingComponentList.add(smartRunButton);
 		
 		// 로그 패널
 		JPanel logPanel = new JPanel(new MigLayout("inset 5, fill"));
@@ -941,7 +791,6 @@ public class MainFrame extends JFrame {
 		logPanel.add(jsp, "grow, push");
 		jtx.setFocusable(false);
 		//mainPanel.add(logPanel, "grow, push");
-		
 		
 		//최소화 패널
 		JPanel minimizePanel = new JPanel(new MigLayout("insets 5, hidemode 3", "[grow]".repeat(7), ""));
@@ -956,7 +805,6 @@ public class MainFrame extends JFrame {
 		areaButton2.addActionListener(e->addScreenRect());
 		waitingComponentList.add(areaButton2);
 		areaComponentList.add(areaButton2);
-		minimizePanel.add(areaButton2);
 		
 		JButton areaRemoveButton2 = new JButton("영역제거");
 		areaRemoveButton2.setBackground(new Color(243, 156, 18));
@@ -964,7 +812,6 @@ public class MainFrame extends JFrame {
 		areaRemoveButton2.setFont(buttonFont);
 		areaRemoveButton2.addActionListener(e -> removeScreenRect());
 		waitingComponentList.add(areaRemoveButton2);
-		minimizePanel.add(areaRemoveButton2);
 		
 		JButton darkforceInputButton2 = new JButton("암흑");
 		darkforceInputButton2.setBackground(darkforceInputButton.getBackground());
@@ -977,7 +824,6 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		minimizePanel.add(darkforceInputButton2);
 		waitingComponentList.add(darkforceInputButton2);
 		
 		JButton warhammerCustomButton2 = new JButton("워해머");
@@ -991,7 +837,6 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		minimizePanel.add(warhammerCustomButton2);
 		waitingComponentList.add(warhammerCustomButton2);
 		
 		JButton terror4kLoopButton2 = new JButton("테러");
@@ -1005,7 +850,6 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		minimizePanel.add(terror4kLoopButton2);
 		waitingComponentList.add(terror4kLoopButton2);
 		
 		JButton taskRunButton2 = new JButton("일일업무");
@@ -1031,13 +875,19 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(facilityButton);
 		waitingComponentList.add(facilityButton);
 
-		
 		JButton macroStopButton2 = new JButton("실행중지");
 		macroStopButton2.setBackground(macroStopButton.getBackground());
 		macroStopButton2.setForeground(macroStopButton.getForeground());
 		macroStopButton2.setFont(macroStopButton.getFont());
 		macroStopButton2.addActionListener(e -> stopMacro());
 		runningComponentList.add(macroStopButton2);
+		
+		minimizePanel.add(areaButton2);
+		minimizePanel.add(areaRemoveButton2);
+		minimizePanel.add(darkforceInputButton2);
+		minimizePanel.add(warhammerCustomButton2);
+		minimizePanel.add(terror4kLoopButton2);
+		minimizePanel.add(taskRunButton2);
 		minimizePanel.add(macroStopButton2);
 	}
 
@@ -1086,7 +936,7 @@ public class MainFrame extends JFrame {
 			return;
 		Rectangle screenRect = ScreenRectDialog.showDialog(MainFrame.this);
 		status.getScreenList().add(screenRect);
-		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
+		setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
 		setPlayingState(false);
 	}
 
@@ -1096,7 +946,7 @@ public class MainFrame extends JFrame {
 		if (status.getScreenList().isEmpty())
 			return;
 		status.getScreenList().remove(status.getScreenList().size() - 1);
-		screenCountLabel.setText("현재 설정된 화면 : " + status.getScreenList().size());
+		setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
 		setPlayingState(false);
 	}
 

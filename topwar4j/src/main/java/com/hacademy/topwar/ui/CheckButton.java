@@ -2,17 +2,13 @@ package com.hacademy.topwar.ui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.hacademy.topwar.macro.MacroStatus;
 
-@Data @EqualsAndHashCode(callSuper = false)
 public class CheckButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	public static final Color taskButtonBackground = new Color(240, 240, 240);
@@ -20,19 +16,26 @@ public class CheckButton extends JButton {
 	public static final Font buttonFont = new Font("", Font.BOLD, 14);
 	
 	private boolean checked;
-	private List<JCheckBox> concernedCheckboxes;
+	private List<StatusCheckBox> concernedCheckboxes;
+	
+	private ActionListener clickHandler = e->{
+		this.setChecked(!checked);
+		if(concernedCheckboxes == null) return;
+		this.dispatchChecked();
+	};
 
 	public CheckButton(String text) {
 		super(text);
 		this.setFont(buttonFont);
 		this.setChecked(false);
+		this.addActionListener(clickHandler);
 	}
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 		this.setBackground(!checked ? taskButtonBackground : taskButtonForeground);
 		this.setForeground(!checked ? taskButtonForeground : taskButtonBackground);
 	}
-	public void setConcernedCheckboxes(List<JCheckBox> concernedCheckboxes) {
+	public void setConcernedCheckboxes(List<StatusCheckBox> concernedCheckboxes) {
 		this.concernedCheckboxes = concernedCheckboxes;
 	}
 	public void refreshChecked() {
@@ -40,17 +43,21 @@ public class CheckButton extends JButton {
 	}
 	public void dispatchChecked() {
 		if(concernedCheckboxes != null) {
-			for(JCheckBox checkbox : concernedCheckboxes) {
-				checkbox.setSelected(checked);
+			for(StatusCheckBox checkbox : concernedCheckboxes) {
+				checkbox.setSelectedAndSave(checked);
 			}
+			MacroStatus.getInstance().save();
 		}
 	}
 	public boolean getConcernedCheckboxesChecked() {
 		if(concernedCheckboxes == null) return false;
-		for(JCheckBox checkbox : concernedCheckboxes) {
+		for(StatusCheckBox checkbox : concernedCheckboxes) {
 			if(!checkbox.isSelected())
 				return false;
 		}
 		return true;
+	}
+	public boolean isChecked() {
+		return checked;
 	}
 }
