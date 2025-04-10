@@ -117,7 +117,7 @@ public class MainFrame extends JFrame {
 	private CheckButton etcTaskCheckButton = new CheckButton("기타 작업");
 	private CheckButton facilityTaskCheckButton = new CheckButton("시설 작업");
 	private JButton taskRunButton = new JButton("작업 시작");
-	private JButton smartRunButton = new JButton("요일을 고려하여 스마트 실행(Smart Run)");
+//	private JButton smartRunButton = new JButton("요일을 고려하여 스마트 실행(Smart Run)");
 
 	private List<JComponent> waitingComponentList = new ArrayList<>();
 	private List<JComponent> runningComponentList = new ArrayList<>();
@@ -878,7 +878,7 @@ public class MainFrame extends JFrame {
 		taskRunButton.setBackground(new Color(46, 204, 113));
 		taskRunButton.setForeground(Color.white);
 		taskRunButton.setFont(buttonFont);
-		taskRunButton.addActionListener(e -> {
+		ActionListener runTask = e->{
 			long count = Stream.of(dailyTaskCheckboxes, weeklyTaskCheckboxes, facilityTaskCheckboxes, etcTaskCheckboxes)
 				.flatMap(Collection::stream)
 				.filter(checkbox->checkbox.isSelected())
@@ -894,7 +894,8 @@ public class MainFrame extends JFrame {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-		});
+		};
+		taskRunButton.addActionListener(runTask);
 
 		taskButtonPanel.add(taskRunButton);
 		taskPanel.add(taskButtonPanel, "growx");
@@ -915,14 +916,14 @@ public class MainFrame extends JFrame {
 			}
 		};
 
-		JPanel smartButtonPanel = new JPanel(new MigLayout("align right", "[]"));
-		smartRunButton.setBackground(new Color(9, 132, 227));
-		smartRunButton.setForeground(Color.white);
-		smartRunButton.setFont(buttonFont);
-		smartRunButton.addActionListener(smartRunTask);
-
-		smartButtonPanel.add(smartRunButton, "grow");
-		taskPanel.add(smartButtonPanel, "grow");
+//		JPanel smartButtonPanel = new JPanel(new MigLayout("align right", "[]"));
+//		smartRunButton.setBackground(new Color(9, 132, 227));
+//		smartRunButton.setForeground(Color.white);
+//		smartRunButton.setFont(buttonFont);
+//		smartRunButton.addActionListener(smartRunTask);
+//
+//		smartButtonPanel.add(smartRunButton, "grow");
+//		taskPanel.add(smartButtonPanel, "grow");
 
 		contentPanel.add(taskPanel);
 
@@ -931,7 +932,7 @@ public class MainFrame extends JFrame {
 //		waitingComponentList.add(trainingTaskCheckButton);
 		waitingComponentList.add(etcTaskCheckButton);
 		waitingComponentList.add(taskRunButton);
-		waitingComponentList.add(smartRunButton);
+//		waitingComponentList.add(smartRunButton);
 		
 		// 로그 패널
 		JPanel logPanel = new JPanel(new MigLayout("inset 5, fill"));
@@ -993,14 +994,6 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(warhammerCustomButton2);
 		waitingComponentList.add(warhammerCustomButton2);
 		
-		JButton smartRunButton2 = new JButton("일일업무");
-		smartRunButton2.setBackground(smartRunButton.getBackground());
-		smartRunButton2.setForeground(smartRunButton.getForeground());
-		smartRunButton2.setFont(smartRunButton.getFont());
-		smartRunButton2.addActionListener(smartRunTask);
-		minimizePanel.add(smartRunButton2);
-		waitingComponentList.add(smartRunButton2);
-
 		JButton terror4kLoopButton2 = new JButton("테러");
 		terror4kLoopButton2.setBackground(terror4kLoopButton.getBackground());
 		terror4kLoopButton2.setForeground(terror4kLoopButton.getForeground());
@@ -1015,6 +1008,15 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(terror4kLoopButton2);
 		waitingComponentList.add(terror4kLoopButton2);
 		
+		JButton taskRunButton2 = new JButton("일일업무");
+		taskRunButton2.setBackground(taskRunButton.getBackground());
+		taskRunButton2.setForeground(taskRunButton.getForeground());
+		taskRunButton2.setFont(taskRunButton.getFont());
+		taskRunButton2.addActionListener(runTask);
+		minimizePanel.add(taskRunButton2);
+		waitingComponentList.add(taskRunButton2);
+
+		
 		JButton facilityButton = new JButton("시설");
 		facilityButton.setBackground(new Color(42, 52, 54));
 		facilityButton.setForeground(Color.white);
@@ -1026,6 +1028,8 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
+		minimizePanel.add(facilityButton);
+		waitingComponentList.add(facilityButton);
 
 		
 		JButton macroStopButton2 = new JButton("실행중지");

@@ -445,9 +445,9 @@ public class MacroTimelineFactory {
 		timeline.add(화면중앙클릭(status, basePoint));			
 		timeline.add(채집시설버튼클릭(status, basePoint));		
 		timeline.add(빠른출전버튼클릭(status, basePoint));	
-		timeline.add(슬롯4번선택(status, basePoint));
-		timeline.add(슬롯5번선택(status, basePoint));
-		timeline.add(슬롯6번선택(status, basePoint));
+//		timeline.add(슬롯4번선택(status, basePoint));
+//		timeline.add(슬롯5번선택(status, basePoint));
+//		timeline.add(슬롯6번선택(status, basePoint));
 		timeline.add(슬롯7번선택(status, basePoint));
 		timeline.add(슬롯8번선택(status, basePoint));
 		timeline.add(슬롯9번선택(status, basePoint));
@@ -476,9 +476,9 @@ public class MacroTimelineFactory {
 		timeline.add(화면중앙클릭(status, basePoint));
 		timeline.add(채집시설버튼클릭(status, basePoint));
 		timeline.add(빠른출전버튼클릭(status, basePoint));
-		timeline.add(슬롯4번선택(status, basePoint));
-		timeline.add(슬롯5번선택(status, basePoint));
-		timeline.add(슬롯6번선택(status, basePoint));
+//		timeline.add(슬롯4번선택(status, basePoint));
+//		timeline.add(슬롯5번선택(status, basePoint));
+//		timeline.add(슬롯6번선택(status, basePoint));
 		timeline.add(슬롯7번선택(status, basePoint));
 		timeline.add(슬롯8번선택(status, basePoint));
 		timeline.add(슬롯9번선택(status, basePoint));

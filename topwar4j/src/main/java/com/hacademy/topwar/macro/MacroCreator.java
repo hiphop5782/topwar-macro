@@ -332,7 +332,7 @@ public class MacroCreator {
 	}
 	public static MacroTimelinesGroup task(MacroTimelinesGroup timelinesGroup, MacroStatus status, boolean considerWeek) throws Exception {
 		timelinesGroup.clear();
-		
+		System.out.println("task");
 		VIP보상(timelinesGroup, status);
 		장바구니(timelinesGroup, status);
 		특별패키지(timelinesGroup, status);
@@ -356,7 +356,7 @@ public class MacroCreator {
 		// 시설
 		석유시설(timelinesGroup, status);
 		식량시설(timelinesGroup, status);
-		오딘시설(timelinesGroup, status);
+		오딘시설(timelinesGroup, status);    
 		
 		return timelinesGroup;
 	}
