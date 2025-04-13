@@ -70,10 +70,11 @@ public class Topwar4jApplication {
 			JOptionPane.showMessageDialog(null, message, "TW-Macro", JOptionPane.INFORMATION_MESSAGE);
 			
 			MainFrame frame = new MainFrame();
-			GraphicUtils.runWindow("main", frame);
+			GraphicUtils.runWindow(MainFrame.class, frame);
 		}
 		catch(Exception e) {
 			JOptionPane.showMessageDialog(null, "실행 오류 발생\n개발자에게 문의하세요\n"+e.getMessage(), "오류 발생", JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
 		}
 	}
 }

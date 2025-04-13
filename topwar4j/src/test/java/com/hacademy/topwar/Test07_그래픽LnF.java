@@ -23,6 +23,6 @@ public class Test07_그래픽LnF {
 //		catch(Exception e) {}
 		
 		MainFrame frame = new MainFrame();
-		GraphicUtils.runWindow("main", frame);
+		GraphicUtils.runWindow(MainFrame.class, frame);
 	}
 }

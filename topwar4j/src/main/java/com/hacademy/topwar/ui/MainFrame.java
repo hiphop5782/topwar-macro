@@ -24,6 +24,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -32,11 +33,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.DocumentFilter;
 
 import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.MacroCreator;
@@ -44,6 +42,9 @@ import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimelines;
 import com.hacademy.topwar.macro.MacroTimelinesGroup;
 import com.hacademy.topwar.macro.MacroTimelinesListener;
+import com.hacademy.topwar.ui.components.CheckButton;
+import com.hacademy.topwar.ui.components.NumberField;
+import com.hacademy.topwar.ui.components.StatusCheckBox;
 
 import lc.kra.system.keyboard.GlobalKeyboardHook;
 import lc.kra.system.keyboard.event.GlobalKeyAdapter;
@@ -120,6 +121,10 @@ public class MainFrame extends JFrame {
 	private List<JComponent> minimizeComponents = new ArrayList<>();
 	private boolean mini = false;
 	
+	private JComboBox<String> screenSelectBox = new JComboBox<>();
+	private NumberField periodInput = new NumberField();
+	private String noticeText;
+	
 	private List<StatusCheckBox> dailyTaskCheckboxes = new ArrayList<>();
 	private List<StatusCheckBox> weeklyTaskCheckboxes = new ArrayList<>();
 	private List<StatusCheckBox> etcTaskCheckboxes = new ArrayList<>();
@@ -143,9 +148,10 @@ public class MainFrame extends JFrame {
 		});
 		this.init();
 		this.pack();
-		if(status != null) {
+		if(status != null && ws != null) {
 			this.setMinimode(ws.isMini());
 		}
+		this.refreshScreenSelectBox();
 	}
 	
 	public void setMinimode(boolean mini) {
@@ -346,19 +352,7 @@ public class MainFrame extends JFrame {
 		JPanel darkforceDurationPanel = new JPanel(new MigLayout("", "", ""));
 		darkforceDurationPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "후딜레이(초)"));
 		
-		JTextField durationField = new JTextField();
-		((AbstractDocument)durationField.getDocument()).setDocumentFilter(new DocumentFilter() {
-			public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
-				if(string.matches("\\d+")) {
-					super.insertString(fb, offset, string, attr);
-				}
-			};
-			public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attrs) throws javax.swing.text.BadLocationException {
-				if(text.matches("\\d+")) {
-					super.replace(fb, offset, length, text, attrs);
-				}
-			};
-		});
+		NumberField durationField = new NumberField();
 		durationField.setText(String.valueOf(status.getDarkforceDuration()));
 		durationField.addFocusListener(new FocusAdapter() {
 			@Override
@@ -603,6 +597,43 @@ public class MainFrame extends JFrame {
 
 		contentPanel.add(terror4kPanel);
 		
+		//텍스트 자동발송 설정
+		JPanel noticePanel = new JPanel(new MigLayout("wrap 5", "[grow]30[][]30[]10[]", ""));
+		noticePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "반복 텍스트 입력"));
+		waitingComponentList.add(noticePanel);
+		noticePanel.add(screenSelectBox, "grow");
+		
+		periodInput.setText("60");
+		waitingComponentList.add(periodInput);
+		noticePanel.add(periodInput, "grow");
+		
+		JLabel lb = new JLabel("분마다 반복");
+		noticePanel.add(lb);
+		
+		JButton noticeTextButton = new JButton("텍스트 설정");
+		waitingComponentList.add(noticeTextButton);
+		noticePanel.add(noticeTextButton);
+		
+		JButton noticePlayButton = new JButton("자동입력 시작");
+		waitingComponentList.add(noticePlayButton);
+		noticePlayButton.setEnabled(false);
+		
+		noticeTextButton.addActionListener(e->{
+			noticeText = NoticeInputDialog.showDialog(this);
+			noticePlayButton.setEnabled(noticeText != null);
+		});
+		noticePlayButton.addActionListener(e->{
+			try {
+				playNoticeMacro();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		noticePanel.add(noticePlayButton);
+		
+		contentPanel.add(noticePanel);
+		
+		//반복 작업
 		JPanel taskPanel = new JPanel(new MigLayout("wrap 1", "[grow]", ""));
 		taskPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "반복 작업"));
 
@@ -928,6 +959,15 @@ public class MainFrame extends JFrame {
 		WindowStatus.save(this);
 		System.exit(0);
 	}
+	
+	private void refreshScreenSelectBox() {
+		screenSelectBox.removeAllItems();
+		if(status.getScreenList() == null) return;
+		for(int i=0; i < status.getScreenList().size(); i++) {
+			Rectangle rect = status.getScreenList().get(i);
+			screenSelectBox.addItem("화면 "+(i+1)+" - ("+rect.x+","+rect.y+","+rect.width+","+rect.height+")");
+		}
+	}
 
 	private void addScreenRect() {
 		if (timelinesGroup.isPlaying())
@@ -935,6 +975,7 @@ public class MainFrame extends JFrame {
 		Rectangle screenRect = ScreenRectDialog.showDialog(MainFrame.this);
 		status.getScreenList().add(screenRect);
 		setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
+		refreshScreenSelectBox();
 		setPlayingState(false);
 	}
 
@@ -945,6 +986,7 @@ public class MainFrame extends JFrame {
 			return;
 		status.getScreenList().remove(status.getScreenList().size() - 1);
 		setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
+		refreshScreenSelectBox();
 		setPlayingState(false);
 	}
 
@@ -1073,6 +1115,28 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying()) {
 			timelinesGroup.stop();
 		}
+	}
+	
+	private void playNoticeMacro() throws Exception {
+		if (status.getScreenList().isEmpty())
+			return;
+		if (timelinesGroup.isPlaying())
+			return;
+		if (noticeText == null) 
+			return;
+		
+		String screenText = (String)screenSelectBox.getSelectedItem();
+		screenText = screenText.substring(0, screenText.indexOf("-"));
+		int screenNumber = Integer.parseInt(screenText.replace("화면", "").replace(" ", ""));
+		String periodText = periodInput.getText();
+		if(periodText.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "텍스트 실행 간격을 설정하세요");
+			return;
+		}
+		int period = Integer.parseInt(periodText);
+		MacroCreator.notice(timelinesGroup, status, screenNumber, period, noticeText);
+		timelinesGroup.play();
+		setPlayingState(true);
 	}
 
 	private void playTaskMacro() throws Exception {

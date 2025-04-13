@@ -9,16 +9,16 @@ import javax.swing.JFrame;
 import com.hacademy.topwar.exception.TargetNotFoundException;
 
 public class GraphicUtils {
-	private static Map<String, Window> windows = new HashMap<>();
+	private static Map<Class<?>, Window> windows = new HashMap<>();
 	private static Window currentWindow = null;
-	public static void addWindow(String windowTitle, Window window) {
-		windows.put(windowTitle, window);
+	public static void addWindow(Class<?> clazz, Window window) {
+		windows.put(clazz, window);
 	}
-	public static Window getWindow(String windowTitle) {
-		return windows.get(windowTitle);
+	public static Window getWindow(Class<?> clazz) {
+		return windows.get(clazz);
 	}
-	public static void showWindow(String windowTitle) {
-		Window targetWindow = windows.get(windowTitle);
+	public static void showWindow(Class<?> clazz) {
+		Window targetWindow = windows.get(clazz);
 		if(targetWindow == null) 
 			throw new TargetNotFoundException();
 		
@@ -27,9 +27,9 @@ public class GraphicUtils {
 		
 		targetWindow.setVisible(true);
 	}
-	public static void runWindow(String windowTitle, Window window) {
-		addWindow(windowTitle, window);
-		showWindow(windowTitle);
+	public static void runWindow(Class<?> clazz, Window window) {
+		addWindow(clazz, window);
+		showWindow(clazz);
 	}
 	
 }

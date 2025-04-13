@@ -2,6 +2,8 @@ package com.hacademy.topwar.util;
 
 import java.awt.AWTException;
 import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 
 public class Keyboard {
@@ -59,5 +61,27 @@ public class Keyboard {
 			throw new RuntimeException(Thread.currentThread().getName()+" is interrupted");
 		}
 		return this;
+	}
+	
+	public Keyboard saveToClipboard(String text) {
+		StringSelection selection = new StringSelection(text);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+		return this;
+	}
+	
+	public Keyboard copy() {
+		return press(KeyEvent.VK_CONTROL).hold()
+					.press(KeyEvent.VK_C).hold()
+					.release(KeyEvent.VK_C).hold()
+					.release(KeyEvent.VK_CONTROL);
+	}
+	public Keyboard paste() {
+		return press(KeyEvent.VK_CONTROL).hold()
+					.press(KeyEvent.VK_V).hold()
+					.release(KeyEvent.VK_V).hold()
+					.release(KeyEvent.VK_CONTROL);
+	}
+	public Keyboard enter() {
+		return type(KeyEvent.VK_ENTER);
 	}
 }

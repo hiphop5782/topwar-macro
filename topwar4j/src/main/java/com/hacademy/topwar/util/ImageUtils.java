@@ -7,6 +7,7 @@ import static org.bytedeco.opencv.global.opencv_imgproc.matchTemplate;
 import static org.bytedeco.opencv.global.opencv_imgproc.resize;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
@@ -215,6 +216,18 @@ public class ImageUtils {
 		}
 		
 		throw new FileNotFoundException();
+	}
+	
+	public static BufferedImage resizeImage(BufferedImage originalImage, int scale) {
+	    int width = originalImage.getWidth() * scale;
+	    int height = originalImage.getHeight() * scale;
+
+	    BufferedImage resizedImage = new BufferedImage(width, height, originalImage.getType());
+	    Graphics2D g = resizedImage.createGraphics();
+	    g.drawImage(originalImage, 0, 0, width, height, null);
+	    g.dispose();
+
+	    return resizedImage;
 	}
 
 }

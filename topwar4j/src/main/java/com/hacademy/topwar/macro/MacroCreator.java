@@ -1,11 +1,14 @@
 package com.hacademy.topwar.macro;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
 import com.hacademy.topwar.macro.action.MacroDelayAction;
+import com.hacademy.topwar.macro.action.MacroMouseAction;
+import com.hacademy.topwar.macro.action.MacroTypingAction;
 
 public class MacroCreator {
 	public static MacroDelayAction delay(long ms) {
@@ -368,6 +371,31 @@ public class MacroCreator {
 		식량시설(timelinesGroup, status);
 		오딘시설(timelinesGroup, status);
 		
+		return timelinesGroup;
+	}
+	public static MacroTimelinesGroup notice(MacroTimelinesGroup timelinesGroup, MacroStatus status, 
+			int screenNumber, int period, String text) {
+		timelinesGroup.clear();
+		
+		Rectangle baseRect = status.getScreenList().get(screenNumber-1);
+		Point basePoint = baseRect.getLocation();
+		
+		MacroTimelines timelines = new MacroTimelines("텍스트 알림", true);
+		
+		long periodMillis = period * 60L * 1000L;
+		
+		MacroTimeline timeline = new MacroTimeline();
+		text.lines().forEach(line->{
+			timeline.add(new MacroMouseAction(basePoint, 226, 653));
+			timeline.add(new MacroMouseAction(basePoint, 226, 653));
+			timeline.add(new MacroTypingAction(line));
+			timeline.add(delay(500L));
+		});
+		timeline.add(delay(periodMillis));
+		
+		timelines.add(timeline);
+		
+		timelinesGroup.add(timelines);
 		return timelinesGroup;
 	}
 }

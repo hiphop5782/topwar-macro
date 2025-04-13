@@ -84,7 +84,10 @@ public class ScreenRectDialog extends JDialog {
 		this.setAlwaysOnTop(true);
 		this.setModal(true);
 		//Rectangle rect = MonitorUtils.getCurrentMonitorCenterBounds(500, 700);
-		Rectangle rect = MonitorUtils.getAppLocatedMonitorCenterBounds(parent.getX(), parent.getY(), 500, 700);
+		//Rectangle rect = MonitorUtils.getAppLocatedMonitorCenterBounds(parent.getX(), parent.getY(), 500, 700);
+		Rectangle rect = parent == null ? 
+				MonitorUtils.getCurrentMonitorCenterBounds(500, 700) :
+					MonitorUtils.getAppLocatedMonitorCenterBounds(parent.getX(), parent.getY(), 500, 700);
 		this.setBounds(rect);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);

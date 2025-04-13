@@ -1,11 +1,13 @@
 package com.hacademy.topwar.util;
 
+import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Window;
 
 public class MonitorUtils {
 	public static GraphicsEnvironment env() {
@@ -63,5 +65,11 @@ public class MonitorUtils {
 		int px = rect.x + (rect.width / 2 - width / 2);
 		int py = rect.y + (rect.height / 2 - height / 2);
 		return new Rectangle(px, py, width, height);
+	}
+	public static Rectangle getCenterOfApplicationBounds(Window window, Dimension size) {
+		Rectangle rect = window.getBounds();
+		int px = rect.x + (rect.width - size.width) / 2;
+		int py = rect.y + (rect.height - size.height) / 2;
+		return new Rectangle(new Point(px, py), size);
 	}
 }
