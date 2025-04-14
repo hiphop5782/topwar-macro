@@ -114,22 +114,12 @@ public class Test14스크롤캡쳐 {
 	
 	public static List<Double> fix(List<String> datalist) {
 		List<Double> cpList = new ArrayList<>();
-		for(int i=0; i < datalist.size()-1; i++) {
+		for(int i=1; i < datalist.size()-1; i++) {
+			double prev = parseM(datalist.get(i-1));
 			double value = parseM(datalist.get(i));
 			double next = parseM(datalist.get(i+1));
-			if(value < next) {
-				value = next;
-			}
+			
 			cpList.add(value);
-		}
-		List<Double> cpList2 = new ArrayList<>();
-		for(int i=1; i < cpList.size(); i++) {
-			double value = parseM(datalist.get(i));
-			double before = parseM(datalist.get(i-1));
-			if(value > before || value / 6 > before) {
-				value = before;
-			}
-			cpList2.add(value);
 		}
 		return cpList;
 	}
