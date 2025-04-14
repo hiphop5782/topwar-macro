@@ -901,7 +901,6 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		minimizePanel.add(facilityButton);
 		waitingComponentList.add(facilityButton);
 
 		JButton macroStopButton2 = new JButton("실행중지");
@@ -917,6 +916,7 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(warhammerCustomButton2);
 		minimizePanel.add(terror4kLoopButton2);
 		minimizePanel.add(taskRunButton2);
+		minimizePanel.add(facilityButton);
 		minimizePanel.add(macroStopButton2);
 	}
 

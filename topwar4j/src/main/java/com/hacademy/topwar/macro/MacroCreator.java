@@ -335,7 +335,7 @@ public class MacroCreator {
 	}
 	public static MacroTimelinesGroup task(MacroTimelinesGroup timelinesGroup, MacroStatus status, boolean considerWeek) throws Exception {
 		timelinesGroup.clear();
-		System.out.println("task");
+		
 		VIP보상(timelinesGroup, status);
 		장바구니(timelinesGroup, status);
 		특별패키지(timelinesGroup, status);
@@ -343,7 +343,7 @@ public class MacroCreator {
 		일반스킬모집(timelinesGroup, status);
 		고급모집(timelinesGroup, status, considerWeek);
 		일일임무(timelinesGroup, status);
-		골드지원(timelinesGroup, status);
+//		골드지원(timelinesGroup, status);
 		크로스패배(timelinesGroup, status);
 		무료보석(timelinesGroup, status);
 
