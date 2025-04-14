@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OcrUtils {
-	private static final String URL = "http://192.168.30.17:5000/ocr";
+//	private static final String URL = "http://192.168.30.17:5000/ocr";
+	private static final String URL = "http://host.sysout.co.kr:5000/ocr";
 	private static final String BOUNDARY = "----OCRJavaBoundary";
 
 	public static String sendImage(HttpClient client, Path imagePath) throws IOException, InterruptedException {
