@@ -529,7 +529,8 @@ public class MacroTimelineFactory {
 		
 		timeline.add(일일임무버튼(status, basePoint));
 //		timeline.add(섬대작전으로이동(status, basePoint));
-		timeline.add(크로스훈련으로이동(status, basePoint));
+		timeline.add(크로스훈련으로절반이동(status, basePoint));
+		timeline.add(크로스훈련으로절반이동(status, basePoint));
 		timeline.add(randomDelay(status, 2, 3));
 //		timeline.add(크로스훈련선택(status, basePoint));
 		timeline.add(크로스훈련적선택(status, basePoint));
@@ -925,7 +926,7 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 사판훈련으로이동(MacroStatus status, Point basePoint) {
 		//return new MacroMouseAction(basePoint, 354, 640, MacroMouseActionType.WHEELDOWN, 10);
-		return new MacroMouseAction(basePoint, 354, 640, 354, 570, MacroMouseActionType.DRAG, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 354, 640, 354, 430, MacroMouseActionType.DRAG, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 사판훈련(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 353, 640, status.getScreenList().size() < singleCount);
@@ -1113,9 +1114,9 @@ public class MacroTimelineFactory {
 	private static MacroAction 크로스훈련선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 353, 228, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 크로스훈련으로이동(MacroStatus status, Point basePoint) {
+	private static MacroAction 크로스훈련으로절반이동(MacroStatus status, Point basePoint) {
 		//return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELUP, 20);
-		return new MacroMouseAction(basePoint, 351, 660, 351, 210, MacroMouseActionType.DRAG);
+		return new MacroMouseAction(basePoint, 351, 660, 351, 370, MacroMouseActionType.DRAG);
 	}
 	private static MacroAction 길드메뉴(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 471, 469, status.getScreenList().size() < singleCount);

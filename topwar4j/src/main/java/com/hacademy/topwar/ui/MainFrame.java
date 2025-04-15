@@ -147,11 +147,11 @@ public class MainFrame extends JFrame {
 			}
 		});
 		this.init();
-		this.pack();
 		if(status != null && ws != null) {
 			this.setMinimode(ws.isMini());
 		}
 		this.refreshScreenSelectBox();
+		this.pack();
 	}
 	
 	public void setMinimode(boolean mini) {
