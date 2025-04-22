@@ -1,28 +1,15 @@
 package com.hacademy.topwar.macro;
 
-import java.awt.Rectangle;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.hacademy.topwar.util.RectData;
 
 import lombok.Data;
 
 @Data
 public class MacroStatus implements Serializable{
-	private static final long serialVersionUID = 1L;
-	private static MacroStatus instance;
-	static {
-		instance = load();
-	}
-	public static MacroStatus getInstance() {
-		return instance;
-	}
-	
 	private int darkforceAttackCount = 1;
 	private String darkforceLevel = "random";
 	private int darkforceDuration = 300;
@@ -33,7 +20,7 @@ public class MacroStatus implements Serializable{
 	private int terror4kLevel = 5;
 	private boolean terror4kManual = false;
 	
-	private List<Rectangle> screenList = new ArrayList<>();
+	private List<RectData> screenList = new ArrayList<>();
 	
 	//기지 내부 작업
 	//daily task
@@ -50,9 +37,9 @@ public class MacroStatus implements Serializable{
 	private boolean allianceDonation = true;
 	private boolean productMaterial = true;
 	private String productMaterialType = "강철";
-	private boolean armyUnitTraining = true;
-	private boolean navyUnitTraining = true;
-	private boolean airforceUnitTraining = true;
+//	private boolean armyUnitTraining = true;
+//	private boolean navyUnitTraining = true;
+//	private boolean airforceUnitTraining = true;
 	
 	//weekly task
 	private boolean weeklyDecorFreeToken = true;
@@ -65,46 +52,4 @@ public class MacroStatus implements Serializable{
 	private boolean odinFacility = true;
 	private int odinFacilityLevel = 3;
 	
-	public static MacroStatus load() {
-		File dir = new File(System.getProperty("user.home"), "tw-macro");
-		File target = new File(dir, "status");
-		return load(target);
-	}
-	public static MacroStatus load(File target) {
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(target));){
-			
-			MacroStatus status = (MacroStatus) in.readObject();
-			if(status.screenList == null) 
-				status.screenList = new ArrayList<>();
-			status.darkforceAttackCount = Math.max(status.darkforceAttackCount, 1);
-			status.darkforceMarchNumber = Math.max(status.darkforceMarchNumber, 1);
-			status.terror4kLevel = Math.max(status.terror4kLevel, 1);
-			status.oilFacilityLevel = Math.max(status.oilFacilityLevel, 1);
-			status.foodFacilityLevel = Math.max(status.foodFacilityLevel, 1);
-			status.odinFacilityLevel = Math.max(status.odinFacilityLevel, 1);
-			if(status.darkforceLevel == null)
-				status.darkforceLevel = "random";
-			if(status.warhammerLevel == null)
-				status.warhammerLevel = "random";
-			return status;
-		}
-		catch(Exception e) {
-			return new MacroStatus();
-		}
-		
-	}
-	public void save() {
-		File dir = new File(System.getProperty("user.home"), "tw-macro");
-		dir.mkdirs();
-		
-		File target = new File(dir, "status");
-		save(target);
-	}
-	public void save(File target) {
-		try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(target));) {
-			out.writeObject(this);
-		}
-		catch(Exception e) {}
-	}
-
 }

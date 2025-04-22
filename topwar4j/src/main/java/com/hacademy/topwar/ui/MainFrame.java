@@ -22,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -42,9 +41,12 @@ import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimelines;
 import com.hacademy.topwar.macro.MacroTimelinesGroup;
 import com.hacademy.topwar.macro.MacroTimelinesListener;
+import com.hacademy.topwar.macro.PropertyManager;
 import com.hacademy.topwar.ui.components.CheckButton;
 import com.hacademy.topwar.ui.components.NumberField;
 import com.hacademy.topwar.ui.components.StatusCheckBox;
+import com.hacademy.topwar.util.JsonConfigUtil;
+import com.hacademy.topwar.util.RectData;
 
 import lc.kra.system.keyboard.GlobalKeyboardHook;
 import lc.kra.system.keyboard.event.GlobalKeyAdapter;
@@ -56,7 +58,8 @@ import net.miginfocom.swing.MigLayout;
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private MacroStatus status = MacroStatus.getInstance();
+	private MacroStatus macroStatus = JsonConfigUtil.load(MacroStatus.class);
+	private WindowStatus windowStatus = JsonConfigUtil.load(WindowStatus.class);
 
 	private int macroExecuteCount = 0;
 
@@ -131,14 +134,13 @@ public class MainFrame extends JFrame {
 	private List<StatusCheckBox> facilityTaskCheckboxes = new ArrayList<>();
 	
 	public MainFrame() throws Exception {
-		WindowStatus ws = WindowStatus.load();
 		this.setAlwaysOnTop(false);
-		if(ws == null) 
+		if(windowStatus == null) 
 			this.setLocationByPlatform(true);
 		else 
-			this.setLocation(ws.getX(), ws.getY());
+			this.setLocation(windowStatus.getX(), windowStatus.getY());
 		this.setResizable(false);
-		this.setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
+		this.setTitle("TW-Macro (설정된 화면 : " + macroStatus.getScreenList().size() + ")");
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -151,7 +153,6 @@ public class MainFrame extends JFrame {
 			this.setMinimode(ws.isMini());
 		}
 		this.refreshScreenSelectBox();
-		this.pack();
 	}
 	
 	public void setMinimode(boolean mini) {
@@ -188,36 +189,6 @@ public class MainFrame extends JFrame {
 //		파일 메뉴 - 새파일, 열기, 저장, 종료
 		JMenu file = new JMenu("파일");
 		bar.add(file);
-
-//		JMenuItem newMacro = new JMenuItem("새 매크로");
-//		newMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl N"));
-//		newMacro.addActionListener(e->{});
-//		file.add(newMacro);
-
-//		file.addSeparator();
-
-		JMenuItem openMacro = new JMenuItem("설정 열기");
-		openMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
-		openMacro.addActionListener(e -> {
-			JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
-			int choose = chooser.showOpenDialog(this);
-			if (choose == JFileChooser.APPROVE_OPTION) {
-				status = MacroStatus.load(chooser.getSelectedFile());
-				setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
-			}
-		});
-		file.add(openMacro);
-
-		JMenuItem saveMacro = new JMenuItem("설정 저장");
-		saveMacro.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
-		saveMacro.addActionListener(e -> {
-			JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
-			int choose = chooser.showSaveDialog(this);
-			if (choose == JFileChooser.APPROVE_OPTION) {
-				status.save(chooser.getSelectedFile());
-			}
-		});
-		file.add(saveMacro);
 
 //		file.addSeparator();
 
@@ -955,8 +926,9 @@ public class MainFrame extends JFrame {
 
 	// 상태 저장 및 프로그램 종료
 	public void exitProgram() {
-		status.save();
-		WindowStatus.save(this);
+		PropertyManager.saveMacroStatus();
+		
+		PropertyManager.saveWindowStatus();
 		System.exit(0);
 	}
 	
@@ -964,7 +936,8 @@ public class MainFrame extends JFrame {
 		screenSelectBox.removeAllItems();
 		if(status.getScreenList() == null) return;
 		for(int i=0; i < status.getScreenList().size(); i++) {
-			Rectangle rect = status.getScreenList().get(i);
+			RectData data = status.getScreenList().get(i);
+			Rectangle rect = data.toRectangle();
 			screenSelectBox.addItem("화면 "+(i+1)+" - ("+rect.x+","+rect.y+","+rect.width+","+rect.height+")");
 		}
 	}
@@ -973,7 +946,7 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		Rectangle screenRect = ScreenRectDialog.showDialog(MainFrame.this);
-		status.getScreenList().add(screenRect);
+		status.getScreenList().add(new RectData(screenRect));
 		setTitle("TW-Macro (설정된 화면 : " + status.getScreenList().size() + ")");
 		refreshScreenSelectBox();
 		setPlayingState(false);

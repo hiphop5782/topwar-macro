@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JButton;
 
 import com.hacademy.topwar.macro.MacroStatus;
+import com.hacademy.topwar.macro.PropertyManager;
 
 public class CheckButton extends JButton {
 	private static final long serialVersionUID = 1L;
@@ -46,7 +47,7 @@ public class CheckButton extends JButton {
 			for(StatusCheckBox checkbox : concernedCheckboxes) {
 				checkbox.setSelectedAndSave(checked);
 			}
-			MacroStatus.getInstance().save();
+			PropertyManager.saveMacroStatus();
 		}
 	}
 	public boolean getConcernedCheckboxesChecked() {

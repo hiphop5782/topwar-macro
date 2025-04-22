@@ -7,6 +7,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
 import com.hacademy.topwar.macro.MacroStatus;
+import com.hacademy.topwar.macro.PropertyManager;
 
 public class StatusCheckBox extends JCheckBox {
 	private static final long serialVersionUID = 1L;
@@ -50,7 +51,7 @@ public class StatusCheckBox extends JCheckBox {
 			loading = true;
 			Field field = MacroStatus.class.getDeclaredField(statusProperty);
 			field.setAccessible(true);
-			boolean b = field.getBoolean(MacroStatus.getInstance());
+			boolean b = field.getBoolean(PropertyManager.getMacroStatus());
 			super.setSelected(b);
 		} 
 		catch (Exception e) {
@@ -62,11 +63,11 @@ public class StatusCheckBox extends JCheckBox {
 	}
 	private void saveStatus() {
 		try {
-			MacroStatus instance = MacroStatus.getInstance();
+			MacroStatus instance = PropertyManager.getMacroStatus();
 			Field field = MacroStatus.class.getDeclaredField(statusProperty);
 			field.setAccessible(true);
 			field.set(instance, isSelected());
-			instance.save();
+			PropertyManager.saveMacroStatus();
 			System.out.println("** 설정 내보내기 완료 **");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,7 +84,7 @@ public class StatusCheckBox extends JCheckBox {
 		this.setSelected(checked);
 		
 		try {
-			MacroStatus instance = MacroStatus.getInstance();
+			MacroStatus instance = PropertyManager.getMacroStatus();
 			Field field = MacroStatus.class.getDeclaredField(statusProperty);
 			field.setAccessible(true);
 			field.set(instance, checked);
