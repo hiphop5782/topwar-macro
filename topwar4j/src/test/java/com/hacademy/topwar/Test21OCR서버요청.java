@@ -1,8 +1,10 @@
 package com.hacademy.topwar;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacademy.topwar.util.OcrUtils;
 
 public class Test21OCR서버요청 {
@@ -11,5 +13,7 @@ public class Test21OCR서버요청 {
 		for(String str : list) {
 			System.out.println(str.replace("A", "8"));
 		}
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(new File("result.json"), list);
 	}
 }

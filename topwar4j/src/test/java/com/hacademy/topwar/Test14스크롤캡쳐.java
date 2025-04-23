@@ -96,10 +96,9 @@ public class Test14스크롤캡쳐 {
 		.clickL(baseRect.x + 86, baseRect.y + 23).hold()
 		.clickL(baseRect.x + 86, baseRect.y + 23).hold();
 		
-		List<String> list = ocr(dir);
-		
-		List<Double> fixList = fix(list);
-		fixList.stream().forEach(System.out::println);
+//		List<String> list = ocr(dir);
+//		List<Double> fixList = fix(list);
+//		fixList.stream().forEach(System.out::println);
 	}
 	
 	public static double parseM(String str) {

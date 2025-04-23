@@ -192,6 +192,9 @@ public class ScreenRectDialog extends JDialog {
         //initialClick = e.getPoint();  // 새로운 기준점 설정
     }
     
+    public static Rectangle showDialog() {
+    	return showDialog(null);
+    }
     public static Rectangle showDialog(Window parent) {
     	ScreenRectDialog dialog = new ScreenRectDialog(parent);
     	return dialog.getBounds();

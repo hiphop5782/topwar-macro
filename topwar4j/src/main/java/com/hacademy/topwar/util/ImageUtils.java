@@ -229,5 +229,9 @@ public class ImageUtils {
 
 	    return resizedImage;
 	}
+	
+	public static BufferedImage crop(BufferedImage src, int x, int y, int width, int height) {
+        return src.getSubimage(x, y, width, height);
+    }
 
 }

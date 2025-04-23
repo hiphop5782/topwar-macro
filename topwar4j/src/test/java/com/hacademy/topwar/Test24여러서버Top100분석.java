@@ -1,0 +1,66 @@
+package com.hacademy.topwar;
+
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hacademy.topwar.ui.ScreenRectDialog;
+import com.hacademy.topwar.util.OcrUtils;
+import com.hacademy.topwar.util.ServerUserData;
+
+public class Test24여러서버Top100분석 {
+	public static void main(String[] args) throws Exception {
+		//감지영역 설정 및 요청
+		Rectangle rect = ScreenRectDialog.showDialog();
+		
+		InputStream in = Topwar4jApplication.class
+				.getClassLoader()
+				.getResourceAsStream("servers.json");
+		if(in == null) return;
+		
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(in);
+		
+		JsonNode listNode = root.get("list");
+		if(listNode == null || !listNode.isArray()) return;
+		
+		List<Integer> servers = new ArrayList<>();
+		for(JsonNode node : listNode) {
+			servers.add(node.asInt());
+		}
+		
+		//스레드 실행 도구
+		ExecutorService executor = Executors.newFixedThreadPool(5);
+		
+		for(int server : servers) {
+			System.out.println("<"+server+" 분석 시작>");
+			//CaptureUtils.top100(rect, server);
+			
+			executor.submit(()->{
+				try {
+					File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
+					List<String> cpList = OcrUtils.doOcrDirectory(dir);
+					//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
+					
+					ServerUserData serverUserData = new ServerUserData(server, cpList);
+					serverUserData.saveToJson();
+					serverUserData.print();
+					serverUserData.printAll();
+					serverUserData.printCorrect();
+					serverUserData.printError();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+				
+				System.out.println("** "+server+" 분석 종료 **");
+			});
+		}
+	}
+}
