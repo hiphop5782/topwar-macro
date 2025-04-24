@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacademy.topwar.ui.ScreenRectDialog;
+import com.hacademy.topwar.util.CaptureUtils;
 import com.hacademy.topwar.util.OcrUtils;
 import com.hacademy.topwar.util.ServerUserData;
 
@@ -34,13 +35,14 @@ public class Test24여러서버Top100분석 {
 		for(JsonNode node : listNode) {
 			servers.add(node.asInt());
 		}
+		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
 		//스레드 실행 도구
 		ExecutorService executor = Executors.newFixedThreadPool(5);
-		
+		int count = 0;
 		for(int server : servers) {
-			System.out.println("<"+server+" 분석 시작>");
-			//CaptureUtils.top100(rect, server);
+			System.out.println("<"+server+" 분석 시작> ("+(++count) + " / " + servers.size() +")");
+			CaptureUtils.top100(rect, server);
 			
 			executor.submit(()->{
 				try {
