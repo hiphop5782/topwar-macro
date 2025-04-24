@@ -23,8 +23,13 @@ public class ImageProcessor {
 	//이진화
 	public static Mat binarize(Mat origin) {
 		Mat result = new Mat();
-//		threshold(origin, result, 0, 255, THRESH_BINARY + THRESH_OTSU);
 		threshold(origin, result, 205, 255, THRESH_BINARY);
+		origin.release();
+		return result;
+	}
+	public static Mat binarizeOtsu(Mat origin) {
+		Mat result = new Mat();
+		threshold(origin, result, 0, 255, THRESH_BINARY + THRESH_OTSU);
 		origin.release();
 		return result;
 	}
@@ -83,5 +88,11 @@ public class ImageProcessor {
 		
 		Mat resize2 = resizeImage(dilate, 3);
 		return resize2;
+	}
+	public static Mat reverse(Mat origin) {
+		Mat result = new Mat();
+		bitwise_not(origin, result);
+		origin.release();
+		return result;
 	}
 }
