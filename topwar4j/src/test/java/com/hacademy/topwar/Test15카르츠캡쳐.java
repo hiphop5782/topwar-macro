@@ -13,9 +13,14 @@ import javax.imageio.ImageIO;
 import org.bytedeco.opencv.opencv_core.Mat;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 
+import com.hacademy.topwar.ui.ScreenRectDialog;
 import com.hacademy.topwar.util.ImageProcessor;
 import com.hacademy.topwar.util.ImageUtils;
 import com.hacademy.topwar.util.Mouse;
+
+import lc.kra.system.keyboard.GlobalKeyboardHook;
+import lc.kra.system.keyboard.event.GlobalKeyAdapter;
+import lc.kra.system.keyboard.event.GlobalKeyEvent;
 
 public class Test15카르츠캡쳐 {
 	private static File dir = new File("ocr/kartz");
@@ -26,7 +31,18 @@ public class Test15카르츠캡쳐 {
 		dir.mkdirs();
 	}
 	public static void main(String[] args) throws Exception {
-		Rectangle baseRect = new Rectangle(8, 82, 500, 700);
+		Rectangle baseRect = ScreenRectDialog.showDialog();
+		
+		GlobalKeyboardHook hook = new GlobalKeyboardHook(false);
+		hook.addKeyListener(new GlobalKeyAdapter() {
+			@Override
+			public void keyReleased(GlobalKeyEvent event) {
+				switch(event.getVirtualKeyCode()) {
+				case GlobalKeyEvent.VK_ESCAPE:
+					System.exit(0);
+				}
+			}
+		});
 		
 		LocalDate today = LocalDate.now();
 		String dateStr = today.format(DateTimeFormatter.ofPattern("yyyy-MM"));
@@ -37,10 +53,10 @@ public class Test15카르츠캡쳐 {
 		
 		//이동렉 방지를 위해 미리 끝까지 다녀오기
 		for(int i=0; i < 124; i++) {
-			Mouse.create().move(baseRect.x + 250, baseRect.y + 350).wheelDown(46).hold();
+			Mouse.create().move(baseRect.x + 250, baseRect.y + 350).wheelDown(46).hold(0.2f);
 		}
 		for(int i=0; i < 125; i++) {
-			Mouse.create().move(baseRect.x + 250, baseRect.y + 350).wheelUp(46).hold();
+			Mouse.create().move(baseRect.x + 250, baseRect.y + 350).wheelUp(46).hold(0.2f);
 		}
 		
 		Thread.sleep(5000L);
@@ -82,6 +98,8 @@ public class Test15카르츠캡쳐 {
 				beginY = 224;
 			}
 		}
+		
+		System.exit(0);
 	}
 	
 	public static void remove(File file) {
@@ -102,8 +120,9 @@ public class Test15카르츠캡쳐 {
 	public static void saveImageWithProcess(BufferedImage image, int rank, String type) {
 		Mat src = ImageUtils.bufferedImageToMat(image);
 		Mat gray = ImageProcessor.grayScale(src);
-		Mat binary = ImageProcessor.binarize(gray);
-		imwrite("./ocr/kartz/kartz-"+rank+"-"+type+".png", binary);
+		Mat binary = ImageProcessor.binarizeOtsu(gray);
+		Mat reverse = ImageProcessor.reverse(binary);
+		imwrite("./ocr/kartz/kartz-"+rank+"-"+type+".png", reverse);
 	}
     
     public static BufferedImage crop(BufferedImage src, int x, int y, int width, int height) {

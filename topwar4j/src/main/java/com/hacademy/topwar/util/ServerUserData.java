@@ -29,6 +29,7 @@ public class ServerUserData {
 	private transient final DecimalFormat fmt = new DecimalFormat("#,##0.00");
 	
 	public ServerUserData(int server, List<String> cpList) { 
+		
 		this.cpList = cpList;
 		this.analyze();
 	};
