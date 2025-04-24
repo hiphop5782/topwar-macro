@@ -29,7 +29,7 @@ public class ServerUserData {
 	private transient final DecimalFormat fmt = new DecimalFormat("#,##0.00");
 	
 	public ServerUserData(int server, List<String> cpList) { 
-		
+		this.server = server;
 		this.cpList = cpList;
 		this.analyze();
 	};
@@ -39,7 +39,8 @@ public class ServerUserData {
 		
 		for(int i=0; i < cpList.size(); i++) {
 			try {
-				String cur = cpList.get(i).replace("M", "");
+				String cur = cpList.get(i).replace("M", "")
+						.replace("A", "8");
 				float value = Float.parseFloat(cur);
 				if(value > MAXIMUM_CP) throw new Exception();
 				
@@ -58,7 +59,7 @@ public class ServerUserData {
 			}
 			catch(Exception e) {
 				nokList.add(cpList.get(i));
-				e.printStackTrace();
+				System.err.println("에러 : "+e.getMessage());
 			}
 		}
 		
