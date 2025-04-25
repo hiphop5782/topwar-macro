@@ -99,6 +99,9 @@ public class Test15카르츠캡쳐 {
 			}
 		}
 		
+		//OCR
+		
+		
 		System.exit(0);
 	}
 	

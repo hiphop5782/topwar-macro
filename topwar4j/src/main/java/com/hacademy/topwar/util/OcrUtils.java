@@ -65,6 +65,7 @@ public class OcrUtils {
 				String result = sendImage(client, imagePath);
 				//System.out.printf("[%s] → %s%n", imagePath.getFileName(), result);
 				list.add(result);
+				System.out.println("OCR 완료 ("+imagePath.getFileName()+")");
 			} catch (Exception e) {
 				System.err.println("❌ 오류: " + imagePath + " → " + e.getMessage());
 			}
@@ -81,6 +82,10 @@ public class OcrUtils {
 		})
 		.filter(Objects::nonNull)
 		.toList();
+	}
+	public static String doOcrFile(Path imagePath) throws IOException, InterruptedException {
+		HttpClient client = HttpClient.newHttpClient();
+		return sendImage(client, imagePath);
 	}
 	public static List<String> doOcrDirectoryByTesseract(File dir) throws IOException {
 		return doOcrDirectoryByTesseract(dir.getAbsolutePath());

@@ -39,7 +39,9 @@ public class ServerUserData {
 		
 		for(int i=0; i < cpList.size(); i++) {
 			try {
-				String cur = cpList.get(i).replace("M", "")
+				String cur = cpList.get(i)
+						.strip()
+						.replace("M", "")
 						.replace("A", "8");
 				float value = Float.parseFloat(cur);
 				if(value > MAXIMUM_CP) throw new Exception();
@@ -55,7 +57,7 @@ public class ServerUserData {
 				}
 				
 				total += value;
-				okList.add(cpList.get(i));
+				okList.add(value+"M");
 			}
 			catch(Exception e) {
 				nokList.add(cpList.get(i));
@@ -64,6 +66,11 @@ public class ServerUserData {
 		}
 		
 		average = total / okList.size();
+	}
+	public void saveToJson(File dir) throws StreamWriteException, DatabindException, IOException {
+		File target = new File(dir, server+".json");
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(target, this);
 	}
 	public void saveToJson() throws StreamWriteException, DatabindException, IOException {
 		File target = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server+".json");

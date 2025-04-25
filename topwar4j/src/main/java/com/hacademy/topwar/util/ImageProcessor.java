@@ -1,15 +1,26 @@
 package com.hacademy.topwar.util;
 
-import static org.bytedeco.opencv.global.opencv_imgproc.*;
-import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_core.bitwise_not;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.imwrite;
+import static org.bytedeco.opencv.global.opencv_imgproc.ADAPTIVE_THRESH_GAUSSIAN_C;
+import static org.bytedeco.opencv.global.opencv_imgproc.COLOR_BGR2GRAY;
+import static org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur;
+import static org.bytedeco.opencv.global.opencv_imgproc.MORPH_CLOSE;
+import static org.bytedeco.opencv.global.opencv_imgproc.MORPH_RECT;
+import static org.bytedeco.opencv.global.opencv_imgproc.THRESH_BINARY;
+import static org.bytedeco.opencv.global.opencv_imgproc.THRESH_OTSU;
+import static org.bytedeco.opencv.global.opencv_imgproc.adaptiveThreshold;
+import static org.bytedeco.opencv.global.opencv_imgproc.cvtColor;
+import static org.bytedeco.opencv.global.opencv_imgproc.dilate;
+import static org.bytedeco.opencv.global.opencv_imgproc.getStructuringElement;
+import static org.bytedeco.opencv.global.opencv_imgproc.morphologyEx;
+import static org.bytedeco.opencv.global.opencv_imgproc.resize;
+import static org.bytedeco.opencv.global.opencv_imgproc.threshold;
 
+import java.io.File;
 
 import org.bytedeco.opencv.opencv_core.Mat;
-import org.bytedeco.opencv.opencv_core.MatVector;
-import org.bytedeco.opencv.opencv_core.Point;
-import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_core.Size;
-import org.bytedeco.opencv.opencv_imgproc.CLAHE;
 
 //이미지 전처리 도구
 public class ImageProcessor {
@@ -94,5 +105,8 @@ public class ImageProcessor {
 		bitwise_not(origin, result);
 		origin.release();
 		return result;
+	}
+	public static void save(Mat origin, File target) {
+		imwrite(target.getAbsolutePath(), origin);
 	}
 }
