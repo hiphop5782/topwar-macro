@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class CombatPowerVO {
+public class KartzUserData {
 	private int rank;
-	private double cp;
+	private int server;
+	private int stage;
+	private String damage;
 }

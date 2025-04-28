@@ -85,7 +85,11 @@ public class OcrUtils {
 	}
 	public static String doOcrFile(Path imagePath) throws IOException, InterruptedException {
 		HttpClient client = HttpClient.newHttpClient();
-		return sendImage(client, imagePath);
+		String jsonStr = sendImage(client, imagePath);
+		ObjectMapper parser = new ObjectMapper();
+		Map<String, String> map = parser.readValue(jsonStr, new TypeReference<Map<String, String>>() {});
+		System.out.println(imagePath.getFileName()+" → "+map.get("text"));
+		return map.get("text");
 	}
 	public static List<String> doOcrDirectoryByTesseract(File dir) throws IOException {
 		return doOcrDirectoryByTesseract(dir.getAbsolutePath());

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacademy.topwar.ui.ScreenRectDialog;
 import com.hacademy.topwar.util.CaptureUtils;
 import com.hacademy.topwar.util.OcrUtils;
-import com.hacademy.topwar.util.ServerUserData;
+import com.hacademy.topwar.vo.ServerUserData;
 
 public class Test24여러서버Top100분석 {
 	private static int count=0;

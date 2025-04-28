@@ -13,7 +13,7 @@ import java.util.List;
 import com.hacademy.topwar.ui.ScreenRectDialog;
 import com.hacademy.topwar.util.CaptureUtils;
 import com.hacademy.topwar.util.OcrUtils;
-import com.hacademy.topwar.util.ServerUserData;
+import com.hacademy.topwar.vo.ServerUserData;
 
 public class Test23서버Top100분석 {
 	public static void main(String[] args) throws Exception {

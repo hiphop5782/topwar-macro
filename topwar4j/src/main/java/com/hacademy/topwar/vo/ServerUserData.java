@@ -1,8 +1,9 @@
-package com.hacademy.topwar.util;
+package com.hacademy.topwar.vo;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import lombok.Data;
 public class ServerUserData {
 	@JsonIgnore
 	public static final int MAXIMUM_CP = 300;
+	private LocalDateTime time;
 	private int server;
 	private float total;
 	private float average;
@@ -31,6 +33,7 @@ public class ServerUserData {
 	public ServerUserData(int server, List<String> cpList) { 
 		this.server = server;
 		this.cpList = cpList;
+		this.time = LocalDateTime.now();
 		this.analyze();
 	};
 	
