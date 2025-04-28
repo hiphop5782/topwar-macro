@@ -41,23 +41,23 @@ public class ServerUserData {
 			try {
 				String cur = cpList.get(i)
 						.strip()
-						.replace("M", "")
-						.replace("A", "8");
+						.replace(" ", "")
+						.replace("M", "");
 				float value = Float.parseFloat(cur);
 				if(value > MAXIMUM_CP) throw new Exception();
 				
-				if(i > 0 && i < cpList.size()-1) {
-					String prev = cpList.get(i-1).replace("M", "");
-					String next = cpList.get(i+1).replace("M", "");
-					float prevValue = Float.parseFloat(prev);
-					float nextValue = Float.parseFloat(next);
-					if(!(prevValue <= value && value <= nextValue)) {
-						value = (prevValue + nextValue) / 2;
-					}
-				}
+//				if(i > 0 && i < cpList.size()-1) {
+//					String prev = cpList.get(i-1).replace("M", "");
+//					String next = cpList.get(i+1).replace("M", "");
+//					float prevValue = Float.parseFloat(prev);
+//					float nextValue = Float.parseFloat(next);
+//					if(!(prevValue <= value && value <= nextValue)) {
+//						value = (prevValue + nextValue) / 2;
+//					}
+//				}
 				
 				total += value;
-				okList.add(value+"M");
+				okList.add(cpList.get(i)+"M");
 			}
 			catch(Exception e) {
 				nokList.add(cpList.get(i));

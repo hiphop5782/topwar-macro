@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,30 +43,34 @@ public class Test24여러서버Top100분석 {
 		}
 		else {
 			rect = ScreenRectDialog.showDialog();
+			try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(".screen")))){
+				out.writeObject(rect);
+			}
 		}
 		
-//		InputStream in = Topwar4jApplication.class
-//				.getClassLoader()
-//				.getResourceAsStream("servers.json");
-//		if(in == null) return;
-//		
-//		ObjectMapper mapper = new ObjectMapper();
-//		JsonNode root = mapper.readTree(in);
-//		
-//		JsonNode listNode = root.get("list");
-//		if(listNode == null || !listNode.isArray()) return;
-//		
-//		List<Integer> servers = new ArrayList<>();
-//		for(JsonNode node : listNode) {
-//			servers.add(node.asInt());
-//		}
-		final List<Integer> servers = List.of(
-			1805
-		);
+		InputStream in = Topwar4jApplication.class
+				.getClassLoader()
+				.getResourceAsStream("servers.json");
+		if(in == null) return;
+		
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(in);
+		
+		JsonNode listNode = root.get("list");
+		if(listNode == null || !listNode.isArray()) return;
+		
+		List<Integer> servers = new ArrayList<>();
+		for(JsonNode node : listNode) {
+			servers.add(node.asInt());
+		}
+//		final List<Integer> servers = List.of(
+//		 2157
+//		);
+		//Collections.shuffle(servers);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
 		//스레드 실행 도구
-		ExecutorService executor = Executors.newFixedThreadPool(5);
+		ExecutorService executor = Executors.newFixedThreadPool(4);
 		for(int server : servers) {
 			System.out.println("<"+server+" 분석 시작> ("+(++count) + " / " + servers.size() +")");
 			CaptureUtils.top100(rect, server);
@@ -77,7 +82,7 @@ public class Test24여러서버Top100분석 {
 					//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
 					
 					ServerUserData serverUserData = new ServerUserData(server, cpList);
-					serverUserData.saveToJson(new File("C:\\Users\\user1\\git\\topwar-json"));
+					serverUserData.saveToJson(new File("C:\\Users\\hwang\\git\\topwar-json"));
 					serverUserData.print();
 					serverUserData.printAll();
 					serverUserData.printCorrect();
