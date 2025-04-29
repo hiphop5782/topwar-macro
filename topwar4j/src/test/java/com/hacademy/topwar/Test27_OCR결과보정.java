@@ -26,16 +26,16 @@ public class Test27_OCR결과보정 {
 		List<String> once = new ArrayList<>();
 		for(int i=0; i < list.size(); i++) {
 			String cpStr = list.get(i);
+			if(i == 0 || i == list.size()-1) {
+				System.out.println("cp = " + cpStr +", format = " + isCorrectCombatPower(cpStr));
+				continue;
+			}
+			
 			try {//온전한 숫자인 경우 - 앞뒤 확인해서 튀어나갔는지만 확인
 				double cp = Double.parseDouble(deleteM(cpStr));
-				if(i == 0 || i == list.size()-1) {
-					System.out.println("cp = " + cpStr);
-				}
-				else {
-					double upper = closestUpperValue(list, i);
-					double lower = closestLowerValue(list, i);
-					System.out.println("cp = " + cpStr + ", upper = " + upper+", lower = " + lower);
-				}
+				double upper = closestUpperValue(list, i);
+				double lower = closestLowerValue(list, i);
+				System.out.println("cp = " + cpStr + ", upper = " + upper+", lower = " + lower);
 			}
 			catch(NumberFormatException e) {
 				//온전한 숫자가 아닌 경우 - 앞뒤 확인해서 올바르게 조정
@@ -70,5 +70,19 @@ public class Test27_OCR결과보정 {
 			return closestUpperValue(list, index+1);
 		}
 	}
+	
+	public static boolean isCorrectCombatPower(String cpStr) {
+		String regex = "^[1-9]([0-9]?){2}(\\.?[0-9])[MmTt]$";
+		return cpStr.matches(regex);
+	}
+	
+//	public static double fixed(String cpStr, double min, double max) {
+//		try {
+//			double cp = Double.parseDouble(deleteM(cpStr));
+//		}
+//		catch(NumberFormatException e) {
+//			
+//		}
+//	}
 	
 }

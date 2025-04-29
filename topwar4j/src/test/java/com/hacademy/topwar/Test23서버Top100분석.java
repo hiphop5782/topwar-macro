@@ -19,7 +19,7 @@ public class Test23서버Top100분석 {
 	public static void main(String[] args) throws Exception {
 		
 		//서버 설정
-		int server = 3088;
+		int server = 3223;
 		boolean usePrevScreen = true;
 		
 		File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
@@ -47,7 +47,9 @@ public class Test23서버Top100분석 {
 		//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
 		
 		ServerUserData serverUserData = new ServerUserData(server, cpList);
-		serverUserData.saveToJson(new File("C:\\Users\\user1\\git\\topwar-json"));
+		File target = new File(System.getProperty("user.home"), "git/topwar-json");
+		target.mkdirs();
+		serverUserData.saveToJson(target);
 		serverUserData.print();
 		serverUserData.printAll();
 		serverUserData.printCorrect();

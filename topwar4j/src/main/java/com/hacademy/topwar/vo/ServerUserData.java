@@ -18,7 +18,7 @@ import lombok.Data;
 public class ServerUserData {
 	@JsonIgnore
 	public static final int MAXIMUM_CP = 300;
-	private LocalDateTime time;
+	private long time;
 	private int server;
 	private float total;
 	private float average;
@@ -33,7 +33,7 @@ public class ServerUserData {
 	public ServerUserData(int server, List<String> cpList) { 
 		this.server = server;
 		this.cpList = cpList;
-		this.time = LocalDateTime.now();
+		this.time = System.currentTimeMillis();
 		this.analyze();
 	};
 	
