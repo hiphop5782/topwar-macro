@@ -65,6 +65,7 @@ public class ServerUserData {
 		
 	}
 	public void saveToJson(File dir) throws StreamWriteException, DatabindException, IOException {
+		if(!dir.exists()) dir.mkdirs();
 		File target = new File(dir, server+".json");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(target, this);

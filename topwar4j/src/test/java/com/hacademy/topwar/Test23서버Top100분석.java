@@ -51,7 +51,6 @@ public class Test23서버Top100분석 {
 		
 		ServerUserData serverUserData = new ServerUserData(server, cpList);
 		File target = new File(System.getProperty("user.home"), "git/topwar-json");
-		target.mkdirs();
 		serverUserData.saveToJson(target);
 		serverUserData.print();
 		serverUserData.printAll();
