@@ -26,7 +26,7 @@ public class Test24여러서버Top100분석 {
 	private static int count=0;
 	public static void main(String[] args) throws Exception {
 		//감지영역 설정 및 요청
-		boolean usePrevScreen = true;
+		boolean usePrevScreen =true;
 		
 		//감지영역 설정 및 요청
 		Rectangle rect;
@@ -48,25 +48,24 @@ public class Test24여러서버Top100분석 {
 			}
 		}
 		
-		InputStream in = Topwar4jApplication.class
-				.getClassLoader()
-				.getResourceAsStream("servers.json");
-		if(in == null) return;
-		
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(in);
-		
-		JsonNode listNode = root.get("list");
-		if(listNode == null || !listNode.isArray()) return;
-		
-		List<Integer> servers = new ArrayList<>();
-		for(JsonNode node : listNode) {
-			servers.add(node.asInt());
-		}
-//		final List<Integer> servers = List.of(
-//		 2157
-//		);
-		//Collections.shuffle(servers);
+//		InputStream in = Topwar4jApplication.class
+//				.getClassLoader()
+//				.getResourceAsStream("servers.json");
+//		if(in == null) return;
+//		
+//		ObjectMapper mapper = new ObjectMapper();
+//		JsonNode root = mapper.readTree(in);
+//		
+//		JsonNode listNode = root.get("list");
+//		if(listNode == null || !listNode.isArray()) return;
+//		
+//		List<Integer> servers = new ArrayList<>();
+//		for(JsonNode node : listNode) {
+//			servers.add(node.asInt());
+//		}
+		final List<Integer> servers = List.of(
+				3223
+		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
 		//스레드 실행 도구
