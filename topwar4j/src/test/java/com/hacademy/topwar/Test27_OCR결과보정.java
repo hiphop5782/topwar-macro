@@ -23,30 +23,12 @@ public class Test27_OCR결과보정 {
 		//보정
 		//[1] 내림차순으로 - 문제가 있을 경우 가장 가까운 위 숫자를 보고 원인을 파악하여 고친다
 		//[2] 오름차순으로 - 문제가 있을 경우 가장 가까운 아래 숫자를 보고 원인을 파악하여 고친다
-		List<String> once = new ArrayList<>();
-		for(int i=0; i < list.size(); i++) {
-			String cpStr = list.get(i);
-			if(i == 0 || i == list.size()-1) {
-				System.out.println("cp = " + cpStr +", format = " + isCorrectCombatPower(cpStr));
-				continue;
-			}
-			
-			try {//온전한 숫자인 경우 - 앞뒤 확인해서 튀어나갔는지만 확인
-				double cp = Double.parseDouble(deleteM(cpStr));
-				double upper = closestUpperValue(list, i);
-				double lower = closestLowerValue(list, i);
-				System.out.println("cp = " + cpStr + ", upper = " + upper+", lower = " + lower);
-			}
-			catch(NumberFormatException e) {
-				//온전한 숫자가 아닌 경우 - 앞뒤 확인해서 올바르게 조정
-				double upper = closestUpperValue(list, i);
-				double lower = closestLowerValue(list, i);
-				System.out.println("cp = " + cpStr + ", upper = " + upper+", lower = " + lower);
-			}
-			catch(IndexOutOfBoundsException e) {
-				//범위초과(앞뒤 확인 시) - pass
-			}
-		}
+//		List<String> once = new ArrayList<>();
+//		once.add(fixed(list.get(0)));
+//		for(int i=1; i < list.size-1(); i++) {
+//			String cpStr = list.get(i);
+//			String replaceStr = fixed(cpStr);
+//		}
 	}
 	
 	public static String deleteM(String origin) {

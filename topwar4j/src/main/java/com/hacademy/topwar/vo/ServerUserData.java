@@ -3,7 +3,6 @@ package com.hacademy.topwar.vo;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +19,6 @@ public class ServerUserData {
 	public static final int MAXIMUM_CP = 300;
 	private long time;
 	private int server;
-	private float total;
-	private float average;
 	private List<Float> cpValues = new ArrayList<>();
 	private List<String> cpList;
 	private List<String> okList = new ArrayList<>();
@@ -59,8 +56,7 @@ public class ServerUserData {
 //					}
 //				}
 				
-				total += value;
-				okList.add(cpList.get(i)+"M");
+				okList.add(cpList.get(i));
 			}
 			catch(Exception e) {
 				nokList.add(cpList.get(i));
@@ -68,7 +64,6 @@ public class ServerUserData {
 			}
 		}
 		
-		average = total / okList.size();
 	}
 	public void saveToJson(File dir) throws StreamWriteException, DatabindException, IOException {
 		File target = new File(dir, server+".json");
@@ -85,7 +80,6 @@ public class ServerUserData {
 		System.out.println("<"+server+" 분석 결과>");
 		System.out.println("- 분석 정확도 : " + okList.size() + "% ("+okList.size()+"/"+nokList.size()+")");
 		System.out.println("- 전투력 구간 : " + okList.get(0) + " ~ " + okList.get(okList.size()-1));
-		System.out.println("- Top 100 평균 전투력 : " + fmt.format(average) + "M");
 	}
 	public void printAll() {
 		System.out.println(cpList);

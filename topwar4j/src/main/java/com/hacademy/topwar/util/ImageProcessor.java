@@ -84,8 +84,8 @@ public class ImageProcessor {
 		//bitwise_not(binary, binary);//반전
 		Mat binary = binarize(gaussian);
 		
-		Mat morphed = morphology(binary);
-		Mat dilate = dilateImage(morphed);
+		//Mat morphed = morphology(binary);
+		//Mat dilate = dilateImage(morphed);
 		
 //		MatVector contours = new MatVector();
 //		findContours(dilate.clone(), contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
@@ -97,7 +97,8 @@ public class ImageProcessor {
 //			}
 //		}
 		
-		Mat resize2 = resizeImage(dilate, 3);
+		Mat reverse = reverse(binary);
+		Mat resize2 = resizeImage(reverse, 3);
 		return resize2;
 	}
 	public static Mat reverse(Mat origin) {

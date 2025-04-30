@@ -32,9 +32,9 @@ public class Test26카르츠분석 {
         		String damageResult = damageFile.exists() ? OcrUtils.doOcrFile(damageFile.toPath()) : null;
         		if(damageResult != null) {
         			damageResult = damageResult
-        					.replace("..", ".")
-        					.replace(" ", ".")
-        					.replace("l", "1").replace("I", "1")
+//        					.replace("..", ".")
+//        					.replace(" ", ".")
+//        					.replace("l", "1").replace("I", "1")
         					.toLowerCase();
         		}
         		

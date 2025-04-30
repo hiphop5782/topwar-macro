@@ -39,6 +39,9 @@ public class Test23서버Top100분석 {
 		}
 		else {
 			rect = ScreenRectDialog.showDialog();
+			try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(".screen")))){
+				out.writeObject(rect);
+			}
 		}
 		
 		CaptureUtils.top100(rect, server);
