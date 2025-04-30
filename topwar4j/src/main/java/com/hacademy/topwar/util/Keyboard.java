@@ -6,6 +6,11 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 
+import lc.kra.system.keyboard.GlobalKeyboardHook;
+import lc.kra.system.keyboard.event.GlobalKeyAdapter;
+import lc.kra.system.keyboard.event.GlobalKeyEvent;
+import lc.kra.system.keyboard.event.GlobalKeyListener;
+
 public class Keyboard {
 	private Robot robot;
 	private Keyboard() {
@@ -15,6 +20,27 @@ public class Keyboard {
 		catch(AWTException e) {
 			System.err.println("지원하지 않는 환경");
 		}
+	}
+	
+	private static GlobalKeyboardHook hook = null;
+	private static final GlobalKeyListener listener = new GlobalKeyAdapter() {
+		@Override
+		public void keyReleased(GlobalKeyEvent event) {
+			switch(event.getVirtualKeyCode()) {
+			case GlobalKeyEvent.VK_ESCAPE:
+				System.exit(0);
+			}
+		}
+	};
+	public static void enableEscToQuit() {
+		if(hook != null) return;
+		hook = new GlobalKeyboardHook(false);
+		hook.addKeyListener(listener);
+	}
+	public static void disableEscToQuit() {
+		if(hook == null) return;
+		hook.removeKeyListener(listener);
+		hook = null;
 	}
 	
 	public static Keyboard create() {

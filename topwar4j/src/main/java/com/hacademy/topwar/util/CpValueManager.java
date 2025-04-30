@@ -19,6 +19,9 @@ public class CpValueManager {
 		this.cpList = new ArrayList<>();
 		
 		for(String str : strList) {
+			if(str.matches("7[0-9][0-9]M")) {
+				str = "1" + str.substring(1);
+			}
 			cpList.add(
 				Double.parseDouble(
 					str.replace("M", "")

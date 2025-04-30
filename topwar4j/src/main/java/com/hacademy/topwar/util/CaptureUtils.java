@@ -17,26 +17,7 @@ import lc.kra.system.keyboard.event.GlobalKeyListener;
 
 public class CaptureUtils {
 	private static final DecimalFormat df = new DecimalFormat("000");
-	private static final GlobalKeyListener listener = new GlobalKeyAdapter() {
-		@Override
-		public void keyReleased(GlobalKeyEvent event) {
-			switch(event.getVirtualKeyCode()) {
-			case GlobalKeyEvent.VK_ESCAPE:
-				System.exit(0);
-			}
-		}
-	};
 	public static File top100(Rectangle rect, int server) throws Exception {
-		return top100(rect, server, true);
-	}
-	public static File top100(Rectangle rect, int server, boolean enableEscToQuit) throws Exception {
-		//ESC 강제종료 설정
-		GlobalKeyboardHook hook = null;
-		if(enableEscToQuit) {
-			hook = new GlobalKeyboardHook(false);
-			hook.addKeyListener(listener);
-		}
-		
 		//저장 폴더 초기화
 		File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
 		if(dir.exists()) {
@@ -93,11 +74,6 @@ public class CaptureUtils {
 		Mouse.create()
 		.clickL(rect.x + 86, rect.y + 23).hold()
 		.clickL(rect.x + 86, rect.y + 23).hold();
-		
-		//ESC 강제종료 해제
-		if(enableEscToQuit && hook != null) {
-			hook.removeKeyListener(listener);
-		}
 		
 		return dir;
 	}
