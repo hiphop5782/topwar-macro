@@ -19,7 +19,7 @@ public class Test23서버Top100분석 {
 	public static void main(String[] args) throws Exception {
 		
 		//서버 설정
-		int server = 3223;
+		int server = 3384;
 		boolean usePrevScreen = true;
 		
 		File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
@@ -44,7 +44,7 @@ public class Test23서버Top100분석 {
 			}
 		}
 		
-		CaptureUtils.top100(rect, server);
+		//CaptureUtils.top100(rect, server);
 		
 		List<String> cpList = OcrUtils.doOcrDirectory(dir);
 		//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);

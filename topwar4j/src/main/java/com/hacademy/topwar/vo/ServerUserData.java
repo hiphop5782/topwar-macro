@@ -10,13 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hacademy.topwar.util.CpValueManager;
 
 import lombok.Data;
 
 @Data
 public class ServerUserData {
-	@JsonIgnore
-	public static final int MAXIMUM_CP = 300;
 	private long time;
 	private int server;
 	private List<String> cpList;
@@ -26,6 +25,7 @@ public class ServerUserData {
 	@JsonIgnore
 	private transient final DecimalFormat fmt = new DecimalFormat("#,##0.00");
 	
+	public ServerUserData() {}
 	public ServerUserData(int server, List<String> cpList) { 
 		this.server = server;
 		this.cpList = cpList;
@@ -35,34 +35,9 @@ public class ServerUserData {
 	
 	public void analyze() {
 		if(cpList == null) return;
-		
-		for(int i=0; i < cpList.size(); i++) {
-			try {
-				String cur = cpList.get(i)
-						.strip()
-						.replace(" ", "")
-						.replace("M", "");
-				float value = Float.parseFloat(cur);
-				if(value > MAXIMUM_CP) throw new Exception();
-				
-//				if(i > 0 && i < cpList.size()-1) {
-//					String prev = cpList.get(i-1).replace("M", "");
-//					String next = cpList.get(i+1).replace("M", "");
-//					float prevValue = Float.parseFloat(prev);
-//					float nextValue = Float.parseFloat(next);
-//					if(!(prevValue <= value && value <= nextValue)) {
-//						value = (prevValue + nextValue) / 2;
-//					}
-//				}
-				
-				okList.add(cpList.get(i));
-			}
-			catch(Exception e) {
-				nokList.add(cpList.get(i));
-				System.err.println("에러 : "+e.getMessage());
-			}
-		}
-		
+		CpValueManager manager = new CpValueManager(cpList);
+		manager.adjust();
+		this.okList = manager.getCpList().stream().map(cp->cp+"M").toList();
 	}
 	public void saveToJson(File dir) throws StreamWriteException, DatabindException, IOException {
 		if(!dir.exists()) dir.mkdirs();

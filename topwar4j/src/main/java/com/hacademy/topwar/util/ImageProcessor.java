@@ -9,6 +9,8 @@ import static org.bytedeco.opencv.global.opencv_imgproc.MORPH_CLOSE;
 import static org.bytedeco.opencv.global.opencv_imgproc.MORPH_RECT;
 import static org.bytedeco.opencv.global.opencv_imgproc.THRESH_BINARY;
 import static org.bytedeco.opencv.global.opencv_imgproc.THRESH_OTSU;
+import static org.bytedeco.opencv.global.opencv_core.CV_32F;
+import static org.bytedeco.opencv.global.opencv_core.CV_8U;
 import static org.bytedeco.opencv.global.opencv_imgproc.adaptiveThreshold;
 import static org.bytedeco.opencv.global.opencv_imgproc.cvtColor;
 import static org.bytedeco.opencv.global.opencv_imgproc.dilate;
@@ -16,9 +18,12 @@ import static org.bytedeco.opencv.global.opencv_imgproc.getStructuringElement;
 import static org.bytedeco.opencv.global.opencv_imgproc.morphologyEx;
 import static org.bytedeco.opencv.global.opencv_imgproc.resize;
 import static org.bytedeco.opencv.global.opencv_imgproc.threshold;
+import static org.bytedeco.opencv.global.opencv_imgproc.filter2D;
+import static org.bytedeco.opencv.global.opencv_core.addWeighted;
 
 import java.io.File;
 
+import org.bytedeco.javacpp.indexer.FloatIndexer;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Size;
 
@@ -74,15 +79,47 @@ public class ImageProcessor {
 		origin.release();
 		return result;
 	}
+	//윤곽선 보강
+	public static Mat sharpen(Mat origin) {
+		Mat result = new Mat();
+		Mat kernel = new Mat(3, 3, CV_32F);
+		FloatIndexer ki = kernel.createIndexer();
+		ki.put(0, 0, -1); ki.put(0, 1, -1); ki.put(0, 2, -1);
+	    ki.put(1, 0, -1); ki.put(1, 1,  9); ki.put(1, 2, -1);
+	    ki.put(2, 0, -1); ki.put(2, 1, -1); ki.put(2, 2, -1);
+        filter2D(origin, result, origin.depth(), kernel);
+		origin.release();
+		kernel.release();
+		return result;
+	}
+	public static Mat sharpenMask(Mat origin) {
+		//grayscale에 맞게 채널 조정
+		Mat origin32f = new Mat();
+		origin.convertTo(origin32f, CV_32F);
+		
+		Mat blurred = new Mat();
+		GaussianBlur(origin32f, blurred, new Size(0, 0), 1.5);
+		
+		Mat result32f = new Mat();
+		addWeighted(origin32f, 1.5, blurred, -0.5, 0, result32f);
+		
+		Mat result = new Mat();
+		result32f.convertTo(result, CV_8U);
+		
+		origin.release();	origin32f.release(); 	blurred.release();	result32f.release();
+		return result;
+	}
 	//통합 전처리
 	public static Mat pre(Mat origin) {
 		Mat resize = resizeImage(origin, 3);
 		Mat gray = grayScale(resize);
 		
-		Mat gaussian = gaussianBlur(gray);
+		//Mat gaussian = gaussianBlur(gray);
 		//Mat binary = adaptiveBinarize(gaussian);
 		//bitwise_not(binary, binary);//반전
-		Mat binary = binarize(gaussian);
+		Mat binary = binarize(gray);
+		//Mat sharpen = sharpen(binary);
+		Mat sharpenMask = sharpenMask(binary);
 		
 		//Mat morphed = morphology(binary);
 		//Mat dilate = dilateImage(morphed);
@@ -97,7 +134,7 @@ public class ImageProcessor {
 //			}
 //		}
 		
-		Mat reverse = reverse(binary);
+		Mat reverse = reverse(sharpenMask);
 		Mat resize2 = resizeImage(reverse, 3);
 		return resize2;
 	}
