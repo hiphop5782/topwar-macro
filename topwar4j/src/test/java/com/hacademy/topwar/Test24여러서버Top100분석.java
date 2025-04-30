@@ -64,7 +64,7 @@ public class Test24여러서버Top100분석 {
 //			servers.add(node.asInt());
 //		}
 		final List<Integer> servers = List.of(
-				3223
+				3453
 		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
