@@ -19,7 +19,6 @@ public class ServerUserData {
 	public static final int MAXIMUM_CP = 300;
 	private long time;
 	private int server;
-	private List<Float> cpValues = new ArrayList<>();
 	private List<String> cpList;
 	private List<String> okList = new ArrayList<>();
 	private List<String> nokList = new ArrayList<>();
