@@ -19,11 +19,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacademy.topwar.ui.ScreenRectDialog;
 import com.hacademy.topwar.util.CaptureUtils;
+import com.hacademy.topwar.util.Keyboard;
 import com.hacademy.topwar.util.OcrUtils;
 import com.hacademy.topwar.vo.ServerUserData;
 
 public class Test24여러서버Top100분석 {
-	private static int count=0;
 	public static void main(String[] args) throws Exception {
 		//감지영역 설정 및 요청
 		boolean usePrevScreen =true;
@@ -68,8 +68,12 @@ public class Test24여러서버Top100분석 {
 		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
+		//ESC 설정
+		Keyboard.enableEscToQuit();
+		
 		//스레드 실행 도구
 		ExecutorService executor = Executors.newFixedThreadPool(4);
+		int count = 0;
 		for(int server : servers) {
 			System.out.println("<"+server+" 분석 시작> ("+(++count) + " / " + servers.size() +")");
 			CaptureUtils.top100(rect, server);
@@ -81,7 +85,7 @@ public class Test24여러서버Top100분석 {
 					//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
 					
 					ServerUserData serverUserData = new ServerUserData(server, cpList);
-					serverUserData.saveToJson(new File("C:\\Users\\hwang\\git\\topwar-json"));
+					serverUserData.saveToJson(new File("C:/Users/user1/git/topwar-json"));
 					serverUserData.print();
 					serverUserData.printAll();
 					serverUserData.printCorrect();
@@ -92,11 +96,14 @@ public class Test24여러서버Top100분석 {
 				}
 				
 				System.out.println("** "+server+" 분석 종료 **");
-				count++;
-				if(count == servers.size()) {
+				
+				if(executor.isTerminated()) {
 					System.exit(0);
 				}
 			});
+			
 		}
+		
 	}
+	
 }
