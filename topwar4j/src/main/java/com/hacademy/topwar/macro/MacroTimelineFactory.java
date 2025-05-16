@@ -23,7 +23,10 @@ public class MacroTimelineFactory {
 			timeline.add(랜덤암흑유닛선택(status, basePoint));//레벨선택
 		}
 		else {
-			timeline.add(암흑레벨선택(status, basePoint, 1));
+			timeline.add(암흑레벨선택(status, basePoint, 3));
+			for(int i=0; i < 3; i++) {
+				timeline.add(레벨빼기버튼클릭(status, basePoint));
+			}
 			int level = Integer.parseInt(status.getDarkforceLevel());
 			for(int i=1; i < level; i++) {
 				timeline.add(레벨더하기버튼클릭(status, basePoint));
