@@ -1,5 +1,6 @@
 package com.hacademy.topwar.ui;
 
+import java.awt.Point;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -9,9 +10,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
-@Data
+@Data @JsonIgnoreProperties(ignoreUnknown = true)
 public class WindowStatus implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int x, y;
@@ -48,5 +51,9 @@ public class WindowStatus implements Serializable{
 			catch(Exception e) {}
 		}
 		return null;
+	}
+	
+	public Point getPoint() {
+		return new Point(x, y);
 	}
 }

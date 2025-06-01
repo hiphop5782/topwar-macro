@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
@@ -57,9 +60,6 @@ import net.miginfocom.swing.MigLayout;
 @Getter
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-
-	private MacroStatus macroStatus = JsonConfigUtil.load(MacroStatus.class);
-	private WindowStatus windowStatus = JsonConfigUtil.load(WindowStatus.class);
 
 	private int macroExecuteCount = 0;
 
@@ -135,12 +135,12 @@ public class MainFrame extends JFrame {
 	
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
-		if(windowStatus == null) 
+		if(PropertyManager.getWindowStatus() == null) 
 			this.setLocationByPlatform(true);
 		else 
-			this.setLocation(windowStatus.getX(), windowStatus.getY());
+			this.setLocation(PropertyManager.getWindowStatus().getPoint());
 		this.setResizable(false);
-		this.setTitle("TW-Macro (설정된 화면 : " + macroStatus.getScreenList().size() + ")");
+		this.setTitle("TW-Macro (설정된 화면 : " + PropertyManager.getMacroStatus().getScreenList().size() + ")");
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -148,14 +148,21 @@ public class MainFrame extends JFrame {
 				exitProgram();
 			}
 		});
+		this.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				Point p = getLocation();
+				PropertyManager.getWindowStatus().setX(p.x);
+				PropertyManager.getWindowStatus().setY(p.y);
+			}
+		});
 		this.init();
-		if(macroStatus != null && windowStatus != null) {
-			this.setMinimode(windowStatus.isMini());
-		}
+		this.setMinimode(PropertyManager.getWindowStatus().isMini());
 		this.refreshScreenSelectBox();
 	}
 	
 	public void setMinimode(boolean mini) {
+		PropertyManager.getWindowStatus().setMini(mini);
 		this.mini = mini;
 		for(JComponent component : minimizeComponents) {
 			component.setVisible(mini);
@@ -211,7 +218,6 @@ public class MainFrame extends JFrame {
 		maximize.setAccelerator(KeyStroke.getKeyStroke("F12"));
 		maximize.addActionListener(e->setMinimode(false));
 		setting.add(maximize);
-		
 	}
 
 	public void components() {
@@ -264,11 +270,11 @@ public class MainFrame extends JFrame {
 
 		ButtonGroup darkforceMarchGroup = new ButtonGroup();
 		for (int i = 1; i <= 8; i++) {
-			JRadioButton radio = new JRadioButton(i + "번", i == macroStatus.getDarkforceMarchNumber());
+			JRadioButton radio = new JRadioButton(i + "번", i == PropertyManager.getMacroStatus().getDarkforceMarchNumber());
 			radio.addActionListener(e -> {
 				String text = radio.getText();
 				int number = Integer.parseInt(text.substring(0, 1));
-				macroStatus.setDarkforceMarchNumber(number);
+				PropertyManager.getMacroStatus().setDarkforceMarchNumber(number);
 			});
 			darkforceMarchPanel.add(radio);
 			darkforceMarchGroup.add(radio);
@@ -297,10 +303,10 @@ public class MainFrame extends JFrame {
 		JPanel darkforceCountPanel = new JPanel(new MigLayout("", "[]10[]", ""));
 		darkforceCountPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "횟수"));
 		
-		JRadioButton darkforceCount1 = new JRadioButton("1회", macroStatus.getDarkforceAttackCount() == 1);
-		JRadioButton darkforceCount2 = new JRadioButton("5회", macroStatus.getDarkforceAttackCount() == 5);
-		darkforceCount1.addActionListener(e -> macroStatus.setDarkforceAttackCount(1));
-		darkforceCount2.addActionListener(e -> macroStatus.setDarkforceAttackCount(5));
+		JRadioButton darkforceCount1 = new JRadioButton("1회", PropertyManager.getMacroStatus().getDarkforceAttackCount() == 1);
+		JRadioButton darkforceCount2 = new JRadioButton("5회", PropertyManager.getMacroStatus().getDarkforceAttackCount() == 5);
+		darkforceCount1.addActionListener(e -> PropertyManager.getMacroStatus().setDarkforceAttackCount(1));
+		darkforceCount2.addActionListener(e -> PropertyManager.getMacroStatus().setDarkforceAttackCount(5));
 		darkforceCountPanel.add(darkforceCount1);
 		darkforceCountPanel.add(darkforceCount2);
 		ButtonGroup darkforceCountGroup = new ButtonGroup();
@@ -314,8 +320,8 @@ public class MainFrame extends JFrame {
 		darkforceLevelPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "레벨(영땅용)"));
 		
 		JComboBox<String> darkforceLevelBox = new JComboBox<>(new String[] {"random", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"});
-		darkforceLevelBox.setSelectedItem(macroStatus.getDarkforceLevel());
-		darkforceLevelBox.addActionListener(e->macroStatus.setDarkforceLevel((String) darkforceLevelBox.getSelectedItem()));
+		darkforceLevelBox.setSelectedItem(PropertyManager.getMacroStatus().getDarkforceLevel());
+		darkforceLevelBox.addActionListener(e->PropertyManager.getMacroStatus().setDarkforceLevel((String) darkforceLevelBox.getSelectedItem()));
 		waitingComponentList.add(darkforceLevelBox);
 		darkforceLevelPanel.add(darkforceLevelBox);
 		
@@ -324,11 +330,11 @@ public class MainFrame extends JFrame {
 		darkforceDurationPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "후딜레이(초)"));
 		
 		NumberField durationField = new NumberField();
-		durationField.setText(String.valueOf(macroStatus.getDarkforceDuration()));
+		durationField.setText(String.valueOf(PropertyManager.getMacroStatus().getDarkforceDuration()));
 		durationField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				macroStatus.setDarkforceDuration(Integer.parseInt(durationField.getText()));
+				PropertyManager.getMacroStatus().setDarkforceDuration(Integer.parseInt(durationField.getText()));
 			}
 		});
 		darkforceDurationPanel.add(durationField);
@@ -487,9 +493,9 @@ public class MainFrame extends JFrame {
 
 		ButtonGroup terror4kLevelGroup = new ButtonGroup();
 		for (int i = 1; i <= 5; i++) {
-			JRadioButton radio = new JRadioButton(String.valueOf(i), i == macroStatus.getTerror4kLevel());
+			JRadioButton radio = new JRadioButton(String.valueOf(i), i == PropertyManager.getMacroStatus().getTerror4kLevel());
 			radio.addActionListener(e -> {
-				macroStatus.setTerror4kLevel(Integer.parseInt(radio.getText().substring(0, 1)));
+				PropertyManager.getMacroStatus().setTerror4kLevel(Integer.parseInt(radio.getText().substring(0, 1)));
 			});
 			terror4kLevelGroup.add(radio);
 			terror4kLevelPanel.add(radio);
@@ -502,13 +508,13 @@ public class MainFrame extends JFrame {
 		JPanel terror4kAttackTypePanel = new JPanel(new MigLayout("inset 2", "[]5[]", ""));
 		terror4kAttackTypePanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "방식"));
 		ButtonGroup terror4kAttackTypeGroup = new ButtonGroup();
-		JRadioButton terror4kAttackRally = new JRadioButton("집결", macroStatus.isTerror4kManual() == false);
-		JRadioButton terror4kAttackManual = new JRadioButton("공격", macroStatus.isTerror4kManual() == true);
+		JRadioButton terror4kAttackRally = new JRadioButton("집결", PropertyManager.getMacroStatus().isTerror4kManual() == false);
+		JRadioButton terror4kAttackManual = new JRadioButton("공격", PropertyManager.getMacroStatus().isTerror4kManual() == true);
 		terror4kAttackRally.addActionListener(e -> {
-			macroStatus.setTerror4kManual(false);
+			PropertyManager.getMacroStatus().setTerror4kManual(false);
 		});
 		terror4kAttackManual.addActionListener(e -> {
-			macroStatus.setTerror4kManual(true);
+			PropertyManager.getMacroStatus().setTerror4kManual(true);
 		});
 
 		terror4kAttackTypePanel.add(terror4kAttackRally);
@@ -654,7 +660,7 @@ public class MainFrame extends JFrame {
 		JComboBox<String> materialTypebox = new JComboBox<>(new String[] {"강철","나사","트랜지스터", "고무", "텅스텐", "배터리", "유리"});
 		StatusCheckBox materialCheckbox = new StatusCheckBox("재료생산", "productMaterial", etcTaskCheckButton, materialTypebox);
 		materialTypebox.addActionListener(e->{
-			macroStatus.setProductMaterialType((String)materialTypebox.getSelectedItem());
+			PropertyManager.getMacroStatus().setProductMaterialType((String)materialTypebox.getSelectedItem());
 		});
 		waitingComponentList.add(materialTypebox);
 		
@@ -677,9 +683,9 @@ public class MainFrame extends JFrame {
 		JPanel oilTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JComboBox<Integer> oilTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
 		StatusCheckBox oilTaskCheckbox = new StatusCheckBox("석유시설", "oilFacility", facilityTaskCheckButton, oilTaskLevel);
-		oilTaskLevel.setSelectedItem(macroStatus.getOilFacilityLevel());
+		oilTaskLevel.setSelectedItem(PropertyManager.getMacroStatus().getOilFacilityLevel());
 		oilTaskLevel.addActionListener(e -> {
-			macroStatus.setOilFacilityLevel((int) oilTaskLevel.getSelectedItem());
+			PropertyManager.getMacroStatus().setOilFacilityLevel((int) oilTaskLevel.getSelectedItem());
 		});
 
 		oilTaskPanel.add(oilTaskCheckbox);
@@ -690,9 +696,9 @@ public class MainFrame extends JFrame {
 		JPanel foodTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JComboBox<Integer> foodTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3, 4, 5 });
 		StatusCheckBox foodTaskCheckbox = new StatusCheckBox("식량시설", "foodFacility", facilityTaskCheckButton, foodTaskLevel);
-		foodTaskLevel.setSelectedItem(macroStatus.getFoodFacilityLevel());
+		foodTaskLevel.setSelectedItem(PropertyManager.getMacroStatus().getFoodFacilityLevel());
 		foodTaskLevel.addActionListener(e -> {
-			macroStatus.setFoodFacilityLevel((int) foodTaskLevel.getSelectedItem());
+			PropertyManager.getMacroStatus().setFoodFacilityLevel((int) foodTaskLevel.getSelectedItem());
 		});
 
 		foodTaskPanel.add(foodTaskCheckbox);
@@ -703,9 +709,9 @@ public class MainFrame extends JFrame {
 		JPanel odinTaskPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JComboBox<Integer> odinTaskLevel = new JComboBox<>(new Integer[] { 1, 2, 3 });
 		StatusCheckBox odinTaskCheckbox = new StatusCheckBox("오딘시설", "odinFacility", facilityTaskCheckButton, odinTaskLevel);
-		odinTaskLevel.setSelectedItem(macroStatus.getOdinFacilityLevel());
+		odinTaskLevel.setSelectedItem(PropertyManager.getMacroStatus().getOdinFacilityLevel());
 		odinTaskLevel.addActionListener(e -> {
-			macroStatus.setOdinFacilityLevel((int) odinTaskLevel.getSelectedItem());
+			PropertyManager.getMacroStatus().setOdinFacilityLevel((int) odinTaskLevel.getSelectedItem());
 		});
 
 		odinTaskPanel.add(odinTaskCheckbox);
@@ -927,16 +933,15 @@ public class MainFrame extends JFrame {
 	// 상태 저장 및 프로그램 종료
 	public void exitProgram() {
 		PropertyManager.saveMacroStatus();
-		
 		PropertyManager.saveWindowStatus();
 		System.exit(0);
 	}
 	
 	private void refreshScreenSelectBox() {
 		screenSelectBox.removeAllItems();
-		if(macroStatus.getScreenList() == null) return;
-		for(int i=0; i < macroStatus.getScreenList().size(); i++) {
-			RectData data = macroStatus.getScreenList().get(i);
+		if(PropertyManager.getMacroStatus().getScreenList() == null) return;
+		for(int i=0; i < PropertyManager.getMacroStatus().getScreenList().size(); i++) {
+			RectData data = PropertyManager.getMacroStatus().getScreenList().get(i);
 			Rectangle rect = data.toRectangle();
 			screenSelectBox.addItem("화면 "+(i+1)+" - ("+rect.x+","+rect.y+","+rect.width+","+rect.height+")");
 		}
@@ -946,8 +951,8 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		Rectangle screenRect = ScreenRectDialog.showDialog(MainFrame.this);
-		macroStatus.getScreenList().add(new RectData(screenRect));
-		setTitle("TW-Macro (설정된 화면 : " + macroStatus.getScreenList().size() + ")");
+		PropertyManager.getMacroStatus().getScreenList().add(new RectData(screenRect));
+		setTitle("TW-Macro (설정된 화면 : " + PropertyManager.getMacroStatus().getScreenList().size() + ")");
 		refreshScreenSelectBox();
 		setPlayingState(false);
 	}
@@ -955,22 +960,22 @@ public class MainFrame extends JFrame {
 	private void removeScreenRect() {
 		if (timelinesGroup.isPlaying())
 			return;
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
-		macroStatus.getScreenList().remove(macroStatus.getScreenList().size() - 1);
-		setTitle("TW-Macro (설정된 화면 : " + macroStatus.getScreenList().size() + ")");
+		PropertyManager.getMacroStatus().getScreenList().remove(PropertyManager.getMacroStatus().getScreenList().size() - 1);
+		setTitle("TW-Macro (설정된 화면 : " + PropertyManager.getMacroStatus().getScreenList().size() + ")");
 		refreshScreenSelectBox();
 		setPlayingState(false);
 	}
 
 	private void playDarkforceMacroOnce() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
 		
-		MacroTimelines timelines = MacroCreator.darkforce(macroStatus);
+		MacroTimelines timelines = MacroCreator.darkforce(PropertyManager.getMacroStatus());
 		timelinesGroup.add(timelines);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
@@ -979,40 +984,40 @@ public class MainFrame extends JFrame {
 	private void playDarkforceMacroLoop(int count) throws Exception {
 		if (count < 1)
 			return;
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = MacroCreator.darkforceLoop(macroStatus);
+		MacroTimelines timelines = MacroCreator.darkforceLoop(PropertyManager.getMacroStatus());
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
 	}
 
 	private void playDarkforceMacroLoop() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = MacroCreator.darkforceLoop(macroStatus);
+		MacroTimelines timelines = MacroCreator.darkforceLoop(PropertyManager.getMacroStatus());
 		timelinesGroup.add(timelines);
 		timelinesGroup.play();
 		setPlayingState(true);
 	}
 
 	private void playWarhammerMacroOnce() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = MacroCreator.warhammer4k(macroStatus);
+		MacroTimelines timelines = MacroCreator.warhammer4k(PropertyManager.getMacroStatus());
 		timelinesGroup.add(timelines);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
@@ -1021,39 +1026,39 @@ public class MainFrame extends JFrame {
 	private void playWarhammerMacroLoop(int count) throws Exception {
 		if (count < 1)
 			return;
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
 		
-		MacroTimelines timelines = MacroCreator.warhammer4k(macroStatus, 100);
+		MacroTimelines timelines = MacroCreator.warhammer4k(PropertyManager.getMacroStatus(), 100);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
 	}
 
 	private void playWarhammerMacroLoop() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
 		
-		MacroTimelines timelines = MacroCreator.warhammer4k(macroStatus, 100);
+		MacroTimelines timelines = MacroCreator.warhammer4k(PropertyManager.getMacroStatus(), 100);
 		timelinesGroup.add(timelines);
 		timelinesGroup.play();
 		setPlayingState(true);
 	}
 
 	private void playTerror4kMacroOnce() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
 		
-		MacroTimelines timelines = MacroCreator.terror4k(macroStatus);
+		MacroTimelines timelines = MacroCreator.terror4k(PropertyManager.getMacroStatus());
 		timelinesGroup.add(timelines);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
@@ -1062,24 +1067,24 @@ public class MainFrame extends JFrame {
 	private void playTerror4kMacroLoop(int count) throws Exception {
 		if (count < 1 || count > 10)
 			return;
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
 		timelinesGroup.clear();
 
-		MacroTimelines timelines = MacroCreator.terror4k(macroStatus, Delay.TERROR.getDuration());
+		MacroTimelines timelines = MacroCreator.terror4k(PropertyManager.getMacroStatus(), Delay.TERROR.getDuration());
 		timelinesGroup.add(timelines);
 		timelinesGroup.play(count);
 		setPlayingState(true);
 	}
 	
 	private void playFacilityMacro() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-		MacroCreator.facility(timelinesGroup, macroStatus);
+		MacroCreator.facility(timelinesGroup, PropertyManager.getMacroStatus());
 		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}
@@ -1091,7 +1096,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void playNoticeMacro() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
@@ -1107,33 +1112,33 @@ public class MainFrame extends JFrame {
 			return;
 		}
 		int period = Integer.parseInt(periodText);
-		MacroCreator.notice(timelinesGroup, macroStatus, screenNumber, period, noticeText);
+		MacroCreator.notice(timelinesGroup, PropertyManager.getMacroStatus(), screenNumber, period, noticeText);
 		timelinesGroup.play();
 		setPlayingState(true);
 	}
 
 	private void playTaskMacro() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-		MacroCreator.task(timelinesGroup, macroStatus);
+		MacroCreator.task(timelinesGroup, PropertyManager.getMacroStatus());
 		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}
 
 	private void playSmartTaskMacro() throws Exception {
-		if (macroStatus.getScreenList().isEmpty())
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-		MacroCreator.task(timelinesGroup, macroStatus, true);
+		MacroCreator.task(timelinesGroup, PropertyManager.getMacroStatus(), true);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}
 
 	private void setPlayingState(boolean isPlay) {
-		if (macroStatus.getScreenList().isEmpty()) {
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty()) {
 			for (JComponent component : waitingComponentList) {
 				component.setEnabled(false);
 			}

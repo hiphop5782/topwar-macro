@@ -3,6 +3,7 @@ package com.hacademy.topwar.util;
 import java.awt.AWTException;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 
@@ -14,7 +15,12 @@ import lombok.Getter;
 
 public class Mouse {
 	private Robot robot;
+	private Rectangle base;
 	private Mouse() {
+		this(null);
+	}
+	private Mouse(Rectangle base) {
+		this.base = base;
 		try {
 			robot = new Robot();
 		}
@@ -25,6 +31,9 @@ public class Mouse {
 	
 	public static Mouse create() {
 		return new Mouse();
+	}
+	public static Mouse create(Rectangle base) {
+		return new Mouse(base);
 	}
 	
 	private int x, y;
@@ -45,8 +54,8 @@ public class Mouse {
 		robot.mouseMove(x, y);
 	}
 	public Mouse move(int x, int y) {
-		this.x = x;
-		this.y = y;
+		this.x = base == null ? x : base.x + x;
+		this.y = base == null ? y : base.y + y;
 		move();
 		return this;
 	}
@@ -66,6 +75,15 @@ public class Mouse {
 		
 		System.out.println("targetX = " + targetX+", targetY = " + targetY);
 		return move(targetX, targetY);
+	}
+	public Mouse move(int x1, int y1, int x2, int y2, int steps) {
+		for(int i=1; i <= steps; i++) {
+			int x = x1 + (x2 - x1) * i / steps;
+			int y = y1 + (y2 - y1) * i / steps;
+			move(x, y);
+			hold(0.005f);
+		}
+		return this;
 	}
 	public Mouse move(int x, int y, double durationSeconds) {
 		int unitMillis = 50; //단위시간
@@ -147,6 +165,9 @@ public class Mouse {
 		return this;
 	}
 	
+	public Mouse dragL(int x1, int y1, int x2, int y2) {
+		return move(x1, y1).pushL().move(x1, y1, x2, y2, 100).hold().releaseL();
+	}
 	public Mouse dragL(int x1, int y1, int x2, int y2, double durationSeconds) {
 		return move(x1, y1).hold().pushL().hold().move(x2, y2, durationSeconds).hold(1.5f).releaseL();
 	}

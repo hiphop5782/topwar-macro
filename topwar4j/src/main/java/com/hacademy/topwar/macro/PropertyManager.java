@@ -11,6 +11,7 @@ public class PropertyManager {
 	@Getter
 	private static WindowStatus windowStatus;
 	static {
+		System.out.println("* property manager 실행");
 		macroStatus = JsonConfigUtil.load(MacroStatus.class);
 		windowStatus = JsonConfigUtil.load(WindowStatus.class);
 	}

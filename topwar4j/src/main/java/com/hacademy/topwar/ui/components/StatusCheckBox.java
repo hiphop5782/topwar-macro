@@ -68,7 +68,6 @@ public class StatusCheckBox extends JCheckBox {
 			field.setAccessible(true);
 			field.set(instance, isSelected());
 			PropertyManager.saveMacroStatus();
-			System.out.println("** 설정 내보내기 완료 **");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
