@@ -37,7 +37,7 @@ public class Test25카르츠캡쳐 {
 	private static File dir = new File("ocr/kartz");
 	public static void main(String[] args) throws Exception {
 		//감지영역 설정 및 요청
-		boolean usePrevScreen = false;
+		boolean usePrevScreen = true;
 		
 		//감지영역 설정 및 요청
 		Rectangle rect;
@@ -103,7 +103,7 @@ public class Test25카르츠캡쳐 {
 			saveImageWithoutProcess(bm, i, "origin");
 			
 			for(int k=0; k < 4; k++) {
-				BufferedImage card = crop(bm, 0, bm.getHeight() / 4 * k , 333, 83);
+				BufferedImage card = crop(bm, 0, bm.getHeight() / 4 * k - i , 333, 83);
 				BufferedImage server = crop(bm, 171, innerY + offset * k, 43, 15);
 				BufferedImage stage = crop(bm, 225, innerY + 18 + offset * k, 25, 15);
 				if(isClearStage(server)) {
@@ -114,7 +114,8 @@ public class Test25카르츠캡쳐 {
 					BufferedImage damage = crop(bm, 176, innerY + 34 + offset * k, 68, 15);
 					saveImageWithProcess(damage, rank, "damage");
 				}
-				saveImageWithoutProcess(card, rank, "card");
+				//saveImageWithoutProcess(card, rank, "card");
+				ImageIO.write(card, "png", new File("./ocr/kartz/"+rank+".png"));
 				saveImageWithProcess(server, rank, "server");
 				saveImageWithProcess(stage, rank, "stage");
 				rank++;

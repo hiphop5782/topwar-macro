@@ -19,7 +19,7 @@ public class Test26카르츠분석 {
 	
 	public static void analyze(File dir) throws StreamWriteException, DatabindException, IOException {
     	List<KartzUserData> list = new ArrayList<>();
-    	for(int rank=101; rank <= 500; rank++) {
+    	for(int rank=1; rank <= 500; rank++) {
     		try {
     			KartzUserData data = new KartzUserData();
     			data.setRank(rank);
@@ -35,7 +35,12 @@ public class Test26카르츠분석 {
 //        					.replace("..", ".")
 //        					.replace(" ", ".")
 //        					.replace("l", "1").replace("I", "1")
-        					.toLowerCase();
+        					.replace("A", "a").replace("t", "T")
+        					.replace("q", "9");
+        			if(damageResult.matches("^[1-9][0-9][0-9]7$"))
+        				damageResult = damageResult.substring(0, 3) + "T";
+        			else if(damageResult.matches("^[1-9]1\\.[0-9][0-9]aa$"))
+        				damageResult = damageResult.substring(0, 1) + "." + damageResult.substring(3);
         		}
         		
         		try { data.setServer(Integer.parseInt(serverResult)); } catch(Exception e) {e.printStackTrace();}
