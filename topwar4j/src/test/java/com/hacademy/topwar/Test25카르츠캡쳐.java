@@ -90,7 +90,6 @@ public class Test25카르츠캡쳐 {
 		for(int i=0; i < 125; i++) {
 			Mouse.create().move(rect.x + 250, rect.y + 350).wheelUp(46).hold(0.2f);
 		}
-		
 		Thread.sleep(5000L);
 		
 		//1명씩 찍을 수가 없기 때문에 4명씩 캡쳐 후 분할(125회)
@@ -99,11 +98,14 @@ public class Test25카르츠캡쳐 {
 		int rank = 1;
 		for(int i=0; i < 125; i++) {
 			BufferedImage bm = ImageUtils.captureScreen(
-					new Rectangle(rect.x + offsetX, rect.y + beginY, 333, 332));
+					new Rectangle(rect.x + offsetX, rect.y + beginY, 333, 339));
 			saveImageWithoutProcess(bm, i, "origin");
 			
 			for(int k=0; k < 4; k++) {
-				BufferedImage card = crop(bm, 0, bm.getHeight() / 4 * k - i , 333, 83);
+				int height = 83;
+				int ypos = height * k + k * 2;
+//				System.out.println("height = " + bm.getHeight() + ", k = " + k + ", ypos = " + ypos + " , height = " + height);
+				BufferedImage card = crop(bm, 0, ypos, 333, height);
 				BufferedImage server = crop(bm, 171, innerY + offset * k, 43, 15);
 				BufferedImage stage = crop(bm, 225, innerY + 18 + offset * k, 25, 15);
 				if(isClearStage(server)) {
