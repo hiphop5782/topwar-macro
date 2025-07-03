@@ -69,10 +69,10 @@ public class CpValueManager {
 					if(d < 0) count++;
 					diffList.set(k-1, d);
 				}
-//				System.out.println((pos+1)+" ~ " + (i));
-//				System.out.println(cpList);
-//				System.out.println(diffList);
-//				System.out.println("count = " + count);
+				System.out.println((pos+1)+" ~ " + (i));
+				System.out.println(cpList);
+				System.out.println(diffList);
+				System.out.println("count = " + count);
 				error = count > 0;
 			}
 		}

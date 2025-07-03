@@ -3,30 +3,28 @@ package com.hacademy.topwar;
 import java.awt.Rectangle;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacademy.topwar.ui.ScreenRectDialog;
 import com.hacademy.topwar.util.CaptureUtils;
 import com.hacademy.topwar.util.Keyboard;
-import com.hacademy.topwar.util.OcrUtils;
-import com.hacademy.topwar.vo.ServerUserData;
 
 public class Test24여러서버Top100분석 {
 	public static void main(String[] args) throws Exception {
 		//감지영역 설정 및 요청
-		boolean usePrevScreen =true;
+		boolean usePrevScreen =false;
 		
 		//감지영역 설정 및 요청
 		Rectangle rect;
@@ -48,60 +46,34 @@ public class Test24여러서버Top100분석 {
 			}
 		}
 		
-//		InputStream in = Topwar4jApplication.class
-//				.getClassLoader()
-//				.getResourceAsStream("servers.json");
-//		if(in == null) return;
-//		
-//		ObjectMapper mapper = new ObjectMapper();
-//		JsonNode root = mapper.readTree(in);
-//		
-//		JsonNode listNode = root.get("list");
-//		if(listNode == null || !listNode.isArray()) return;
-//		
-//		List<Integer> servers = new ArrayList<>();
-//		for(JsonNode node : listNode) {
-//			servers.add(node.asInt());
-//		}
-		final List<Integer> servers = List.of(
-				3453
-		);
+		HttpClient client = HttpClient.newBuilder().build();
+		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://raw.githubusercontent.com/hiphop5782/topwar-json/refs/heads/main/servers.json")).GET().build();
+		HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+		
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(response.body());
+		
+		JsonNode listNode = root.get("list");
+		if(listNode == null || !listNode.isArray()) return;
+		
+		List<Integer> servers = new ArrayList<>();
+		for(JsonNode node : listNode) {
+			servers.add(node.asInt());
+		}
+//		final List<Integer> servers = List.of(
+//				3453
+//		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
 		//ESC 설정
 		Keyboard.enableEscToQuit();
 		
 		//스레드 실행 도구
-		ExecutorService executor = Executors.newFixedThreadPool(4);
 		int count = 0;
 		for(int server : servers) {
-			System.out.println("<"+server+" 분석 시작> ("+(++count) + " / " + servers.size() +")");
+			System.out.println("<"+server+" 캡쳐 시작> ("+(++count) + " / " + servers.size() +")");
 			CaptureUtils.top100(rect, server);
-			
-			executor.submit(()->{
-				try {
-					File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
-					List<String> cpList = OcrUtils.doOcrDirectory(dir);
-					//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
-					
-					ServerUserData serverUserData = new ServerUserData(server, cpList);
-					serverUserData.saveToJson(new File("C:/Users/user1/git/topwar-json"));
-					serverUserData.print();
-					serverUserData.printAll();
-					serverUserData.printCorrect();
-					serverUserData.printError();
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-				
-				System.out.println("** "+server+" 분석 종료 **");
-				
-				if(executor.isTerminated()) {
-					System.exit(0);
-				}
-			});
-			
+			System.out.println("** 캡쳐 완료 **");
 		}
 		
 	}
