@@ -15,28 +15,28 @@ import com.hacademy.topwar.vo.ServerUserData;
 
 public class Test24여러서버Top100분석2 {
 	public static void main(String[] args) throws Exception {
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://raw.githubusercontent.com/hiphop5782/topwar-json/refs/heads/main/servers.json")).GET().build();
-		
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(response.body());
-		
-		JsonNode listNode = root.get("list");
-		if(listNode == null || !listNode.isArray()) return;
-		List<Integer> servers = new ArrayList<>();
-		for(JsonNode node : listNode) {
-			servers.add(node.asInt());
-		}
-//		final List<Integer> servers = List.of(
-//				3453
-//		);
+//		HttpClient client = HttpClient.newHttpClient();
+//		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://raw.githubusercontent.com/hiphop5782/topwar-json/refs/heads/main/servers.json")).GET().build();
+//		
+//		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//		
+//		ObjectMapper mapper = new ObjectMapper();
+//		JsonNode root = mapper.readTree(response.body());
+//		
+//		JsonNode listNode = root.get("list");
+//		if(listNode == null || !listNode.isArray()) return;
+//		List<Integer> servers = new ArrayList<>();
+//		for(JsonNode node : listNode) {
+//			servers.add(node.asInt());
+//		}
+		final List<Integer> servers = List.of(
+				3453
+		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
+		File targetDir = new File(System.getProperty("user.home") + "/git/topwar-json");
 		//스레드 실행 도구
 		for(int server : servers) {
-			if(server > 1409) break;
 			System.out.println("<"+server+"> 서버 분석 시작");
 			try {
 				File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
@@ -44,7 +44,7 @@ public class Test24여러서버Top100분석2 {
 				//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
 				
 				ServerUserData serverUserData = new ServerUserData(server, cpList);
-				serverUserData.saveToJson(new File(System.getProperty("user.home") + "/git/topwar-json"));
+				serverUserData.saveToJson(targetDir);
 				serverUserData.print();
 				serverUserData.printAll();
 				serverUserData.printCorrect();
