@@ -30,20 +30,25 @@ public class CpValueManager {
 			if(str.matches("7[0-9][0-9]M")) {
 				str = "1" + str.substring(1);
 			}
-			cpList.add(
-				Double.parseDouble(
-					str.replace("M", "")
-						.replace("O", "0").replace("D", "0").replace("Q","0")
-						.replace("I", "1").replace("l", "1")
-						.replace("Z", "2").replace("z", "2")
-						.replace("B", "3").replace("E", "3")
-						.replace("S", "5")
-						.replace("b", "6")
-						.replace(")", "7").replace("T", "7")
-						.replace("A", "8")
-						.replace("N", "9").replace("#", "9")
-				)
-			);
+			try {
+				cpList.add(
+						Double.parseDouble(
+							str.replace("M", "")
+								.replace("O", "0").replace("D", "0").replace("Q","0")
+								.replace("I", "1").replace("l", "1").replace("]", "1")
+								.replace("Z", "2").replace("z", "2")
+								.replace("B", "3").replace("E", "3")
+								.replace("S", "5")
+								.replace("b", "6")
+								.replace(")", "7").replace("T", "7")
+								.replace("A", "8")
+								.replace("N", "9").replace("#", "9")
+						)
+					);
+			}
+			catch(Exception e) {
+				System.err.println("숫자 변환 오류 : " + e.getMessage());
+			}
 		}
 				
 		this.diffList = new ArrayList<>();

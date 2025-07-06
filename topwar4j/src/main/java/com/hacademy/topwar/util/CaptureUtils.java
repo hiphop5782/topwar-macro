@@ -27,8 +27,8 @@ public class CaptureUtils {
 		
 		//Top100 메뉴로 진입
 		Mouse.create()
-		.clickL(rect.x + 413, rect.y + 673).hold()
-		.clickL(rect.x + 151, rect.y + 329);
+		.clickL(rect.x + 413, rect.y + 673).hold(1f)
+		.clickL(rect.x + 151, rect.y + 329).hold(1f);
 		Keyboard.create()
 		.backspace(10)
 		.type(String.valueOf(server));

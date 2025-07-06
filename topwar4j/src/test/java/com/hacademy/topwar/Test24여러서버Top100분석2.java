@@ -34,9 +34,9 @@ public class Test24여러서버Top100분석2 {
 		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
+		File targetDir = new File(System.getProperty("user.home") + "/git/topwar-json");
 		//스레드 실행 도구
 		for(int server : servers) {
-			if(server > 1409) break;
 			System.out.println("<"+server+"> 서버 분석 시작");
 			try {
 				File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
@@ -44,7 +44,7 @@ public class Test24여러서버Top100분석2 {
 				//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
 				
 				ServerUserData serverUserData = new ServerUserData(server, cpList);
-				serverUserData.saveToJson(new File(System.getProperty("user.home") + "/git/topwar-json"));
+				serverUserData.saveToJson(targetDir);
 				serverUserData.print();
 				serverUserData.printAll();
 				serverUserData.printCorrect();

@@ -44,6 +44,7 @@ public class ServerUserData {
 		File target = new File(dir, server+".json");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(target, this);
+		System.out.println(target.getAbsolutePath()+" 저장 완료");
 	}
 	public void saveToJson() throws StreamWriteException, DatabindException, IOException {
 		File target = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server+".json");

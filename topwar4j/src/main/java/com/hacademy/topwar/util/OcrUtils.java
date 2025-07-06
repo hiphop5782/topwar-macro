@@ -67,9 +67,9 @@ public class OcrUtils {
 				.forEach(imagePath -> {
 					try {
 						String result = sendImage(client, imagePath);
-						System.out.printf("[%s] → %s%n", imagePath.getFileName(), result);
+						System.out.printf("%s [%s] → %s%n", path, imagePath.getFileName(), result);
 						list.add(result);
-						System.out.println("OCR 완료 (" + imagePath.getFileName() + ")");
+						//System.out.println("OCR 완료 (" + imagePath.getFileName() + ")");
 					} catch (Exception e) {
 						System.err.println("❌ 오류: " + imagePath + " → " + e.getMessage());
 					}
