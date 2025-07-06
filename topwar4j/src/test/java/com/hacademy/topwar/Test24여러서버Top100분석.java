@@ -24,7 +24,7 @@ import com.hacademy.topwar.util.Keyboard;
 public class Test24여러서버Top100분석 {
 	public static void main(String[] args) throws Exception {
 		//감지영역 설정 및 요청
-		boolean usePrevScreen =true;
+		boolean usePrevScreen = true;
 		
 		//감지영역 설정 및 요청
 		Rectangle rect;
