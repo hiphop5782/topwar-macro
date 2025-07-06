@@ -19,6 +19,14 @@ public class CpValueManager {
 		this.cpList = new ArrayList<>();
 		
 		for(String str : strList) {
+			//세자리일때
+			//[1] 7XX일 경우 1XX이 잘못 해석된 것
+			//[2] 소수점이 나올 수 없으므로 띄어쓰기는 모두 제거 해야함
+			if(str.matches("^[1-9][0-9][0-9]M$")) {
+				
+			}
+			//두자리일때
+			
 			if(str.matches("7[0-9][0-9]M")) {
 				str = "1" + str.substring(1);
 			}

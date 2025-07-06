@@ -8,7 +8,9 @@ import static org.bytedeco.opencv.global.opencv_imgproc.GaussianBlur;
 import static org.bytedeco.opencv.global.opencv_imgproc.MORPH_CLOSE;
 import static org.bytedeco.opencv.global.opencv_imgproc.MORPH_RECT;
 import static org.bytedeco.opencv.global.opencv_imgproc.THRESH_BINARY;
+import static org.bytedeco.opencv.global.opencv_imgproc.THRESH_BINARY_INV;
 import static org.bytedeco.opencv.global.opencv_imgproc.THRESH_OTSU;
+import static org.bytedeco.opencv.global.opencv_imgproc.INTER_CUBIC;
 import static org.bytedeco.opencv.global.opencv_core.CV_32F;
 import static org.bytedeco.opencv.global.opencv_core.CV_8U;
 import static org.bytedeco.opencv.global.opencv_imgproc.adaptiveThreshold;
@@ -57,7 +59,7 @@ public class ImageProcessor {
 	}
 	public static Mat resizeImage(Mat origin, int scale) {
 		Mat result = new Mat();
-		resize(origin, result, new Size(origin.cols() * scale, origin.rows() * scale));
+		resize(origin, result, new Size(origin.cols() * scale, origin.rows() * scale), 0, 0, INTER_CUBIC);
 		origin.release();
 		return result;
 	}
@@ -68,14 +70,19 @@ public class ImageProcessor {
 		return origin;
 	}
 	public static Mat morphology(Mat origin) {
+		Mat result = new Mat();
 		Mat kernel = getStructuringElement(MORPH_RECT, new Size(2, 2));
-		morphologyEx(origin, origin, MORPH_CLOSE, kernel);
+		morphologyEx(origin, result, MORPH_CLOSE, kernel);
 		kernel.release();
-		return origin;
+		origin.release();
+		return result;
 	}
 	public static Mat adaptiveBinarize(Mat origin) {
 		Mat result = new Mat();
-		adaptiveThreshold(origin, result, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 15, 4);
+		adaptiveThreshold(
+				origin, result, 255, 
+				ADAPTIVE_THRESH_GAUSSIAN_C, 
+				THRESH_BINARY_INV, 11, 2);
 		origin.release();
 		return result;
 	}
@@ -114,14 +121,14 @@ public class ImageProcessor {
 		Mat resize = resizeImage(origin, 3);
 		Mat gray = grayScale(resize);
 		
-		//Mat gaussian = gaussianBlur(gray);
-		//Mat binary = adaptiveBinarize(gaussian);
+		Mat gaussian = gaussianBlur(gray);
+		Mat binary = adaptiveBinarize(gaussian);
 		//bitwise_not(binary, binary);//반전
-		Mat binary = binarize(gray);
+		//Mat binary = binarize(gray);
 		//Mat sharpen = sharpen(binary);
-		Mat sharpenMask = sharpenMask(binary);
+		//Mat sharpenMask = sharpenMask(binary);
 		
-		//Mat morphed = morphology(binary);
+		Mat morphed = morphology(binary);
 		//Mat dilate = dilateImage(morphed);
 		
 //		MatVector contours = new MatVector();
@@ -134,9 +141,9 @@ public class ImageProcessor {
 //			}
 //		}
 		
-		Mat reverse = reverse(sharpenMask);
-		Mat resize2 = resizeImage(reverse, 3);
-		return resize2;
+		//Mat reverse = reverse(sharpenMask);
+		//Mat resize2 = resizeImage(reverse, 3);
+		return morphed;
 	}
 	public static Mat reverse(Mat origin) {
 		Mat result = new Mat();
