@@ -9,6 +9,7 @@ import java.util.Locale;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
 import com.hacademy.topwar.macro.action.MacroMouseAction;
 import com.hacademy.topwar.macro.action.MacroTypingAction;
+import com.hacademy.topwar.ui.LogDialog;
 import com.hacademy.topwar.util.RectData;
 
 public class MacroCreator {
@@ -173,7 +174,6 @@ public class MacroCreator {
 	}
 	public static void 일반스킬모집(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyNormalIncrutAndSkill()) {
-			System.out.println("일반모집");
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("일반/스킬모집", false);
 			for (RectData rectData : status.getScreenList()) {

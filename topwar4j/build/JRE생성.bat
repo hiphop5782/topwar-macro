@@ -1,1 +1,1 @@
-"C:\Program Files\Java\jdk-17\bin\jlink.exe" --module-path "C:\Program Files\Java\jdk-17\jmods" --add-modules java.base,java.desktop,java.net.http --output jre
+"C:\Program Files\Amazon Corretto\jdk21.0.8_9\bin\jlink.exe" --module-path "C:\Program Files\Amazon Corretto\jdk21.0.8_9\jmods" --add-modules java.base,java.desktop,java.net.http --output jre

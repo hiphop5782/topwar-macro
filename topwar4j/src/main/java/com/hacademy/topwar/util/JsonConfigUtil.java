@@ -1,6 +1,8 @@
 package com.hacademy.topwar.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hacademy.topwar.ui.LogDialog;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -38,11 +40,15 @@ public class JsonConfigUtil {
 
     public static void save(Object config) {
     	String filename = config.getClass().getSimpleName().toLowerCase()+".json";
-    	System.out.println("["+filename+"] 저장중...");
+    	LogDialog instance = LogDialog.getInstance();
+    	if(instance != null)
+    		System.out.println("["+filename+"] 저장중...");
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(root, filename), config);
-            System.out.println("["+filename+"] 저장 성공");
-            System.out.println(config);
+            if(instance != null) {
+            	System.out.println("["+filename+"] 저장 성공");
+            	System.out.println(config);
+            }
         } catch (IOException e) {
             throw new RuntimeException("Failed to save config file : ", e);
         }

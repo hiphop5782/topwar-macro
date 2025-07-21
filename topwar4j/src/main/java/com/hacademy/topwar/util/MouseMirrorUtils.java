@@ -8,6 +8,7 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
 import com.hacademy.topwar.macro.MacroStatus;
+import com.hacademy.topwar.ui.LogDialog;
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.LPARAM;
@@ -51,7 +52,9 @@ public class MouseMirrorUtils {
 			//내부 창 상대좌표 계산
 			int relativeX = clickX - trigger.x;
 			int relativeY = clickY - trigger.y;
-			System.out.println("클릭한 상대위치 : ("+relativeX+", "+relativeY+")");
+			LogDialog instance = LogDialog.getInstance();
+			if(instance != null)
+				instance.println("클릭한 상대위치 : ("+relativeX+", "+relativeY+")");
 			
 			//창 열거 및 필터링
 			User32.INSTANCE.EnumWindows((hwnd, data)->{
@@ -103,7 +106,9 @@ public class MouseMirrorUtils {
 					//Thread.sleep(100);
 					
 					//System.out.println("hwnd = " + rectData.hwnd);
-					System.out.println("창 클릭 : Before ("+beforeX+","+beforeY+") → After("+pt.x+","+pt.y+")");
+					if(LogDialog.getInstance() != null) {
+						LogDialog.getInstance().println("창 클릭 : Before ("+beforeX+","+beforeY+") → After("+pt.x+","+pt.y+")");
+					}
 
 					// PostMessage로 클릭 시도
 					User32.INSTANCE.PostMessage(rectData.hwnd, WinUserEx.WM_LBUTTONDOWN, new WPARAM(0), new LPARAM(lParam));

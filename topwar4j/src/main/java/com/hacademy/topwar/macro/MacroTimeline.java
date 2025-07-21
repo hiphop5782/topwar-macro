@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hacademy.topwar.macro.action.MacroAction;
+import com.hacademy.topwar.ui.LogDialog;
 
 import lombok.Setter;
 

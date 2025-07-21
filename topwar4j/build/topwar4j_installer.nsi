@@ -1,6 +1,6 @@
 ﻿; NSIS 설치 스크립트 시작
 !define APPNAME "Topwar4j"
-!define COMPANY "MyCompany"
+!define COMPANY "Hacademy"
 !define DESCRIPTION "Topwar4j Installer"
 !define VERSION "1.0.0"
 !define INSTALL_DIR "$PROGRAMFILES64\${APPNAME}"

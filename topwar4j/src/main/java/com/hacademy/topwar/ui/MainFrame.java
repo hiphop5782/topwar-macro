@@ -199,8 +199,15 @@ public class MainFrame extends JFrame {
 //		파일 메뉴 - 새파일, 열기, 저장, 종료
 		JMenu file = new JMenu("파일");
 		bar.add(file);
+		
+		JMenuItem log = new JMenuItem("로그 확인");
+		log.setAccelerator(KeyStroke.getKeyStroke("F7"));
+		log.addActionListener(e->{
+			LogDialog.showDialog(MainFrame.this);
+		});
+		file.add(log);
 
-//		file.addSeparator();
+		file.addSeparator();
 
 		JMenuItem exit = new JMenuItem("종료");
 		exit.setAccelerator(KeyStroke.getKeyStroke("alt F4"));
@@ -902,6 +909,7 @@ public class MainFrame extends JFrame {
 		//사이드패널
 		mainPanel.add(sidePanel, "width min:150, growy, pushy");
 		sidePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "사용할 화면 선택"));
+		maximizeComponents.add(sidePanel);
 		
 	}
 
@@ -980,6 +988,9 @@ public class MainFrame extends JFrame {
 		mirrorMode.addActionListener(e->{
 			JCheckBox source = (JCheckBox)e.getSource();
 			MouseMirrorUtils.setMirrorMode(source.isSelected());
+			if(LogDialog.getInstance() != null) {
+				LogDialog.getInstance().println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
+			}
 		});
 		waitingComponentList.add(mirrorMode);
 		sidePanel.add(mirrorMode, "aligny top");
