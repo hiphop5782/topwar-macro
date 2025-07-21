@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.util.PropertyManager;
 
 public class CheckButton extends JButton {

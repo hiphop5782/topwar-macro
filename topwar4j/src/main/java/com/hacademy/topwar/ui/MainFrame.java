@@ -34,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
@@ -46,6 +47,7 @@ import com.hacademy.topwar.macro.MacroTimelinesListener;
 import com.hacademy.topwar.ui.components.CheckButton;
 import com.hacademy.topwar.ui.components.NumberField;
 import com.hacademy.topwar.ui.components.StatusCheckBox;
+import com.hacademy.topwar.util.MouseMirrorUtils;
 import com.hacademy.topwar.util.PropertyManager;
 import com.hacademy.topwar.util.RectData;
 
@@ -132,6 +134,7 @@ public class MainFrame extends JFrame {
 	private List<StatusCheckBox> facilityTaskCheckboxes = new ArrayList<>();
 	
 	private JPanel sidePanel = new JPanel(new MigLayout("wrap1, inset 5, hidemode 3", "[grow,fill]", ""));
+	private JCheckBox mirrorMode = new JCheckBox("동시 클릭하기(F9)", false);
 	
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
@@ -900,19 +903,6 @@ public class MainFrame extends JFrame {
 		mainPanel.add(sidePanel, "width min:150, growy, pushy");
 		sidePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "사용할 화면 선택"));
 		
-		List<RectData> rectList = PropertyManager.getMacroStatus().getScreenList();
-		if(rectList != null) {
-			for(int i=0; i < rectList.size(); i++) {
-				int seq = i+1;
-				RectData rd = rectList.get(i);
-				JCheckBox checkbox = new JCheckBox("스크린 "+seq, rd.active);
-				checkbox.addActionListener(e->{
-					JCheckBox source = (JCheckBox)e.getSource();
-					rd.active = source.isSelected();
-				});
-				sidePanel.add(checkbox, "aligny top");
-			}
-		}
 	}
 
 	public void events() throws Exception {
@@ -943,6 +933,8 @@ public class MainFrame extends JFrame {
 //				case GlobalKeyEvent.VK_F8:
 //					timeline.clear();
 //					break;
+				case GlobalKeyEvent.VK_F9:
+					mirrorMode.doClick();
 				}
 			}
 		});
@@ -965,8 +957,9 @@ public class MainFrame extends JFrame {
 			screenSelectBox.addItem("화면 "+(i+1)+" - ("+rect.x+","+rect.y+","+rect.width+","+rect.height+")");
 		}
 		
+		//사이드패널
 		sidePanel.removeAll();
-		
+
 		List<RectData> rectList = PropertyManager.getMacroStatus().getScreenList();
 		if(rectList != null) {
 			for(int i=0; i < rectList.size(); i++) {
@@ -977,11 +970,22 @@ public class MainFrame extends JFrame {
 					JCheckBox source = (JCheckBox)e.getSource();
 					rd.active = source.isSelected();
 				});
+				waitingComponentList.add(checkbox);
 				sidePanel.add(checkbox, "aligny top");
 			}
-			sidePanel.repaint();
-			sidePanel.revalidate();
+			
+			sidePanel.add(new JSeparator(), "span, growx, wrap");
 		}
+		
+		mirrorMode.addActionListener(e->{
+			JCheckBox source = (JCheckBox)e.getSource();
+			MouseMirrorUtils.setMirrorMode(source.isSelected());
+		});
+		waitingComponentList.add(mirrorMode);
+		sidePanel.add(mirrorMode, "aligny top");
+		
+		sidePanel.repaint();
+		sidePanel.revalidate();
 	}
 
 	private void addScreenRect() {
