@@ -7,6 +7,11 @@ import java.io.IOException;
 public class JsonConfigUtil {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final File root = new File(System.getProperty("user.home"), "tw-macro");
+    static {
+    	if(!root.exists()) {
+    		root.mkdirs();
+    	}
+    }
 
     public static <T> T load(Class<T> clazz) {
     	String filename = clazz.getSimpleName().toLowerCase()+".json";

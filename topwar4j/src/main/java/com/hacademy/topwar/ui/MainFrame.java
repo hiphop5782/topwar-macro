@@ -40,15 +40,13 @@ import javax.swing.border.Border;
 
 import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.MacroCreator;
-import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimelines;
 import com.hacademy.topwar.macro.MacroTimelinesGroup;
 import com.hacademy.topwar.macro.MacroTimelinesListener;
-import com.hacademy.topwar.macro.PropertyManager;
 import com.hacademy.topwar.ui.components.CheckButton;
 import com.hacademy.topwar.ui.components.NumberField;
 import com.hacademy.topwar.ui.components.StatusCheckBox;
-import com.hacademy.topwar.util.JsonConfigUtil;
+import com.hacademy.topwar.util.PropertyManager;
 import com.hacademy.topwar.util.RectData;
 
 import lc.kra.system.keyboard.GlobalKeyboardHook;
@@ -133,6 +131,8 @@ public class MainFrame extends JFrame {
 	private List<StatusCheckBox> etcTaskCheckboxes = new ArrayList<>();
 	private List<StatusCheckBox> facilityTaskCheckboxes = new ArrayList<>();
 	
+	private JPanel sidePanel = new JPanel(new MigLayout("wrap1, inset 5, hidemode 3", "[grow,fill]", ""));
+	
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
 		if(PropertyManager.getWindowStatus() == null) 
@@ -157,8 +157,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 		this.init();
-		this.setMinimode(PropertyManager.getWindowStatus().isMini());
 		this.refreshScreenSelectBox();
+		this.setMinimode(PropertyManager.getWindowStatus().isMini());
 	}
 	
 	public void setMinimode(boolean mini) {
@@ -895,6 +895,24 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(taskRunButton2);
 		minimizePanel.add(facilityButton);
 		minimizePanel.add(macroStopButton2);
+		
+		//사이드패널
+		mainPanel.add(sidePanel, "width min:150, growy, pushy");
+		sidePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "사용할 화면 선택"));
+		
+		List<RectData> rectList = PropertyManager.getMacroStatus().getScreenList();
+		if(rectList != null) {
+			for(int i=0; i < rectList.size(); i++) {
+				int seq = i+1;
+				RectData rd = rectList.get(i);
+				JCheckBox checkbox = new JCheckBox("스크린 "+seq, rd.active);
+				checkbox.addActionListener(e->{
+					JCheckBox source = (JCheckBox)e.getSource();
+					rd.active = source.isSelected();
+				});
+				sidePanel.add(checkbox, "aligny top");
+			}
+		}
 	}
 
 	public void events() throws Exception {
@@ -940,10 +958,29 @@ public class MainFrame extends JFrame {
 	private void refreshScreenSelectBox() {
 		screenSelectBox.removeAllItems();
 		if(PropertyManager.getMacroStatus().getScreenList() == null) return;
+		
 		for(int i=0; i < PropertyManager.getMacroStatus().getScreenList().size(); i++) {
 			RectData data = PropertyManager.getMacroStatus().getScreenList().get(i);
 			Rectangle rect = data.toRectangle();
 			screenSelectBox.addItem("화면 "+(i+1)+" - ("+rect.x+","+rect.y+","+rect.width+","+rect.height+")");
+		}
+		
+		sidePanel.removeAll();
+		
+		List<RectData> rectList = PropertyManager.getMacroStatus().getScreenList();
+		if(rectList != null) {
+			for(int i=0; i < rectList.size(); i++) {
+				int seq = i+1;
+				RectData rd = rectList.get(i);
+				JCheckBox checkbox = new JCheckBox("스크린 "+seq, rd.active);
+				checkbox.addActionListener(e->{
+					JCheckBox source = (JCheckBox)e.getSource();
+					rd.active = source.isSelected();
+				});
+				sidePanel.add(checkbox, "aligny top");
+			}
+			sidePanel.repaint();
+			sidePanel.revalidate();
 		}
 	}
 

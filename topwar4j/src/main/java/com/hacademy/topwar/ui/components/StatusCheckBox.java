@@ -7,7 +7,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
 import com.hacademy.topwar.macro.MacroStatus;
-import com.hacademy.topwar.macro.PropertyManager;
+import com.hacademy.topwar.util.PropertyManager;
 
 public class StatusCheckBox extends JCheckBox {
 	private static final long serialVersionUID = 1L;

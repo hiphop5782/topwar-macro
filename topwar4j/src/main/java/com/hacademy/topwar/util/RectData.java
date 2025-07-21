@@ -7,6 +7,7 @@ public class RectData {
     public int y;
     public int width;
     public int height;
+    public boolean active = true;
 
     public RectData() {}
 
