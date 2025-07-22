@@ -31,19 +31,11 @@ public class LogDialog extends JDialog {
 		this.display();
 	}
 	
-	private static LogDialog dialog;
-    public static void showDialog(Window parent) {
-    	if(dialog == null) {
-    		dialog = new LogDialog(parent);
-    	}
+    public void showDialog(Window parent) {
     	Dimension d = new Dimension(400, 400);
     	Rectangle rect = MonitorUtils.getCenterOfApplicationBounds(parent, d);
-    	dialog.setBounds(rect);
-    	dialog.setVisible(true);
-    }
-    
-    public static LogDialog getInstance() {
-    	return dialog;
+    	this.setBounds(rect);
+    	this.setVisible(true);
     }
     
     public void display() {

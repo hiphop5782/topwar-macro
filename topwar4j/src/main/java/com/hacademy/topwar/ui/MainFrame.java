@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -47,6 +48,7 @@ import com.hacademy.topwar.macro.MacroTimelinesListener;
 import com.hacademy.topwar.ui.components.CheckButton;
 import com.hacademy.topwar.ui.components.NumberField;
 import com.hacademy.topwar.ui.components.StatusCheckBox;
+import com.hacademy.topwar.util.LogUtils;
 import com.hacademy.topwar.util.MouseMirrorUtils;
 import com.hacademy.topwar.util.PropertyManager;
 import com.hacademy.topwar.util.RectData;
@@ -203,7 +205,7 @@ public class MainFrame extends JFrame {
 		JMenuItem log = new JMenuItem("로그 확인");
 		log.setAccelerator(KeyStroke.getKeyStroke("F7"));
 		log.addActionListener(e->{
-			LogDialog.showDialog(MainFrame.this);
+			LogUtils.showDialog(this);
 		});
 		file.add(log);
 
@@ -938,11 +940,13 @@ public class MainFrame extends JFrame {
 //					Point location = MouseInfo.getPointerInfo().getLocation();
 //					timeline.add(new MacroMouseAction(location, MacroMouseActionType.CLICK));
 //					break;
-//				case GlobalKeyEvent.VK_F8:
-//					timeline.clear();
-//					break;
+				case GlobalKeyEvent.VK_F8:
+					Point p = MouseInfo.getPointerInfo().getLocation();
+					MouseMirrorUtils.click(p);
+					break;
 				case GlobalKeyEvent.VK_F9:
 					mirrorMode.doClick();
+					break;
 				}
 			}
 		});
@@ -988,9 +992,7 @@ public class MainFrame extends JFrame {
 		mirrorMode.addActionListener(e->{
 			JCheckBox source = (JCheckBox)e.getSource();
 			MouseMirrorUtils.setMirrorMode(source.isSelected());
-			if(LogDialog.getInstance() != null) {
-				LogDialog.getInstance().println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
-			}
+			LogUtils.println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
 		});
 		waitingComponentList.add(mirrorMode);
 		sidePanel.add(mirrorMode, "aligny top");

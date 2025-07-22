@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\PC\git\topwar-macro\topwar4j\target\topwar4j-0.0.1-SNAPSHOT-jar-with-dependencies.jar</jar>
+  <jar>C:\Users\PC\git\topwar-macro\topwar4j\target\topwar4j-0.0.1-SNAPSHOT.jar</jar>
   <outfile>C:\Users\PC\git\topwar-macro\topwar4j\build\topwar4j.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>

@@ -40,15 +40,11 @@ public class JsonConfigUtil {
 
     public static void save(Object config) {
     	String filename = config.getClass().getSimpleName().toLowerCase()+".json";
-    	LogDialog instance = LogDialog.getInstance();
-    	if(instance != null)
-    		System.out.println("["+filename+"] 저장중...");
+		LogUtils.println("["+filename+"] 저장중...");
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(root, filename), config);
-            if(instance != null) {
-            	System.out.println("["+filename+"] 저장 성공");
-            	System.out.println(config);
-            }
+        	LogUtils.println("["+filename+"] 저장 성공");
+        	LogUtils.println(config);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save config file : ", e);
         }
