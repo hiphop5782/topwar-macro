@@ -165,14 +165,6 @@
 		                <mainClass>com.hacademy.topwar.Topwar4jApplication</mainClass>
 		              </transformer>
 		            </transformers>
-		            <!--
-					<relocations>
-		              <relocation>
-		                <pattern>com.github.kwhat.jnativehook.lib</pattern>
-		                <shadedPattern>jnativehook</shadedPattern>
-		              </relocation>
-		            </relocations>
-					-->
 					<filters>
 					  	<filter>
 					    	<artifact>*:*</artifact>

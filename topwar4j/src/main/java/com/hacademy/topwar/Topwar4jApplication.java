@@ -1,5 +1,7 @@
 package com.hacademy.topwar;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -15,12 +17,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.hacademy.topwar.ui.MainFrame;
 import com.hacademy.topwar.util.GraphicUtils;
+import com.hacademy.topwar.util.JNativeLoader;
 
 public class Topwar4jApplication {
 	public static void main(String[] args) {
-		FlatMacLightLaf.setup();
-		
+		//로그 리디렉션
 		try {
+			PrintStream out = new PrintStream(new FileOutputStream("log.txt", true));
+			System.setOut(out);
+			System.setErr(out);
+			
+			//dll 로드
+			JNativeLoader.init();
+		
+			//LnF 설정
+			FlatMacLightLaf.setup();
+		
 			System.setProperty("https.protocols", "TLSv1.2");
 			File dir = new File(Topwar4jApplication.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			File keyFile = new File(dir, ".certkey");
@@ -74,7 +86,15 @@ public class Topwar4jApplication {
 		}
 		catch(Exception e) {
 			JOptionPane.showMessageDialog(null, "실행 오류 발생\n개발자에게 문의하세요\n"+e.getMessage(), "오류 발생", JOptionPane.WARNING_MESSAGE);
-			e.printStackTrace();
+			try (PrintStream out = new PrintStream(new FileOutputStream("log.txt", true))) {
+				out.println("[에러] "+e.getMessage());
+				for(StackTraceElement element : e.getStackTrace()) {
+					out.println("\t\t" + element.toString());
+				}
+			}
+			catch(Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 }

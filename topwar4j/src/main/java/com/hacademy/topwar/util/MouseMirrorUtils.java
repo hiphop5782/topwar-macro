@@ -2,6 +2,7 @@ package com.hacademy.topwar.util;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.File;
 import java.util.List;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
@@ -9,7 +10,6 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
 import com.hacademy.topwar.macro.MacroStatus;
-import com.hacademy.topwar.ui.LogDialog;
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.LPARAM;
@@ -124,13 +124,7 @@ public class MouseMirrorUtils {
 	};
 	
 	static {
-		try {
-			GlobalScreen.registerNativeHook();
-			GlobalScreen.addNativeMouseListener(listener);
-		}
-		catch(NativeHookException e) {
-			e.printStackTrace();
-		}
+		GlobalScreen.addNativeMouseListener(listener);
 	}
 	
 	public static void setMirrorMode(boolean enable) {

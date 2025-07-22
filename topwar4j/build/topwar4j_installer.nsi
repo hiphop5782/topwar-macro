@@ -38,10 +38,14 @@ Section "Install"
     ; 📌 이미지 폴더 복사
     SetOutPath "$INSTDIR\images"
     File /r "..\images\*"
+
+    ; 📌 이미지 폴더 복사
+    SetOutPath "$INSTDIR\lib"
+    File "lib\*"
     
     ; 📌 JRE 폴더 복사 
     setOutPath "$INSTDIR\jre"
-   	File /r "jre\*"
+    File /r "jre\*"
 
     ; 📌 바탕화면 및 시작 메뉴에 바로가기 추가
     ; CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
