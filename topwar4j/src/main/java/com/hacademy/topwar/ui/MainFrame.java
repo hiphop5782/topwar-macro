@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -34,21 +35,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
 import com.hacademy.topwar.constant.Delay;
 import com.hacademy.topwar.macro.MacroCreator;
-import com.hacademy.topwar.macro.MacroStatus;
 import com.hacademy.topwar.macro.MacroTimelines;
 import com.hacademy.topwar.macro.MacroTimelinesGroup;
 import com.hacademy.topwar.macro.MacroTimelinesListener;
-import com.hacademy.topwar.macro.PropertyManager;
 import com.hacademy.topwar.ui.components.CheckButton;
 import com.hacademy.topwar.ui.components.NumberField;
 import com.hacademy.topwar.ui.components.StatusCheckBox;
-import com.hacademy.topwar.util.JsonConfigUtil;
+import com.hacademy.topwar.util.LogUtils;
+import com.hacademy.topwar.util.MouseMirrorUtils;
+import com.hacademy.topwar.util.PropertyManager;
 import com.hacademy.topwar.util.RectData;
 
 import lc.kra.system.keyboard.GlobalKeyboardHook;
@@ -133,6 +135,9 @@ public class MainFrame extends JFrame {
 	private List<StatusCheckBox> etcTaskCheckboxes = new ArrayList<>();
 	private List<StatusCheckBox> facilityTaskCheckboxes = new ArrayList<>();
 	
+	private JPanel sidePanel = new JPanel(new MigLayout("wrap1, inset 5, hidemode 3", "[grow,fill]", ""));
+	private JCheckBox mirrorMode = new JCheckBox("동시 클릭하기(F9)", false);
+	
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
 		if(PropertyManager.getWindowStatus() == null) 
@@ -157,8 +162,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 		this.init();
-		this.setMinimode(PropertyManager.getWindowStatus().isMini());
 		this.refreshScreenSelectBox();
+		this.setMinimode(PropertyManager.getWindowStatus().isMini());
 	}
 	
 	public void setMinimode(boolean mini) {
@@ -196,8 +201,15 @@ public class MainFrame extends JFrame {
 //		파일 메뉴 - 새파일, 열기, 저장, 종료
 		JMenu file = new JMenu("파일");
 		bar.add(file);
+		
+		JMenuItem log = new JMenuItem("로그 확인");
+		log.setAccelerator(KeyStroke.getKeyStroke("F7"));
+		log.addActionListener(e->{
+			LogUtils.showDialog(this);
+		});
+		file.add(log);
 
-//		file.addSeparator();
+		file.addSeparator();
 
 		JMenuItem exit = new JMenuItem("종료");
 		exit.setAccelerator(KeyStroke.getKeyStroke("alt F4"));
@@ -895,6 +907,12 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(taskRunButton2);
 		minimizePanel.add(facilityButton);
 		minimizePanel.add(macroStopButton2);
+		
+		//사이드패널
+		mainPanel.add(sidePanel, "width min:150, growy, pushy");
+		sidePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "사용할 화면 선택"));
+		maximizeComponents.add(sidePanel);
+		
 	}
 
 	public void events() throws Exception {
@@ -922,9 +940,13 @@ public class MainFrame extends JFrame {
 //					Point location = MouseInfo.getPointerInfo().getLocation();
 //					timeline.add(new MacroMouseAction(location, MacroMouseActionType.CLICK));
 //					break;
-//				case GlobalKeyEvent.VK_F8:
-//					timeline.clear();
-//					break;
+				case GlobalKeyEvent.VK_F8:
+					Point p = MouseInfo.getPointerInfo().getLocation();
+					MouseMirrorUtils.click(p);
+					break;
+				case GlobalKeyEvent.VK_F9:
+					mirrorMode.doClick();
+					break;
 				}
 			}
 		});
@@ -940,11 +962,43 @@ public class MainFrame extends JFrame {
 	private void refreshScreenSelectBox() {
 		screenSelectBox.removeAllItems();
 		if(PropertyManager.getMacroStatus().getScreenList() == null) return;
+		
 		for(int i=0; i < PropertyManager.getMacroStatus().getScreenList().size(); i++) {
 			RectData data = PropertyManager.getMacroStatus().getScreenList().get(i);
 			Rectangle rect = data.toRectangle();
 			screenSelectBox.addItem("화면 "+(i+1)+" - ("+rect.x+","+rect.y+","+rect.width+","+rect.height+")");
 		}
+		
+		//사이드패널
+		sidePanel.removeAll();
+
+		List<RectData> rectList = PropertyManager.getMacroStatus().getScreenList();
+		if(rectList != null) {
+			for(int i=0; i < rectList.size(); i++) {
+				int seq = i+1;
+				RectData rd = rectList.get(i);
+				JCheckBox checkbox = new JCheckBox("스크린 "+seq, rd.active);
+				checkbox.addActionListener(e->{
+					JCheckBox source = (JCheckBox)e.getSource();
+					rd.active = source.isSelected();
+				});
+				waitingComponentList.add(checkbox);
+				sidePanel.add(checkbox, "aligny top");
+			}
+			
+			sidePanel.add(new JSeparator(), "span, growx, wrap");
+		}
+		
+		mirrorMode.addActionListener(e->{
+			JCheckBox source = (JCheckBox)e.getSource();
+			MouseMirrorUtils.setMirrorMode(source.isSelected());
+			LogUtils.println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
+		});
+		waitingComponentList.add(mirrorMode);
+		sidePanel.add(mirrorMode, "aligny top");
+		
+		sidePanel.repaint();
+		sidePanel.revalidate();
 	}
 
 	private void addScreenRect() {

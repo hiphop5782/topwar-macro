@@ -9,6 +9,7 @@ import java.util.Locale;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
 import com.hacademy.topwar.macro.action.MacroMouseAction;
 import com.hacademy.topwar.macro.action.MacroTypingAction;
+import com.hacademy.topwar.ui.LogDialog;
 import com.hacademy.topwar.util.RectData;
 
 public class MacroCreator {
@@ -18,6 +19,7 @@ public class MacroCreator {
 	public static MacroTimelines darkforce(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("암흑", true);
 		for (RectData rectData : status.getScreenList()) {
+			if(rectData.active == false) continue;
 			Rectangle screenRect = rectData.toRectangle();
 //			Point rader = ImageUtils.searchRaderButton(screenRect);
 //			if(rader == null) {
@@ -44,6 +46,7 @@ public class MacroCreator {
 	public static MacroTimelines warhammer4k(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("워해머", true);
 		for (RectData rectData : status.getScreenList()) {
+			if(rectData.active == false) continue;
 			Rectangle screenRect = rectData.toRectangle();
 //			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
 //			if(rader == null) {
@@ -68,6 +71,7 @@ public class MacroCreator {
 	public static MacroTimelines terror4k(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines("테러", false);
 		for (RectData rectData : status.getScreenList()) {
+			if(rectData.active == false) continue;
 			Rectangle screenRect = rectData.toRectangle();
 //			Point rader = ImageUtils.searchButton(screenRect, Button.RADER);
 //			if(rader == null) {
@@ -121,6 +125,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);//기지내부로이동
 			MacroTimelines timelines = new MacroTimelines("VIP보상", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.VIP보상받기매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -133,6 +138,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("장바구니", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.장바구니매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -145,6 +151,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("특별패키지", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.패키지무료보상매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -157,6 +164,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("사판훈련", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.사판훈련매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -166,10 +174,10 @@ public class MacroCreator {
 	}
 	public static void 일반스킬모집(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyNormalIncrutAndSkill()) {
-			System.out.println("일반모집");
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("일반/스킬모집", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.일반모집스킬모집매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -188,6 +196,7 @@ public class MacroCreator {
 										} : 2;
 			MacroTimelines timelines = new MacroTimelines("고급모집", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.고급모집매크로(status, screenRect.getLocation(), count);
 				timelines.add(timeline);
@@ -200,6 +209,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("일일임무", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.일일임무매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -212,6 +222,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("골드지원", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.골드지원요청(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -224,6 +235,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("크로스패배", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.크로스패배매크로(status, screenRect.getLocation(), 10);
 				timelines.add(timeline);
@@ -236,6 +248,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("무료보석", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.무료보석수집매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -282,6 +295,7 @@ public class MacroCreator {
 			if(considerWeek==false || week.equals("월")) {
 				MacroTimelines timelines = new MacroTimelines("주간장식세트무료토큰", false);
 				for (RectData rectData : status.getScreenList()) {
+					if(rectData.active == false) continue;
 					Rectangle screenRect = rectData.toRectangle();
 					MacroTimeline timeline = MacroTimelineFactory.주간장식세트무료쿠폰매크로(status, screenRect.getLocation());
 					timelines.add(timeline);
@@ -295,6 +309,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("길드기부", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.길드기부매크로(status, screenRect.getLocation(), 10);
 				timelines.add(timeline);
@@ -307,6 +322,7 @@ public class MacroCreator {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("재료생산", false);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.재료생산매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -319,6 +335,7 @@ public class MacroCreator {
 			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("석유시설", true);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.석유시설매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -331,6 +348,7 @@ public class MacroCreator {
 			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("식량시설", true);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.식량시설매크로(status, screenRect.getLocation());
 				timelines.add(timeline);
@@ -343,6 +361,7 @@ public class MacroCreator {
 			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines("오딘시설", true);
 			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
 				Rectangle screenRect = rectData.toRectangle();
 				MacroTimeline timeline = MacroTimelineFactory.오딘시설매크로(status, screenRect.getLocation());
 				timelines.add(timeline);

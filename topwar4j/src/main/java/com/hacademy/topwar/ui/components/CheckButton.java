@@ -7,8 +7,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import com.hacademy.topwar.macro.MacroStatus;
-import com.hacademy.topwar.macro.PropertyManager;
+import com.hacademy.topwar.util.PropertyManager;
 
 public class CheckButton extends JButton {
 	private static final long serialVersionUID = 1L;

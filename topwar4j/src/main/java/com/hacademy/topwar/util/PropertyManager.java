@@ -1,7 +1,8 @@
-package com.hacademy.topwar.macro;
+package com.hacademy.topwar.util;
 
+import com.hacademy.topwar.macro.MacroStatus;
+import com.hacademy.topwar.ui.LogDialog;
 import com.hacademy.topwar.ui.WindowStatus;
-import com.hacademy.topwar.util.JsonConfigUtil;
 
 import lombok.Getter;
 

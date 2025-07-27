@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.hacademy.topwar.ui.LogDialog;
+
 import lombok.Data;
 
 @Data
@@ -34,6 +36,7 @@ public class MacroTimelinesGroup {
 		if(timelinesList.isEmpty()) return;
 		
 		playing = true;
+		System.out.println("매크로 플레이 [count:"+count+"]");
 		
 		service = Executors.newSingleThreadExecutor();
 		service.submit(()->{
@@ -46,8 +49,8 @@ public class MacroTimelinesGroup {
 				}
 			}
 			catch(Exception e) {
-				//e.printStackTrace();
-				System.out.println("Play {"+count+"} is interruted");
+				e.printStackTrace();
+				System.err.println("Play {"+count+"} is interruted");
 			}
 			finally {
 				playing = false;

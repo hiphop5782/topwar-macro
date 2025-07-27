@@ -1,5 +1,7 @@
 package com.hacademy.topwar.macro.action;
 
+import com.hacademy.topwar.ui.LogDialog;
+
 public class MacroDelayAction implements MacroAction{
 	
 	private double second = 1;
