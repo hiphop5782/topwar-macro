@@ -15,23 +15,23 @@ import com.hacademy.topwar.vo.ServerUserData;
 
 public class Test24여러서버Top100분석2 {
 	public static void main(String[] args) throws Exception {
-//		HttpClient client = HttpClient.newHttpClient();
-//		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://raw.githubusercontent.com/hiphop5782/topwar-json/refs/heads/main/servers.json")).GET().build();
-//		
-//		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//		
-//		ObjectMapper mapper = new ObjectMapper();
-//		JsonNode root = mapper.readTree(response.body());
-//		
-//		JsonNode listNode = root.get("list");
-//		if(listNode == null || !listNode.isArray()) return;
-//		List<Integer> servers = new ArrayList<>();
-//		for(JsonNode node : listNode) {
-//			servers.add(node.asInt());
-//		}
-		final List<Integer> servers = List.of(
-				3223
-		);
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://raw.githubusercontent.com/hiphop5782/topwar-json/refs/heads/main/servers.json")).GET().build();
+		
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(response.body());
+		
+		JsonNode listNode = root.get("list");
+		if(listNode == null || !listNode.isArray()) return;
+		List<Integer> servers = new ArrayList<>();
+		for(JsonNode node : listNode) {
+			servers.add(node.asInt());
+		}
+//		final List<Integer> servers = List.of(
+//				3223
+//		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
 		File targetDir = new File(System.getProperty("user.home") + "/git/topwar-json");
