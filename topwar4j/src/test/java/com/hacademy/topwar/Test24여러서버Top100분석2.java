@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hacademy.topwar.util.GithubUtils;
 import com.hacademy.topwar.util.OcrUtils;
 import com.hacademy.topwar.vo.ServerUserData;
 
@@ -55,7 +56,10 @@ public class Test24여러서버Top100분석2 {
 			}
 			
 			System.out.println("** "+server+" 분석 종료 **");
+			GithubUtils.commitAndPush();
 		}
+		
+		GithubUtils.commitAndPush();
 		
 	}
 	
