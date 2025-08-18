@@ -56,7 +56,6 @@ public class Test24여러서버Top100분석2 {
 			}
 			
 			System.out.println("** "+server+" 분석 종료 **");
-			GithubUtils.commitAndPush();
 		}
 		
 		GithubUtils.commitAndPush();

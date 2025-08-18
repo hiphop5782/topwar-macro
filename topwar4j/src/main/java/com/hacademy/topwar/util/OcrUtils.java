@@ -12,8 +12,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,8 +23,9 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
 public class OcrUtils {
-//	private static final String URL = "http://192.168.30.17:5000/ocr";
-	private static final String URL = "http://host.sysout.co.kr:5000/ocr";
+//	private static final String URL = "http://192.168.0.5:5000/ocr";
+//	private static final String URL = "http://host.sysout.co.kr:5000/ocr";
+	private static final String URL = "http://localhost:5000/ocr";
 
 	public static String sendImage(HttpClient client, Path imagePath) throws IOException, InterruptedException {
 		String boundary = "----WebKitFormBoundary" + UUID.randomUUID().toString().replace("-", "");
@@ -62,30 +64,27 @@ public class OcrUtils {
 		List<String> list = new ArrayList<>();
 		Path folder = Paths.get(path); // 이미지 폴더 경로
 		HttpClient client = HttpClient.newHttpClient();
+		
+		// 정규표현식 패턴: "text":" 뒤에 오는 큰따옴표 안의 문자열
+        Pattern pattern = Pattern.compile("\"text\":\"(.*?)\"");
 
 		Files.list(folder).filter(p -> p.toString().endsWith(".png") || p.toString().endsWith(".jpg")).sorted()
-				.forEach(imagePath -> {
-					try {
-						String result = sendImage(client, imagePath);
-						System.out.printf("%s [%s] → %s%n", path, imagePath.getFileName(), result);
-						list.add(result);
-						//System.out.println("OCR 완료 (" + imagePath.getFileName() + ")");
-					} catch (Exception e) {
-						System.err.println("❌ 오류: " + imagePath + " → " + e.getMessage());
+			.forEach(imagePath -> {
+				try {
+					String result = sendImage(client, imagePath);
+					System.out.printf("%s [%s] → %s%n", path, imagePath.getFileName(), result);
+					Matcher matcher = pattern.matcher(result);
+					if(matcher.find()) {
+						String cp = matcher.group(1);
+						System.out.println("\t→최종CP : "+cp);
+						list.add(cp);
 					}
-				});
-
-		ObjectMapper parser = new ObjectMapper();
-		return list.stream().map(json -> {
-			try {
-				Map<String, String> map = parser.readValue(json, new TypeReference<Map<String, String>>() {
-				});
-				return map.get("text");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}).filter(Objects::nonNull).toList();
+					//System.out.println("OCR 완료 (" + imagePath.getFileName() + ")");
+				} catch (Exception e) {
+					System.err.println("❌ 오류: " + imagePath + " → " + e.getMessage());
+				}
+			});
+		return list;
 	}
 
 	public static String doOcrFile(Path imagePath) throws IOException, InterruptedException {

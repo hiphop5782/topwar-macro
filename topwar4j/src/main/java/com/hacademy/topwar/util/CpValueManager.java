@@ -26,7 +26,6 @@ public class CpValueManager {
 				
 			}
 			//두자리일때
-			
 			if(str.matches("7[0-9][0-9]M")) {
 				str = "1" + str.substring(1);
 			}
@@ -60,35 +59,51 @@ public class CpValueManager {
 		}
 	}
 	
-	public void adjust() {
-		for(int i=0; i < diffList.size(); i++) {
-			double diff = diffList.get(i);
-			if(diff >= 0) continue;
+//	소수점이 사라지는 경우만 처리
+//	소수점은 100M 미만에서 발생하며 소수점이 사라지는 경우 숫자가 3자리로 변경됨
+//	앞이나 뒷 데이터보다 5배 이상 커지면 99%확률로 소수점이 사라졌다고 판정
+	public void adjust() { adjust(1); }
+	public void adjust(int count) {
+		final int FIRST = 0;
+		final int LAST = cpList.size()-1;
+		for(int k=0; k < count; k++) {
+			for(int i=0; i < cpList.size(); i++) {
+				//처음이나 마지막인 경우는 따로 처리
+				double origin = cpList.get(i);
+				double replacement;
+				if(i == FIRST) 
+					replacement = adjustFirstValue(cpList.get(i), cpList.get(i+1));
+				else if(i == LAST)
+					replacement = adjustLastValue(cpList.get(i-1), cpList.get(i));
+				else
+					replacement = adjustValue(cpList.get(i-1), cpList.get(i), cpList.get(i+1));
 			
-			int pos = findErrorPositionFrom(i);
-			double gap = cpList.get(pos) - cpList.get(i);//차이
-			long digit = (long)Math.abs(gap);//gap의 정수부
-			int digitCount = String.valueOf(digit).length();//digit의 자리수
-			double offset = Math.pow(10, digitCount-1);//더할 값
-
-			boolean error = true;
-			while(error) {
-				int count = 0;
-				for(int k=pos+1; k <= i; k++) {
-					cpList.set(k, cpList.get(k) + offset);
+				if(origin != replacement) {
+					cpList.set(i, replacement);
+					System.out.println("<CP조정> origin : "+origin+", replacement : " + replacement);
 				}
-				for(int k=pos+1; k <= i+1; k++) {
-					double d = cpList.get(k-1) - cpList.get(k);
-					if(d < 0) count++;
-					diffList.set(k-1, d);
-				}
-				System.out.println((pos+1)+" ~ " + (i));
-				System.out.println(cpList);
-				System.out.println(diffList);
-				System.out.println("count = " + count);
-				error = count > 0;
 			}
 		}
+	}
+	
+	private double adjustFirstValue(double value, double next) {
+		if(value > next * 5) {
+			return next >= 10 ? value/10 : value / 100;
+		}
+		return value;
+	}
+	private double adjustLastValue(double prev, double value) {
+		if(value > prev) {
+			return prev >= 10 ? value/10 : value / 100;
+		}
+		return value;
+	}
+	private double adjustValue(double prev, double value, double next) {
+		if(value > prev) 
+			return prev >= 10 ? value/10 : value / 100;
+		if(value > next * 5) 
+			return next >= 10 ? value/10 : value / 100;
+		return value;
 	}
 	
 	private int findErrorPositionFrom(int index) {
