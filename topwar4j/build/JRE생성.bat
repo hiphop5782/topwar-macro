@@ -1,1 +1,1 @@
-"C:\Program Files\Java\jdk-17\bin\jlink.exe" --module-path "C:\Program Files\Java\jdk-17\jmods" --add-modules java.base,java.desktop,java.net.http --output jre
+"%JAVA_HOME%\bin\jlink.exe" --module-path "%JAVA_HOME%\jmods" --add-modules java.base,java.desktop,java.net.http,java.xml,java.logging --output jre

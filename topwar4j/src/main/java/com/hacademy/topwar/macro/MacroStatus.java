@@ -16,6 +16,8 @@ public class MacroStatus implements Serializable{
 	private int darkforceDuration = 300;
 	private int darkforceMarchNumber = 1;
 	private String warhammerLevel = "random";
+	private String warhammerType = "워해머-4K";
+	private int warhammerDuration = 60;
 	private boolean potion = true;
 	
 	private int terror4kLevel = 5;
@@ -52,5 +54,4 @@ public class MacroStatus implements Serializable{
 	private int foodFacilityLevel = 5;
 	private boolean odinFacility = true;
 	private int odinFacilityLevel = 3;
-	
 }

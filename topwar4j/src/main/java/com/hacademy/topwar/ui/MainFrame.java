@@ -100,7 +100,6 @@ public class MainFrame extends JFrame {
 	private JButton darkforceLoopButton = new JButton("무한");
 
 	private JButton warhammer1Button = new JButton("1회");
-	private JButton warhammer10Button = new JButton("10회");
 	private JButton warhammer15Button = new JButton("15회");
 	private JButton warhammerCustomButton = new JButton("입력");
 	private JButton warhammerLoopButton = new JButton("무한");
@@ -420,8 +419,38 @@ public class MainFrame extends JFrame {
 		contentPanel.add(darkforcePanel);
 
 		// [워해머4k]
-		JPanel warhammer4kPanel = new JPanel(new MigLayout("inset 10, align right", "[]10[]", ""));
-		warhammer4kPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "워해머(Warhammer-4k)"));
+		JPanel warhammer4kPanel = new JPanel(new MigLayout("inset 10, align left", "[]10[]10[grow,fill]", ""));
+		warhammer4kPanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "집결 몬스터"));
+		
+		JPanel warhammerTypePanel = new JPanel(new MigLayout("", "[]10[]", ""));
+		warhammerTypePanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "종류 선택"));
+		
+		JComboBox<String> warhammerTypebox = new JComboBox<>(new String[] {"워해머-4K", "하트팡팡"});
+		warhammerTypebox.setSelectedItem(PropertyManager.getMacroStatus().getWarhammerType());
+		warhammerTypebox.addActionListener(e->PropertyManager.getMacroStatus().setWarhammerType((String) warhammerTypebox.getSelectedItem()));
+		waitingComponentList.add(warhammerTypebox);
+		warhammerTypePanel.add(warhammerTypebox);
+		
+		warhammer4kPanel.add(warhammerTypePanel);
+		
+		// 후딜레이
+		JPanel warhammerDurationPanel = new JPanel(new MigLayout("", "", ""));
+		warhammerDurationPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "후딜레이(초)"));
+		
+		NumberField warhammerDurationField = new NumberField();
+		warhammerDurationField.setText(String.valueOf(PropertyManager.getMacroStatus().getWarhammerDuration()));
+		warhammerDurationField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				PropertyManager.getMacroStatus().setWarhammerDuration(Integer.parseInt(warhammerDurationField.getText()));
+			}
+		});
+		warhammerDurationPanel.add(warhammerDurationField);
+		waitingComponentList.add(warhammerDurationField);
+		
+		warhammer4kPanel.add(warhammerDurationPanel);
+		
+		JPanel warhammerButtonPanel = new JPanel(new MigLayout("wrap 2, align right", "[]10[]", ""));
 
 		warhammer1Button.setBackground(new Color(46, 204, 113));
 		warhammer1Button.setForeground(Color.white);
@@ -433,19 +462,7 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		warhammer4kPanel.add(warhammer1Button);
-
-		warhammer10Button.setBackground(new Color(46, 204, 113));
-		warhammer10Button.setForeground(Color.white);
-		warhammer10Button.setFont(buttonFont);
-		warhammer10Button.addActionListener(e -> {
-			try {
-				playWarhammerMacroLoop(10);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		});
-		warhammer4kPanel.add(warhammer10Button);
+		warhammerButtonPanel.add(warhammer1Button);
 
 		warhammer15Button.setBackground(new Color(46, 204, 113));
 		warhammer15Button.setForeground(Color.white);
@@ -457,7 +474,7 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		warhammer4kPanel.add(warhammer15Button);
+		warhammerButtonPanel.add(warhammer15Button);
 
 		warhammerCustomButton.setBackground(new Color(42, 52, 54));
 		warhammerCustomButton.setForeground(Color.white);
@@ -472,7 +489,7 @@ public class MainFrame extends JFrame {
 			} catch (Exception ex) {
 			}
 		});
-		warhammer4kPanel.add(warhammerCustomButton);
+		warhammerButtonPanel.add(warhammerCustomButton);
 		
 		warhammerLoopButton.setBackground(new Color(9, 132, 227));
 		warhammerLoopButton.setForeground(Color.white);
@@ -484,10 +501,11 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		});
-		warhammer4kPanel.add(warhammerLoopButton);
+		warhammerButtonPanel.add(warhammerLoopButton);
+		
+		warhammer4kPanel.add(warhammerButtonPanel, "grow");
 
 		waitingComponentList.add(warhammer1Button);
-		waitingComponentList.add(warhammer10Button);
 		waitingComponentList.add(warhammer15Button);
 		waitingComponentList.add(warhammerCustomButton);
 		waitingComponentList.add(warhammerLoopButton);

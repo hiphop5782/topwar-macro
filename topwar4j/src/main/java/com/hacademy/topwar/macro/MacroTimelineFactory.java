@@ -98,7 +98,13 @@ public class MacroTimelineFactory {
 		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
 		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색
 		timeline.add(집결탭선택(status, basePoint));//집결
-		timeline.add(워해머선택(status, basePoint));//워해머-4K
+		
+		if(status.getWarhammerType().equals("하트팡팡")) {
+			timeline.add(하트팡팡선택(status, basePoint));//하트팡팡
+		}
+		else {
+			timeline.add(워해머선택(status, basePoint));//워해머-4K
+		}
 		
 		//레벨선택
 		timeline.add(랜덤워해머선택(status, basePoint));
@@ -248,14 +254,17 @@ public class MacroTimelineFactory {
 		MacroTimeline timeline = new MacroTimeline();
 		
 		timeline.add(패키지상점(status, basePoint));
-		timeline.add(주간카드탭(status, basePoint));
+		timeline.add(주간카드탭으로이동(status, basePoint));
 		timeline.add(randomDelay(status, 1, 2));
+		timeline.add(주간카드탭(status, basePoint));
+		timeline.add(보석함클릭(status, basePoint));
 		
 		for(int i=0; i < 20; i++) {
 			timeline.add(주간카드무료다이아수령(status, basePoint));
 			timeline.add(randomDelay(status, 16, 18));
 		}
 		
+		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(화면중앙클릭(status, basePoint));
 		
@@ -826,6 +835,9 @@ public class MacroTimelineFactory {
 	private static MacroAction 테러선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 257, 437, status.getScreenList().size() < singleCount);
 	}
+	private static MacroAction 하트팡팡선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 383, 437, status.getScreenList().size() < singleCount);
+	}
 	private static MacroAction 암흑레벨선택(MacroStatus status, Point basePoint, int level) {
 		return switch(level) {
 		case 1 -> new MacroMouseAction(basePoint, 170, 597, status.getScreenList().size() < singleCount);
@@ -910,10 +922,16 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 410, 150, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 주간카드탭(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 327, 66, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 342, 72, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 주간카드탭으로이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 342, 72, 129, 72, MacroMouseActionType.DRAG);
+	}
+	private static MacroAction 보석함클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 397, 141, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 주간카드무료다이아수령(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 377, 130, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 354, 318, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일일임무버튼(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 77, 580, status.getScreenList().size() < singleCount);

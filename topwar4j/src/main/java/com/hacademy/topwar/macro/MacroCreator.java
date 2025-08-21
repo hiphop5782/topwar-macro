@@ -9,7 +9,6 @@ import java.util.Locale;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
 import com.hacademy.topwar.macro.action.MacroMouseAction;
 import com.hacademy.topwar.macro.action.MacroTypingAction;
-import com.hacademy.topwar.ui.LogDialog;
 import com.hacademy.topwar.util.RectData;
 
 public class MacroCreator {

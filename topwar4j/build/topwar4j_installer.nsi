@@ -43,11 +43,14 @@ Section "Install"
     setOutPath "$INSTDIR\jre"
    	File /r "jre\*"
 
+    ; ⭐⭐⭐ JNativeHook.x86_64.dll 파일을 포함하는 lib 폴더 복사 코드 추가 ⭐⭐⭐
+    SetOutPath "$INSTDIR\lib"
+    File /r "lib\*"
+
     ; 📌 바탕화면 및 시작 메뉴에 바로가기 추가
-    ; CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
-    ; CreateShortcut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico"
-    CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico" 0 "" "" "$INSTDIR"
-    CreateShortcut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico" 0 "" "" "$INSTDIR"
+    SetOutPath "$INSTDIR"
+    CreateShortcut "C:\Users\Public\Desktop\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico" 0 "" "" "$INSTDIR"
+    CreateShortcut "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\topwar4j.exe" "" "$INSTDIR\KID.ico" 0 "" "" "$INSTDIR"
 
     ; 📌 레지스트리에 설치 정보 기록
     WriteRegStr HKLM "Software\${APPNAME}" "InstallDir" "$INSTDIR"
@@ -60,8 +63,8 @@ SectionEnd
 
 Section "Uninstall"
     ; 📌 바로가기 삭제
-    Delete "$DESKTOP\${APPNAME}.lnk"
-    Delete "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk"
+    Delete "C:\Users\Public\Desktop\${APPNAME}.lnk"
+    Delete "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\${APPNAME}\${APPNAME}.lnk"
 
     ; 📌 프로그램 파일 삭제
     Delete "$INSTDIR\topwar4j.exe"
