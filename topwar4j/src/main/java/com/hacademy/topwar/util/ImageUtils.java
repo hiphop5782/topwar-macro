@@ -286,7 +286,6 @@ public class ImageUtils {
 	
 	public static void save(String path, Mat mat) throws URISyntaxException {
 		File devImage = new File(System.getProperty("user.dir"), path);
-		System.out.println("devImage = " + devImage.getAbsolutePath());
 		imwrite(devImage.getAbsolutePath(), mat);
 	}
 	

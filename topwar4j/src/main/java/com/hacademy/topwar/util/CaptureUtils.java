@@ -21,7 +21,12 @@ public class CaptureUtils {
 		//저장 폴더 초기화
 		File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
 		if(dir.exists()) {
-			FileUtils.deleteDirectory(dir);
+			try {
+				FileUtils.deleteDirectory(dir);
+			}
+			catch(Exception e) {
+				System.err.println("Directory 삭제 실패 : " + e.getMessage());
+			}
 		}
 		dir.mkdirs();
 		

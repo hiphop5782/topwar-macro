@@ -33,7 +33,7 @@ import com.hacademy.topwar.util.Keyboard;
 import com.hacademy.topwar.util.OcrUtils;
 import com.hacademy.topwar.vo.ServerUserData;
 
-public class Test24여러서버Top100분석3 {
+public class Test24여러서버Top100분석4 {
 	public static void main(String[] args) throws Exception {
 		//감지영역 설정 및 요청
 		boolean usePrevScreen = true;
@@ -83,55 +83,33 @@ public class Test24여러서버Top100분석3 {
 		int count = 0;
 		File targetDir = new File(System.getProperty("user.home") + "/git/topwar-json");
 		
-		ExecutorService service = Executors.newFixedThreadPool(5);
-		
 		for(int server : servers) {
 			System.out.println("<"+server+" 캡쳐 시작> ("+(++count) + " / " + servers.size() +")");
 			CaptureUtils.top100(rect, server);
 			System.out.println("** 캡쳐 완료 **");
 			
-			service.submit(()->{
-				try {
-					File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
-					List<String> cpList = OcrUtils.doOcrDirectory(dir);
-					//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
-					
-					ServerUserData serverUserData = new ServerUserData(server, cpList);
-					serverUserData.saveToJson(targetDir);
-					serverUserData.print();
-					serverUserData.printAll();
-					serverUserData.printCorrect();
-					serverUserData.printError();
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
+			try {
+				File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
+				List<String> cpList = OcrUtils.doOcrDirectory(dir);
+				//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
 				
-				System.out.println("** "+server+" 분석 종료 **");
-				try {
-					GithubUtils.commitAndPush();
-				} catch (ServiceUnavailableException | IOException | GitAPIException e) {
-					e.printStackTrace();
-				}
-			});
-		}
-		
-		//종료 대기 처리
-		service.shutdown();
-		try {
-			// 모든 스레드가 종료될 때까지 최대 1시간 동안 대기합니다.
-			// 1시간 안에 종료되지 않으면 false를 반환합니다.
-			if(!service.awaitTermination(1, TimeUnit.HOURS)) {
-				System.err.println("시간 초과: 모든 작업이 완료되지 않았습니다.");
-				// 강제 종료가 필요한 경우 shutdownNow()를 사용할 수 있습니다.
-				// service.shutdownNow();
+				ServerUserData serverUserData = new ServerUserData(server, cpList);
+				serverUserData.saveToJson(targetDir);
+				serverUserData.print();
+				serverUserData.printAll();
+				serverUserData.printCorrect();
+				serverUserData.printError();
 			}
-			else {
-				System.out.println("모든 작업이 완료되었습니다.");
+			catch(Exception e) {
+				e.printStackTrace();
 			}
-		} catch (InterruptedException e) {
-			// 대기 중인 스레드가 인터럽트될 경우
-			e.printStackTrace();
+			
+			System.out.println("** "+server+" 분석 종료 **");
+			try {
+				GithubUtils.commitAndPush();
+			} catch (ServiceUnavailableException | IOException | GitAPIException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		System.out.println("프로그램을 종료합니다.");

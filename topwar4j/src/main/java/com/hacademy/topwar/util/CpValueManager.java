@@ -19,16 +19,6 @@ public class CpValueManager {
 		this.cpList = new ArrayList<>();
 		
 		for(String str : strList) {
-			//세자리일때
-			//[1] 7XX일 경우 1XX이 잘못 해석된 것
-			//[2] 소수점이 나올 수 없으므로 띄어쓰기는 모두 제거 해야함
-			if(str.matches("^[1-9][0-9][0-9]M$")) {
-				
-			}
-			//두자리일때
-			if(str.matches("7[0-9][0-9]M")) {
-				str = "1" + str.substring(1);
-			}
 			try {
 				cpList.add(
 						Double.parseDouble(
@@ -65,7 +55,6 @@ public class CpValueManager {
 	public void adjust() { adjust(1); }
 	public void adjust(int count) {
 		final int FIRST = 0;
-		final int LAST = cpList.size()-1;
 		for(int k=0; k < count; k++) {
 			for(int i=0; i < cpList.size(); i++) {
 				//처음이나 마지막인 경우는 따로 처리
@@ -73,10 +62,8 @@ public class CpValueManager {
 				double replacement;
 				if(i == FIRST) 
 					replacement = adjustFirstValue(cpList.get(i), cpList.get(i+1));
-				else if(i == LAST)
-					replacement = adjustLastValue(cpList.get(i-1), cpList.get(i));
 				else
-					replacement = adjustValue(cpList.get(i-1), cpList.get(i), cpList.get(i+1));
+					replacement = adjustValue(cpList.get(i-1), cpList.get(i));
 			
 				if(origin != replacement) {
 					cpList.set(i, replacement);
@@ -87,22 +74,21 @@ public class CpValueManager {
 	}
 	
 	private double adjustFirstValue(double value, double next) {
-		if(value > next * 5) {
-			return next >= 10 ? value/10 : value / 100;
+		System.out.println("→ 맨 앞자리 = " + value);
+		Double current = Double.valueOf(value);
+		if(next >= 100 && current.intValue() / 100 == 7) {//7xx인 경우 (1xx의 오인식)
+			return value - 600d;
+		}
+		
+		if(value >= 400) {
+			return value / 10;
 		}
 		return value;
 	}
-	private double adjustLastValue(double prev, double value) {
-		if(value > prev) {
-			return prev >= 10 ? value/10 : value / 100;
-		}
-		return value;
-	}
-	private double adjustValue(double prev, double value, double next) {
-		if(value > prev) 
-			return prev >= 10 ? value/10 : value / 100;
-		if(value > next * 5) 
-			return next >= 10 ? value/10 : value / 100;
+	private double adjustValue(double prev, double value) {
+		System.out.println("→ prev = " + prev+", current = " + value);
+		if(value > prev * 5) 
+			return value / 10;
 		return value;
 	}
 	
