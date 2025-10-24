@@ -22,7 +22,7 @@ public class MacroStatus implements Serializable{
 	private int warhammerDuration = 60;
 	
 	private boolean potion = true;//물약 사용
-	private boolean materialRequest = true;//재료 요청
+	private boolean materialRequest = false;//재료 요청
 	
 	private int terror4kLevel = 5;
 	private boolean terror4kManual = false;
