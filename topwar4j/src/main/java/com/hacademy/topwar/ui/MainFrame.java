@@ -860,9 +860,12 @@ public class MainFrame extends JFrame {
 		darkforceInputButton2.setFont(darkforceInputButton.getFont());
 		darkforceInputButton2.addActionListener(e -> {
 			try {
-				playDarkforceMacroLoop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playDarkforceMacroLoop(count);
+				}
+			} catch (Exception ex) {
 			}
 		});
 		waitingComponentList.add(darkforceInputButton2);
@@ -873,9 +876,12 @@ public class MainFrame extends JFrame {
 		warhammerCustomButton2.setFont(warhammerCustomButton.getFont());
 		warhammerCustomButton2.addActionListener(e -> {
 			try {
-				playWarhammerMacroLoop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playWarhammerMacroLoop(count);
+				}
+			} catch (Exception ex) {
 			}
 		});
 		waitingComponentList.add(warhammerCustomButton2);
@@ -886,9 +892,12 @@ public class MainFrame extends JFrame {
 		terror4kLoopButton2.setFont(terror4kLoopButton.getFont());
 		terror4kLoopButton2.addActionListener(e -> {
 			try {
-				playTerror4kMacroLoop(10);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playTerror4kMacroLoop(count);
+				}
+			} catch (Exception ex) {
 			}
 		});
 		waitingComponentList.add(terror4kLoopButton2);
@@ -902,18 +911,18 @@ public class MainFrame extends JFrame {
 		waitingComponentList.add(taskRunButton2);
 
 		
-		JButton facilityButton = new JButton("시설");
-		facilityButton.setBackground(new Color(42, 52, 54));
-		facilityButton.setForeground(Color.white);
-		facilityButton.setFont(buttonFont);
-		facilityButton.addActionListener(e->{
-			try {
-				playFacilityMacro();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		});
-		waitingComponentList.add(facilityButton);
+//		JButton facilityButton = new JButton("시설");
+//		facilityButton.setBackground(new Color(42, 52, 54));
+//		facilityButton.setForeground(Color.white);
+//		facilityButton.setFont(buttonFont);
+//		facilityButton.addActionListener(e->{
+//			try {
+//				playFacilityMacro();
+//			} catch (Exception e1) {
+//				e1.printStackTrace();
+//			}
+//		});
+//		waitingComponentList.add(facilityButton);
 
 		JButton macroStopButton2 = new JButton("실행중지");
 		macroStopButton2.setBackground(macroStopButton.getBackground());
@@ -928,7 +937,7 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(warhammerCustomButton2);
 		minimizePanel.add(terror4kLoopButton2);
 		minimizePanel.add(taskRunButton2);
-		minimizePanel.add(facilityButton);
+//		minimizePanel.add(facilityButton);
 		minimizePanel.add(macroStopButton2);
 		
 		//사이드패널
