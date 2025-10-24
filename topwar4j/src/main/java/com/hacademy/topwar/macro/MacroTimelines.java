@@ -56,7 +56,7 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 					timeline.play(delay);
 				}
 			}
-			else {//종속 매크로
+			else {//일괄 매크로
 				int size = 0;//가장 긴 행의 개수
 				for(int i=0; i < timelineList.size(); i++) {
 					if(timelineList.get(i).size() > size) {

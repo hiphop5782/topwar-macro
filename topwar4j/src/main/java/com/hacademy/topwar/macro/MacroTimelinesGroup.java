@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.hacademy.topwar.ui.LogDialog;
-
 import lombok.Data;
 
 @Data

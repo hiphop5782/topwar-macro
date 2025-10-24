@@ -583,15 +583,47 @@ public class MacroTimelineFactory {
 		
 		timeline.add(길드메뉴(status, basePoint));
 		timeline.add(randomDelay(status, 0.5, 0.7));
+		//기존 작업을 취소하는 처리
 		timeline.add(길드지원(status, basePoint));
-		timeline.add(길드지원요청취소(status, basePoint));
-		timeline.add(길드지원요청취소확인(status, basePoint));
-		timeline.add(길드지원요청시작(status, basePoint));
+		timeline.add(길드지원요청또는요청취소(status, basePoint));
+		timeline.add(길드지원요청취소확인창에서확인버튼(status, basePoint));
+		timeline.add(길드지원요청또는요청취소옆빈공간(status, basePoint));//진행된 작업이 없을경우 대비
+		
+		//골드 지원 요청 처리
+		timeline.add(길드지원요청또는요청취소(status, basePoint));
 		timeline.add(길드지원골드선택(status, basePoint));
-		timeline.add(길드지원요청완료(status, basePoint));
+		timeline.add(길드지원재료선택창에서지원요청버튼(status, basePoint));
 		timeline.add(randomDelay(status, 0.5, 0.7));
-		timeline.add(길드지원요청취소(status, basePoint));
-		timeline.add(길드지원요청취소확인(status, basePoint));
+		
+		//골드 지원 요청 취소 처리
+		timeline.add(길드지원요청또는요청취소(status, basePoint));
+		timeline.add(길드지원요청취소확인창에서확인버튼(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(화면중앙클릭(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 재료지원요청(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(길드메뉴(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		//기존 작업을 취소하는 처리
+		timeline.add(길드지원(status, basePoint));
+		timeline.add(길드지원요청또는요청취소(status, basePoint));
+		timeline.add(길드지원요청취소확인창에서취소버튼(status, basePoint));
+		timeline.add(길드지원요청또는요청취소옆빈공간(status, basePoint));//진행된 작업이 없을경우 대비
+		timeline.add(길드지원모두지원버튼(status, basePoint));
+		
+		//재료 지원 요청 처리
+		timeline.add(길드지원요청또는요청취소(status, basePoint));
+		int type = (int)(Math.random() * 4) + 1;//일단 랜덤
+		timeline.add(길드지원재료선택(status, basePoint, type));
+		timeline.add(길드지원재료선택창에서지원요청버튼(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 0.7));
+		timeline.add(길드지원요청취소확인창에서취소버튼(status, basePoint));
+		
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(화면중앙클릭(status, basePoint));
@@ -1141,20 +1173,35 @@ public class MacroTimelineFactory {
 	private static MacroAction 길드지원(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 348, 398, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 길드지원요청시작(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 374, 603, status.getScreenList().size() < singleCount);
+	private static MacroAction 길드지원요청또는요청취소(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 366, 607, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 길드지원요청취소(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 374, 603, status.getScreenList().size() < singleCount);
+	private static MacroAction 길드지원요청또는요청취소옆빈공간(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 241, 607, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 길드지원요청취소확인(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 339, 451, status.getScreenList().size() < singleCount);
+	private static MacroAction 길드지원요청취소확인창에서취소버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 174, 462, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 길드지원요청취소확인창에서확인버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 328, 462, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 길드지원재료선택(MacroStatus status, Point basePoint, int type) {
+		return switch(type) {
+		case 1 -> new MacroMouseAction(basePoint, 129, 240, status.getScreenList().size() < singleCount);
+		case 2 -> new MacroMouseAction(basePoint, 214, 240, status.getScreenList().size() < singleCount);
+		case 3 -> new MacroMouseAction(basePoint, 292, 240, status.getScreenList().size() < singleCount);
+		case 4 -> new MacroMouseAction(basePoint, 375, 240, status.getScreenList().size() < singleCount);
+		default -> null;
+		};
 	}
 	private static MacroAction 길드지원골드선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 207, 379, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 205, 384, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 길드지원요청완료(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 254, 500, status.getScreenList().size() < singleCount);
+	private static MacroAction 길드지원재료선택창에서지원요청버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 255, 517, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 길드지원모두지원버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 252, 510, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 최소레벨선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 175, 594, status.getScreenList().size() < singleCount);

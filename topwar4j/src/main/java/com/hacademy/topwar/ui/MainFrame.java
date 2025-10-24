@@ -3,6 +3,7 @@ package com.hacademy.topwar.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -295,17 +296,20 @@ public class MainFrame extends JFrame {
 		contentPanel.add(darkforceMarchPanel);
 
 		// 물약사용 체크박스
-		JPanel useVitPanel = new JPanel(new BorderLayout());
+		JPanel useVitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 //		JCheckBox useVit = new JCheckBox("물약 사용", status.isPotion());
 //		useVit.addActionListener(e -> {
 //			status.setPotion(useVit.isSelected());
 //		});
 		StatusCheckBox useVit = new StatusCheckBox("물약 사용", "potion");
+		StatusCheckBox materialRequest = new StatusCheckBox("재료 지원 요청", "materialRequest");
 
 		useVitPanel.add(useVit);
+		useVitPanel.add(materialRequest);
 		contentPanel.add(useVitPanel);
 		waitingComponentList.add(useVit);
+		waitingComponentList.add(materialRequest);
 
 		// 암흑사냥
 		JPanel darkforcePanel = new JPanel(new MigLayout("inset 5", "[]10[grow,fill]", ""));

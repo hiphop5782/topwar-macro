@@ -30,12 +30,18 @@ public class MacroCreator {
 			
 			MacroTimeline timeline = MacroTimelineFactory.암흑매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
+			
+			//재료 지원 요청이 있는 경우 재료 지원 요청 작업을 추가
+			if(status.isMaterialRequest()) {
+				MacroTimeline timeline2 = MacroTimelineFactory.재료지원요청(status, screenRect.getLocation());
+				timelines.add(timeline2);
+			}
 		}
 		return timelines;
 	}
 	public static MacroTimelines darkforceLoop(MacroStatus status) throws Exception {
 		MacroTimelines timelines = darkforce(status);
-		long ms = timelines.getDuration();
+		//long ms = timelines.getDuration();
 		//Delay delay = status.getDarkforceAttackCount() == 1 ? Delay.DARKFORCE1 : Delay.DARKFORCE5;
 		//long remain = delay.getDurationMillis() - ms;
 		long remain = status.getDarkforceDuration() * 1000L;
@@ -59,6 +65,12 @@ public class MacroCreator {
 			
 			MacroTimeline timeline = MacroTimelineFactory.워해머매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
+			
+			//재료 지원 요청이 있는 경우 재료 지원 요청 작업을 추가
+			if(status.isMaterialRequest()) {
+				MacroTimeline timeline2 = MacroTimelineFactory.재료지원요청(status, screenRect.getLocation());
+				timelines.add(timeline2);
+			}
 		}
 		return timelines;
 	}
@@ -86,6 +98,12 @@ public class MacroCreator {
 			
 			MacroTimeline timeline = MacroTimelineFactory.테러매크로(status, screenRect.getLocation());
 			timelines.add(timeline);
+			
+			//재료 지원 요청이 있는 경우 재료 지원 요청 작업을 추가
+			if(status.isMaterialRequest()) {
+				MacroTimeline timeline2 = MacroTimelineFactory.재료지원요청(status, screenRect.getLocation());
+				timelines.add(timeline2);
+			}
 		}
 		return timelines;
 	}
@@ -241,7 +259,7 @@ public class MacroCreator {
 		}
 	}
 	public static void 골드지원(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		if (status.isGoldRequest()) {
+		if (status.isDailyGoldRequest()) {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
 				"골드지원", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
@@ -259,7 +277,7 @@ public class MacroCreator {
 		if (status.isDailyCrossBattle()) {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
-				"크로스패배", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
+				"크로스패배", MacroTimelines.SEPERATE, MacroTimelines.ANYWHERE
 			);
 			for (RectData rectData : status.getScreenList()) {
 				if(rectData.active == false) continue;
