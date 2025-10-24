@@ -604,27 +604,20 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 1, 1.2));
 		return timeline;
 	}
-	public static MacroTimeline 기지내부로이동(MacroStatus status, Point basePoint) {
+	public static MacroTimeline 기지외부로이동(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
-		
-		timeline.add(월드기지전환버튼(status, basePoint));
+		timeline.add(레이더버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1, 1.5));
 		timeline.add(월드기지전환버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1, 1.5));
-		timeline.add(내기지선택(status, basePoint));
+		timeline.add(레이더버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1, 1.5));
-		timeline.add(내기지입장(status, basePoint));
-		timeline.add(randomDelay(status, 3, 3.5));
-		
+		timeline.add(뒤로가기(status, basePoint));
 		return timeline;
 	}
-	public static MacroTimeline 기지내부에서외부로이동(MacroStatus status, Point basePoint) {
-		MacroTimeline timeline = new MacroTimeline();
-		
+	public static MacroTimeline 기지내부로이동(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = 기지외부로이동(status, basePoint);
 		timeline.add(월드기지전환버튼(status, basePoint));
-		timeline.add(randomDelay(status, 1, 1.5));
-		timeline.add(화면중앙클릭(status, basePoint));
-		
 		return timeline;
 	}
 	public static MacroTimeline 육군훈련(MacroStatus status, Point basePoint, int count) {
@@ -882,6 +875,9 @@ public class MacroTimelineFactory {
 		double delay = Math.random() * range + begin;
 		return new MacroDelayAction(delay / status.getScreenList().size());
 	}
+	private static MacroAction 레이더버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 460, 352, status.getScreenList().size() < singleCount);
+	}
 	private static MacroAction 적군검색(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 249, 652, status.getScreenList().size() < singleCount);
 	}
@@ -925,7 +921,7 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 342, 72, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 주간카드탭으로이동(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 342, 72, 129, 72, MacroMouseActionType.DRAG);
+		return new MacroMouseAction(basePoint, 342, 72, 189, 72, MacroMouseActionType.DRAG);
 	}
 	private static MacroAction 보석함클릭(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 397, 141, status.getScreenList().size() < singleCount);

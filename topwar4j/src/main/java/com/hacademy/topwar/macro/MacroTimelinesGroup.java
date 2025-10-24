@@ -85,4 +85,8 @@ public class MacroTimelinesGroup {
 		}
 		if(listener != null) listener.finish(null);
 	}
+	public MacroTimelines getLast() {
+		if(timelinesList.isEmpty()) return null;
+		return timelinesList.getLast();
+	}
 }

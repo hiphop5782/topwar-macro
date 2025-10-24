@@ -49,6 +49,7 @@ import com.hacademy.topwar.ui.components.CheckButton;
 import com.hacademy.topwar.ui.components.NumberField;
 import com.hacademy.topwar.ui.components.StatusCheckBox;
 import com.hacademy.topwar.util.LogUtils;
+import com.hacademy.topwar.util.Mouse;
 import com.hacademy.topwar.util.MouseMirrorUtils;
 import com.hacademy.topwar.util.PropertyManager;
 import com.hacademy.topwar.util.RectData;
@@ -948,16 +949,15 @@ public class MainFrame extends JFrame {
 				case GlobalKeyEvent.VK_F3:
 					removeScreenRect();
 					break;
-//				case GlobalKeyEvent.VK_F5:
-//					playDarkforceMacroOnce();
-//					break;
+				case GlobalKeyEvent.VK_F5:
+					Mouse.create().wheelUp(300).hold();
+					break;
+				case GlobalKeyEvent.VK_F6:
+					Mouse.create().wheelDown(300).hold();
+					break;
 				case GlobalKeyEvent.VK_ESCAPE:
 					stopMacro();
 					break;
-//				case GlobalKeyEvent.VK_F7:
-//					Point location = MouseInfo.getPointerInfo().getLocation();
-//					timeline.add(new MacroMouseAction(location, MacroMouseActionType.CLICK));
-//					break;
 				case GlobalKeyEvent.VK_F8:
 					Point p = MouseInfo.getPointerInfo().getLocation();
 					MouseMirrorUtils.click(p);
