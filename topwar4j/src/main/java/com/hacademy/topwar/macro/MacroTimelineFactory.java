@@ -614,6 +614,7 @@ public class MacroTimelineFactory {
 		timeline.add(길드지원요청또는요청취소(status, basePoint));
 		timeline.add(길드지원요청취소확인창에서취소버튼(status, basePoint));
 		timeline.add(길드지원요청또는요청취소옆빈공간(status, basePoint));//진행된 작업이 없을경우 대비
+		timeline.add(randomDelay(status, 0.5, 0.7));
 		timeline.add(길드지원모두지원버튼(status, basePoint));
 		
 		//재료 지원 요청 처리
