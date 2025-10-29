@@ -83,9 +83,11 @@ public class MacroCreator {
 		}
 		return timelines;
 	}
+	
+	//주의 : 테러는 원래 MacroTimelines.INTEGRATED 였으나 재료지원과 같이하면 에러가 발생함
 	public static MacroTimelines terror4k(MacroStatus status) throws Exception {
 		MacroTimelines timelines = new MacroTimelines(
-				"테러", MacroTimelines.INTEGRATED, MacroTimelines.OUTER
+				"테러", MacroTimelines.SEPERATE, MacroTimelines.OUTER
 		);
 		for (RectData rectData : status.getScreenList()) {
 			if(rectData.active == false) continue;
