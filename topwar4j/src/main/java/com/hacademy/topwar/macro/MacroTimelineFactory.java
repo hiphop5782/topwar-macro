@@ -224,6 +224,53 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}
+	
+	public static MacroTimeline 필수퀘스트매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		return timeline;
+	}
+	public static MacroTimeline 제국의유물매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
+		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색
+		timeline.add(제국의유물탭선택(status, basePoint));
+		timeline.add(제국의유물랜덤군종선택(status, basePoint));
+		timeline.add(제국의유물스크롤바우측선택(status, basePoint));
+		timeline.add(제국의유물레벨더하기버튼선택(status, basePoint));
+		timeline.add(제국의유물검색버튼선택(status, basePoint));
+		
+		//매크로 개수에 맞게 대기(4~6초)
+		timeline.add(randomDelay(status, 4, 6));
+		
+		//공격
+		timeline.add(적선택(status, basePoint));//유닛선택
+		timeline.add(randomDelay(status, 2, 2.5));
+		timeline.add(하단창우측공격버튼(status, basePoint));
+		
+		timeline.add(randomDelay(status, 2, 2.5));
+		//부대선택
+		timeline.add(부대번호선택(status, basePoint));
+		//출정
+		timeline.add(출정버튼클릭(status, basePoint));
+		
+		return timeline;
+	}
+	public static MacroTimeline 트럭운송매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		return timeline;
+	}
+	public static MacroTimeline 보물1회매크로(MacroStatus status, Point basePoint) {
+		MacroTimeline timeline = new MacroTimeline();
+		timeline.add(일일임무버튼(status, basePoint));
+		timeline.add(randomDelay(status, 3, 5));
+		
+		
+		return timeline;
+	}
+	
 	public static MacroTimeline 사판훈련매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		
@@ -246,7 +293,6 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 2, 3));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -266,7 +312,6 @@ public class MacroTimelineFactory {
 		
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -288,7 +333,6 @@ public class MacroTimelineFactory {
 		
 		timeline.add(randomDelay(status, 1, 2));
 		timeline.add(뒤로가기(status, basePoint));
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -311,7 +355,6 @@ public class MacroTimelineFactory {
 		
 		timeline.add(randomDelay(status, 1, 2));
 		timeline.add(뒤로가기(status, basePoint));
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -324,7 +367,6 @@ public class MacroTimelineFactory {
 		timeline.add(일일VIP보상클릭(status, basePoint));	
 		
 		timeline.add(뒤로가기(status, basePoint));		
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -341,7 +383,6 @@ public class MacroTimelineFactory {
 		timeline.add(뒤로가기(status, basePoint));			
 		timeline.add(뒤로가기(status, basePoint));			
 		timeline.add(뒤로가기(status, basePoint));		
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -357,7 +398,6 @@ public class MacroTimelineFactory {
 		timeline.add(뒤로가기(status, basePoint));			
 		timeline.add(뒤로가기(status, basePoint));			
 		timeline.add(뒤로가기(status, basePoint));	
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -380,7 +420,6 @@ public class MacroTimelineFactory {
 		
 		timeline.add(뒤로가기(status, basePoint));			
 		timeline.add(뒤로가기(status, basePoint));		
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -404,7 +443,6 @@ public class MacroTimelineFactory {
 		
 		timeline.add(섬대작전나가기(status, basePoint));		
 		timeline.add(뒤로가기(status, basePoint));		
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -432,7 +470,6 @@ public class MacroTimelineFactory {
 		timeline.add(뒤로가기(status, basePoint));				
 		timeline.add(뒤로가기(status, basePoint));				
 		timeline.add(뒤로가기(status, basePoint));		
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -574,7 +611,6 @@ public class MacroTimelineFactory {
 		timeline.add(크로스훈련X버튼(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}	
@@ -600,7 +636,6 @@ public class MacroTimelineFactory {
 		timeline.add(길드지원요청취소확인창에서확인버튼(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -627,7 +662,6 @@ public class MacroTimelineFactory {
 		
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
-		timeline.add(화면중앙클릭(status, basePoint));
 		
 		return timeline;
 	}
@@ -852,6 +886,35 @@ public class MacroTimelineFactory {
 	private static MacroAction 집결탭선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 300, 317, status.getScreenList().size() < singleCount);
 	}
+	private static MacroAction 제국의유물탭선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 395, 317, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 제국의유물스크롤바우측선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 320, 597, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 제국의유물레벨더하기버튼선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 355, 597, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 제국의유물검색버튼선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 253, 654, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 제국의유물랜덤군종선택(MacroStatus status, Point basePoint) {
+		int choice = (int)(Math.random() * 3);
+		return switch(choice) {
+		case 0->제국의유물육군선택(status, basePoint);
+		case 1->제국의유물해군선택(status, basePoint);
+		default->제국의유물공군선택(status, basePoint);
+		};
+	}
+	private static MacroAction 제국의유물육군선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 131, 433, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 제국의유물해군선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 257, 433, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 제국의유물공군선택(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 386, 433, status.getScreenList().size() < singleCount);
+	}
 	private static MacroAction 암흑오딘유닛선택(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 131, 437, status.getScreenList().size() < singleCount);//암흑 오딘
 	}
@@ -980,6 +1043,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 사판훈련(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 353, 640, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 제국의유물(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 353, 500, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 사판훈련도전(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 200, 663, status.getScreenList().size() < singleCount);

@@ -659,8 +659,12 @@ public class MainFrame extends JFrame {
 		dailyTaskCheckboxes.add(new StatusCheckBox("일반&스킬모집", "dailyNormalIncrutAndSkill", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("일일업무", "dailyQuestReward", dailyTaskCheckButton));
-		dailyTaskCheckboxes.add(new StatusCheckBox("크로스패배(10회)", "dailyCrossBattle", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("제국의유물", "dailyTruckRequest", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("필수퀘스트", "dailyRequiredQuest", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("트럭운송", "empireRelics", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("골드지원요청", "dailyGoldRequest", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("무료다이아(20회)", "dailyGemReward", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("크로스패배(10회)", "dailyCrossBattle", dailyTaskCheckButton));
 		for (StatusCheckBox checkbox : dailyTaskCheckboxes) {
 			dailyTaskPanel.add(checkbox);
 			waitingComponentList.add(checkbox);
@@ -1201,16 +1205,6 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 	
-	private void playFacilityMacro() throws Exception {
-		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
-			return;
-		if (timelinesGroup.isPlaying())
-			return;
-		MacroCreator.facility(timelinesGroup, PropertyManager.getMacroStatus());
-		timelinesGroup.playOnce();
-		setPlayingState(true);
-	}
-
 	private void stopMacro() {
 		if (timelinesGroup.isPlaying()) {
 			timelinesGroup.stop();
@@ -1253,16 +1247,6 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		MacroCreator.task(timelinesGroup, PropertyManager.getMacroStatus());
-		timelinesGroup.playOnce();
-		setPlayingState(true);
-	}
-
-	private void playSmartTaskMacro() throws Exception {
-		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
-			return;
-		if (timelinesGroup.isPlaying())
-			return;
-		MacroCreator.task(timelinesGroup, PropertyManager.getMacroStatus(), true);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}

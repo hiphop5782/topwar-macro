@@ -260,6 +260,51 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 	}
+	public static void 제국의유물(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		if (status.isDailyGoldRequest()) {
+			moveIntoBase(timelinesGroup, status);
+			MacroTimelines timelines = new MacroTimelines(
+				"제국의유물", MacroTimelines.INTEGRATED, MacroTimelines.OUTER
+			);
+			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
+				Rectangle screenRect = rectData.toRectangle();
+				MacroTimeline timeline = MacroTimelineFactory.제국의유물매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+	}
+	public static void 필수퀘스트(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		if (status.isDailyGoldRequest()) {
+			moveIntoBase(timelinesGroup, status);
+			MacroTimelines timelines = new MacroTimelines(
+				"필수퀘스트", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
+			);
+			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
+				Rectangle screenRect = rectData.toRectangle();
+				MacroTimeline timeline = MacroTimelineFactory.필수퀘스트매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+	}
+	public static void 트럭운송(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		if (status.isDailyGoldRequest()) {
+			moveIntoBase(timelinesGroup, status);
+			MacroTimelines timelines = new MacroTimelines(
+				"트럭운송", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
+			);
+			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
+				Rectangle screenRect = rectData.toRectangle();
+				MacroTimeline timeline = MacroTimelineFactory.트럭운송매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+	}
 	public static void 골드지원(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyGoldRequest()) {
 			moveIntoBase(timelinesGroup, status);
@@ -443,7 +488,10 @@ public class MacroCreator {
 		일반스킬모집(timelinesGroup, status);
 		고급모집(timelinesGroup, status, considerWeek);
 		일일임무(timelinesGroup, status);
-//		골드지원(timelinesGroup, status);
+		제국의유물(timelinesGroup, status);
+		필수퀘스트(timelinesGroup, status);
+		트럭운송(timelinesGroup, status);
+		골드지원(timelinesGroup, status);
 		크로스패배(timelinesGroup, status);
 		무료보석(timelinesGroup, status);
 
