@@ -261,7 +261,7 @@ public class MacroCreator {
 		}
 	}
 	public static void 제국의유물(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		if (status.isDailyGoldRequest()) {
+		if (status.isEmpireRelics()) {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
 				"제국의유물", MacroTimelines.INTEGRATED, MacroTimelines.OUTER
@@ -276,7 +276,7 @@ public class MacroCreator {
 		}
 	}
 	public static void 필수퀘스트(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		if (status.isDailyGoldRequest()) {
+		if (status.isDailyRequiredQuest()) {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
 				"필수퀘스트", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
@@ -291,7 +291,7 @@ public class MacroCreator {
 		}
 	}
 	public static void 트럭운송(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		if (status.isDailyGoldRequest()) {
+		if (status.isDailyTruckRequest()) {
 			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
 				"트럭운송", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
