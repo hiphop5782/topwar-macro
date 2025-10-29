@@ -2,11 +2,9 @@ package com.hacademy.topwar.util;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.File;
 import java.util.List;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
 import com.hacademy.topwar.macro.MacroStatus;
