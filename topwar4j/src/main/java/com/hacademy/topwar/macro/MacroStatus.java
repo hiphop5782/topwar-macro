@@ -47,6 +47,7 @@ public class MacroStatus implements Serializable{
 //	private boolean navyUnitTraining = true;
 //	private boolean airforceUnitTraining = true;
 	private boolean dailyGoldRequest = true;
+	private boolean dailyPrimaryQuest = true;
 	
 	//weekly task
 	private boolean weeklyDecorFreeToken = true;
