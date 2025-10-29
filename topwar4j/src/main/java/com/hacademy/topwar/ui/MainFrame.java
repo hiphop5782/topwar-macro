@@ -1,6 +1,5 @@
 package com.hacademy.topwar.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -138,6 +137,9 @@ public class MainFrame extends JFrame {
 	
 	private JPanel sidePanel = new JPanel(new MigLayout("wrap1, inset 5, hidemode 3", "[grow,fill]", ""));
 	private JCheckBox mirrorMode = new JCheckBox("동시 클릭하기(F9)", false);
+	private JLabel multiclickRepeat = new JLabel("같은 지점 계속 클릭하기(F10)", JLabel.LEFT);
+	
+	private Font buttonFont = new Font("", Font.BOLD, 14);
 	
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
@@ -234,8 +236,6 @@ public class MainFrame extends JFrame {
 	}
 
 	public void components() {
-		Font buttonFont = new Font("", Font.BOLD, 14);
-		
 		// 메인 패널
 		JPanel mainPanel = new JPanel(new MigLayout("wrap 2, inset 0, hidemode 3", "[]5[]", ""));
 		this.setContentPane(mainPanel);
@@ -978,8 +978,17 @@ public class MainFrame extends JFrame {
 				case GlobalKeyEvent.VK_F9:
 					mirrorMode.doClick();
 					break;
+				case GlobalKeyEvent.VK_F10:
+					multiclickRepeatAction();
+					break;
 				}
 			}
+		});
+		
+		mirrorMode.addActionListener(e->{
+			JCheckBox source = (JCheckBox)e.getSource();
+			MouseMirrorUtils.setMirrorMode(source.isSelected());
+			LogUtils.println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
 		});
 	}
 
@@ -1020,13 +1029,11 @@ public class MainFrame extends JFrame {
 			sidePanel.add(new JSeparator(), "span, growx, wrap");
 		}
 		
-		mirrorMode.addActionListener(e->{
-			JCheckBox source = (JCheckBox)e.getSource();
-			MouseMirrorUtils.setMirrorMode(source.isSelected());
-			LogUtils.println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
-		});
 		waitingComponentList.add(mirrorMode);
 		sidePanel.add(mirrorMode, "aligny top");
+		
+		sidePanel.add(new JSeparator(), "span, growx, wrap");
+		sidePanel.add(multiclickRepeat, "aligny top");
 		
 		sidePanel.repaint();
 		sidePanel.revalidate();
@@ -1051,6 +1058,36 @@ public class MainFrame extends JFrame {
 		setTitle("TW-Macro (설정된 화면 : " + PropertyManager.getMacroStatus().getScreenList().size() + ")");
 		refreshScreenSelectBox();
 		setPlayingState(false);
+	}
+	
+	private boolean multiclickFlag = false;
+	private Thread multiclickThread = null;
+	private void multiclickRepeatAction() {
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
+			return;
+		if (timelinesGroup.isPlaying())
+			return;
+		if(multiclickFlag == true) return;
+		if(multiclickThread != null) return;
+		
+		LogUtils.println("starting multiclick repeat");
+		
+		multiclickThread = new Thread(()->{
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			multiclickFlag = true;
+			try {
+				while(multiclickFlag) {
+					MouseMirrorUtils.click(p);
+					for(int i=0; i < 10; i++) Thread.sleep(50L);
+				}
+			}
+			catch(Exception e) {
+				LogUtils.println("finish multiclick repeat");
+			}
+		});
+		multiclickThread.start();
+		
+		setPlayingState(true);
 	}
 
 	private void playDarkforceMacroOnce() throws Exception {
@@ -1178,6 +1215,14 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying()) {
 			timelinesGroup.stop();
 		}
+		if(multiclickFlag) {
+			multiclickFlag = false;
+		}
+		if(multiclickThread != null) {
+			multiclickThread.interrupt();
+			multiclickThread = null;
+		}
+		setPlayingState(false);
 	}
 	
 	private void playNoticeMacro() throws Exception {
