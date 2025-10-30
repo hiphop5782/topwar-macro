@@ -779,8 +779,6 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 1, 1.5));
 		timeline.add(월드기지전환버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1, 1.5));
-		timeline.add(레이더버튼(status, basePoint));
-		timeline.add(randomDelay(status, 1, 1.5));
 		timeline.add(뒤로가기(status, basePoint));
 		return timeline;
 	}

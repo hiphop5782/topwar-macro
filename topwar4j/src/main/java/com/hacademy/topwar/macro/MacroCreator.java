@@ -228,7 +228,6 @@ public class MacroCreator {
 	}
 	public static void 고급모집(MacroTimelinesGroup timelinesGroup, MacroStatus status, boolean considerWeek) throws Exception {
 		if (status.isDailyAdvancedIncruit()) {
-			moveIntoBase(timelinesGroup, status);
 			String week = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
 			int count = considerWeek ? switch(week) {
 										case "월","화"->15;
@@ -249,7 +248,6 @@ public class MacroCreator {
 	}
 	public static void 일일임무(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyQuestReward()) {
-			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
 				"일일임무", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 			);
@@ -279,8 +277,9 @@ public class MacroCreator {
 	}
 	public static void 필수퀘스트(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyRequiredQuest()) {
+			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
-				"필수퀘스트", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
+				"필수퀘스트", MacroTimelines.INTEGRATED, MacroTimelines.OUTER
 			);
 			for (RectData rectData : status.getScreenList()) {
 				if(rectData.active == false) continue;
