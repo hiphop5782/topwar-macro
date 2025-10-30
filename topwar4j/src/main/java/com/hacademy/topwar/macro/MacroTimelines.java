@@ -126,9 +126,9 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 	}
 	
 	public boolean isInner() {
-		return where == ANYWHERE || where == INNER;
+		return where == INNER;
 	}
 	public boolean isOuter() {
-		return where == ANYWHERE || where == OUTER;
+		return where == OUTER;
 	}
 }

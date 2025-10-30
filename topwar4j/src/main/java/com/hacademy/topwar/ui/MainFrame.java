@@ -303,7 +303,7 @@ public class MainFrame extends JFrame {
 //			status.setPotion(useVit.isSelected());
 //		});
 		StatusCheckBox useVit = new StatusCheckBox("물약 사용", "potion");
-		StatusCheckBox materialRequest = new StatusCheckBox("재료 지원 요청", "materialRequest");
+		StatusCheckBox materialRequest = new StatusCheckBox("재료 지원 요청(암흑, 워해머, 테러 시)", "materialRequest");
 
 		useVitPanel.add(useVit);
 		useVitPanel.add(materialRequest);
@@ -659,9 +659,9 @@ public class MainFrame extends JFrame {
 		dailyTaskCheckboxes.add(new StatusCheckBox("일반&스킬모집", "dailyNormalIncrutAndSkill", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("일일업무", "dailyQuestReward", dailyTaskCheckButton));
-		dailyTaskCheckboxes.add(new StatusCheckBox("제국의유물", "dailyTruckRequest", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("제국의유물", "empireRelics", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("필수퀘스트", "dailyRequiredQuest", dailyTaskCheckButton));
-		dailyTaskCheckboxes.add(new StatusCheckBox("트럭운송", "empireRelics", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("트럭운송", "dailyTruckRequest", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("골드지원요청", "dailyGoldRequest", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("무료다이아(20회)", "dailyGemReward", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("크로스패배(10회)", "dailyCrossBattle", dailyTaskCheckButton));

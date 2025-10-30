@@ -131,6 +131,7 @@ public class MacroCreator {
 				"기지내부로이동", MacroTimelines.INTEGRATED
 		);
 		for (RectData rectData : status.getScreenList()) {
+			if(rectData.active == false) continue;
 			MacroTimeline timeline = MacroTimelineFactory.기지내부로이동(status, rectData.toRectangle().getLocation());
 			timelines.add(timeline);
 		}
@@ -144,6 +145,7 @@ public class MacroCreator {
 				"기지외부로이동", MacroTimelines.INTEGRATED
 		);
 		for (RectData rectData : status.getScreenList()) {
+			if(rectData.active == false) continue;
 			MacroTimeline timeline = MacroTimelineFactory.기지외부로이동(status, rectData.toRectangle().getLocation());
 			timelines.add(timeline);
 		}
@@ -261,10 +263,10 @@ public class MacroCreator {
 		}
 	}
 	public static void 제국의유물(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		if (status.isDailyGoldRequest()) {
-			moveIntoBase(timelinesGroup, status);
+		if (status.isEmpireRelics()) {
+			moveOutofBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
-				"제국의유물", MacroTimelines.INTEGRATED, MacroTimelines.OUTER
+				"제국의유물", MacroTimelines.SEPERATE, MacroTimelines.OUTER
 			);
 			for (RectData rectData : status.getScreenList()) {
 				if(rectData.active == false) continue;
@@ -276,8 +278,7 @@ public class MacroCreator {
 		}
 	}
 	public static void 필수퀘스트(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		if (status.isDailyGoldRequest()) {
-			moveIntoBase(timelinesGroup, status);
+		if (status.isDailyRequiredQuest()) {
 			MacroTimelines timelines = new MacroTimelines(
 				"필수퀘스트", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 			);
@@ -291,8 +292,7 @@ public class MacroCreator {
 		}
 	}
 	public static void 트럭운송(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
-		if (status.isDailyGoldRequest()) {
-			moveIntoBase(timelinesGroup, status);
+		if (status.isDailyTruckRequest()) {
 			MacroTimelines timelines = new MacroTimelines(
 				"트럭운송", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 			);
@@ -307,7 +307,6 @@ public class MacroCreator {
 	}
 	public static void 골드지원(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyGoldRequest()) {
-			moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
 				"골드지원", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 			);
@@ -319,6 +318,18 @@ public class MacroCreator {
 			}
 			timelinesGroup.add(timelines);
 		}
+	}
+	public static void 보물소환(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		MacroTimelines timelines = new MacroTimelines(
+			"보물소환", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
+		);
+		for (RectData rectData : status.getScreenList()) {
+			if(rectData.active == false) continue;
+			Rectangle screenRect = rectData.toRectangle();
+			MacroTimeline timeline = MacroTimelineFactory.보물1회매크로(status, screenRect.getLocation());
+			timelines.add(timeline);
+		}
+		timelinesGroup.add(timelines);
 	}
 	public static void 크로스패배(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyCrossBattle()) {

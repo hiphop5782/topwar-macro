@@ -228,6 +228,81 @@ public class MacroTimelineFactory {
 	public static MacroTimeline 필수퀘스트매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		
+		for(int i=1; i <= 3; i++) {
+			//퀘스트받기
+			timeline.add(레이더버튼(status, basePoint));
+			timeline.add(randomDelay(status, 3, 5));
+			timeline.add(필수퀘스트지점(status, basePoint, 1));
+			timeline.add(필수퀘스트지점(status, basePoint, 2));
+			timeline.add(필수퀘스트지점(status, basePoint, 3));
+			timeline.add(필수퀘스트지점(status, basePoint, 4));
+			timeline.add(필수퀘스트이동버튼(status, basePoint));
+			
+			//구조하기(하단중앙) or 암흑 잔재(상단우측) or 암흑 군단 보루(하단우측)
+			switch(i) {
+			case 1: //구조하기
+				timeline.add(필수퀘스트구조하기버튼(status, basePoint)); 
+				if(status.isPotion()) {
+					timeline.add(체력물약선택(status, basePoint));
+					timeline.add(체력물약사용(status, basePoint));
+					timeline.add(체력충전창닫기(status, basePoint));
+				}
+				else {
+					timeline.add(빈공간선택(status, basePoint));
+				}
+				timeline.add(적선택(status, basePoint));
+				timeline.add(필수퀘스트구조하기버튼(status, basePoint));
+				break;
+			case 2://암흑잔재
+				timeline.add(암흑잔재공격버튼(status, basePoint));
+				if(status.isPotion()) {
+					timeline.add(체력물약선택(status, basePoint));
+					timeline.add(체력물약사용(status, basePoint));
+					timeline.add(체력충전창닫기(status, basePoint));
+				}
+				else {
+					timeline.add(빈공간선택(status, basePoint));
+				}
+				timeline.add(적선택(status, basePoint));
+				timeline.add(암흑잔재공격버튼(status, basePoint));
+				timeline.add(부대번호선택(status, basePoint));
+				timeline.add(출정버튼클릭(status, basePoint));
+				break;
+			case 3:
+				timeline.add(적선택(status, basePoint));
+				timeline.add(하단창우측공격버튼(status, basePoint));
+				if(status.isPotion()) {
+					timeline.add(체력물약선택(status, basePoint));
+					timeline.add(체력물약사용(status, basePoint));
+					timeline.add(체력충전창닫기(status, basePoint));
+				}
+				else {
+					timeline.add(빈공간선택(status, basePoint));
+				}
+				timeline.add(적선택(status, basePoint));
+				timeline.add(하단창우측공격버튼(status, basePoint));
+				timeline.add(부대번호선택(status, basePoint));
+				timeline.add(출정버튼클릭(status, basePoint));
+				break;
+			}
+			
+			//완료시까지 대기
+			timeline.add(randomDelay(status, 20, 25));
+			
+			//보상수령
+			timeline.add(레이더버튼(status, basePoint));
+			timeline.add(randomDelay(status, 3, 5));
+			timeline.add(필수퀘스트지점(status, basePoint, 1));
+			timeline.add(필수퀘스트지점(status, basePoint, 2));
+			timeline.add(필수퀘스트지점(status, basePoint, 3));
+			timeline.add(필수퀘스트지점(status, basePoint, 4));
+			timeline.add(randomDelay(status, 1, 2));
+			timeline.add(레이더글자클릭(status, basePoint));
+			timeline.add(레이더글자클릭(status, basePoint));
+			
+			timeline.add(뒤로가기(status, basePoint));
+		}
+		
 		return timeline;
 	}
 	public static MacroTimeline 제국의유물매크로(MacroStatus status, Point basePoint) {
@@ -247,9 +322,9 @@ public class MacroTimelineFactory {
 		//공격
 		timeline.add(적선택(status, basePoint));//유닛선택
 		timeline.add(randomDelay(status, 2, 2.5));
-		timeline.add(하단창우측공격버튼(status, basePoint));
+		timeline.add(제국의유물공격버튼(status, basePoint));//타입이 두가지임(버튼1개or2개)
 		
-		timeline.add(randomDelay(status, 2, 2.5));
+		timeline.add(randomDelay(status, 4, 6));
 		//부대선택
 		timeline.add(부대번호선택(status, basePoint));
 		//출정
@@ -260,6 +335,32 @@ public class MacroTimelineFactory {
 	public static MacroTimeline 트럭운송매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		
+		timeline.add(일일임무버튼(status, basePoint));
+		timeline.add(randomDelay(status, 3, 5));
+		timeline.add(화물차쟁탈전(status, basePoint));
+		
+		//화물차선택 x2 (기존 수령내역 취소)
+		for(int i=1; i <= 5; i++) {
+			timeline.add(화물차선택(status, basePoint, i), 1);
+			timeline.add(화물차선택(status, basePoint, i), 1);
+		}
+		
+		//화물차운송
+		for(int i=1; i <= 5; i++) {
+			timeline.add(화물차선택(status, basePoint, i), 1);
+			timeline.add(화물차운송버튼(status, basePoint), 1);
+			timeline.add(화물차운송안내닫기(status, basePoint), 1);
+			timeline.add(화물차갱신버튼(status, basePoint), 1);
+			timeline.add(화물차운송버튼(status, basePoint), 1);
+			timeline.add(부대번호선택(status, basePoint, i), 1);
+			timeline.add(빠른출전버튼클릭(status, basePoint), 1);
+			timeline.add(출정버튼클릭(status, basePoint), 1);
+		}
+		
+		//뒤로가기
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
 		return timeline;
 	}
 	public static MacroTimeline 보물1회매크로(MacroStatus status, Point basePoint) {
@@ -267,6 +368,7 @@ public class MacroTimelineFactory {
 		timeline.add(일일임무버튼(status, basePoint));
 		timeline.add(randomDelay(status, 3, 5));
 		
+		timeline.add(맨아래로이동(status, basePoint));
 		
 		return timeline;
 	}
@@ -1325,6 +1427,53 @@ public class MacroTimelineFactory {
 		}
 	}
 	
+	private static MacroAction 맨아래로이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 246, 345, MacroMouseActionType.WHEELDOWN, 200, status.getScreenList().size() < singleCount);
+	}
+	private static MacroAction 화물차쟁탈전(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 355, 567);
+	}
+	private static MacroAction 화물차선택(MacroStatus status, Point basePoint, int order) {
+		return switch(order) {
+		case 1->new MacroMouseAction(basePoint, 117, 415);
+		case 2->new MacroMouseAction(basePoint, 186, 415);
+		case 3->new MacroMouseAction(basePoint, 252, 415);
+		case 4->new MacroMouseAction(basePoint, 314, 415);
+		default->new MacroMouseAction(basePoint, 384, 415);
+		};
+	}
+	private static MacroAction 화물차운송버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 244, 585);
+	}
+	private static MacroAction 화물차운송안내닫기(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 396, 235);
+	}
+	private static MacroAction 화물차갱신버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 408, 225);
+	}
+	private static MacroAction 필수퀘스트지점(MacroStatus status, Point basePoint, int order) {
+		return switch(order) {
+		case 1->new MacroMouseAction(basePoint, 180, 240);
+		case 2->new MacroMouseAction(basePoint, 320, 240);
+		case 3->new MacroMouseAction(basePoint, 180, 300);
+		default->new MacroMouseAction(basePoint, 320, 300);
+		};
+	}
+	private static MacroAction 필수퀘스트이동버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 249, 544);
+	}
+	private static MacroAction 필수퀘스트구조하기버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 242, 562);
+	}
+	private static MacroAction 레이더글자클릭(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 260, 30);
+	}
+	private static MacroAction 암흑잔재공격버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 252, 256);
+	}
+	private static MacroAction 제국의유물공격버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 280, 540);
+	}
 }
 
 
