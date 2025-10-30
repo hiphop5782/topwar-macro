@@ -50,6 +50,7 @@ public class MacroStatus implements Serializable{
 	private boolean dailyTruckRequest = true;
 	private boolean dailyRequiredQuest = true;
 	private boolean empireRelics = true;
+	private int treasureCount = 1;
 	
 	//weekly task
 	private boolean weeklyDecorFreeToken = true;

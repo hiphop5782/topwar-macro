@@ -369,8 +369,59 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 3, 5));
 		
 		timeline.add(맨아래로이동(status, basePoint));
+		timeline.add(보물연맹이동(status, basePoint));
+		timeline.add(보물합성(status, basePoint));
+		
+		//1. 보물 상점인 경우 처리
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+
+		//2. 장비 수리인 경우 처리
+		for(int i=0; i < 5; i++) {
+			timeline.add(보물장비수리게이지우측(status, basePoint));
+			timeline.add(보물장비더하기버튼(status, basePoint));
+			timeline.add(보물장비더하기버튼(status, basePoint));
+			timeline.add(보물장비수리기부버튼(status, basePoint));
+		}
+		
+		//3. 장비 수리 마무리 + 보물 룰렛 돌리기
+		timeline.add(장비수리보상수령및룰렛돌리기(status, basePoint));
+		timeline.add(randomDelay(status, 0.5, 1));
+		
+		//4. 고급 수위병 소환
+		timeline.add(보물고급수위병소환버튼(status, basePoint));
+		
+		//4. x버튼 눌러 나가기
+		timeline.add(보물x버튼누르기(status, basePoint));
+		timeline.add(보물x버튼누르기(status, basePoint));
+		timeline.add(보물x버튼누르기(status, basePoint));
+		
+		//나가기
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
 		
 		return timeline;
+	}
+	private static MacroAction 보물고급수위병소환버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 369, 588);
+	}
+	private static MacroAction 보물x버튼누르기(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 414, 81);
+	}
+	private static MacroAction 장비수리보상수령및룰렛돌리기(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 251, 613);
+	}
+	private static MacroAction 보물장비더하기버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 318, 385);
+	}
+	private static MacroAction 보물장비수리기부버튼(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 250, 441);
+	}
+	private static MacroAction 보물장비수리게이지우측(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 289, 387);
+	}
+	private static MacroAction 보물합성(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 250, 630);
 	}
 	
 	public static MacroTimeline 사판훈련매크로(MacroStatus status, Point basePoint) {
@@ -1471,6 +1522,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 제국의유물공격버튼(MacroStatus status, Point basePoint) {
 		return new MacroMouseAction(basePoint, 280, 540);
+	}
+	private static MacroAction 보물연맹이동(MacroStatus status, Point basePoint) {
+		return new MacroMouseAction(basePoint, 355, 515);
 	}
 }
 

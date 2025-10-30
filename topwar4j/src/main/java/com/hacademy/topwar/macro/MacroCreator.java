@@ -322,11 +322,13 @@ public class MacroCreator {
 		MacroTimelines timelines = new MacroTimelines(
 			"보물소환", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 		);
-		for (RectData rectData : status.getScreenList()) {
-			if(rectData.active == false) continue;
-			Rectangle screenRect = rectData.toRectangle();
-			MacroTimeline timeline = MacroTimelineFactory.보물1회매크로(status, screenRect.getLocation());
-			timelines.add(timeline);
+		for(int i=0; i < status.getTreasureCount(); i++) {
+			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
+				Rectangle screenRect = rectData.toRectangle();
+				MacroTimeline timeline = MacroTimelineFactory.보물1회매크로(status, screenRect.getLocation());
+				timelines.add(timeline);
+			}
 		}
 		timelinesGroup.add(timelines);
 	}

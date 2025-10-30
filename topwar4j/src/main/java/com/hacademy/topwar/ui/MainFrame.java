@@ -609,6 +609,31 @@ public class MainFrame extends JFrame {
 
 		contentPanel.add(terror4kPanel);
 		
+		//보물 연맹
+		JPanel treasurePanel = new JPanel(new MigLayout("wrap 5", "[]5[]30[]"));
+		treasurePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "보물 연맹"));
+		
+		NumberField treasureCountField = new NumberField();
+		treasureCountField.setText(String.valueOf(PropertyManager.getMacroStatus().getTreasureCount()));
+		treasurePanel.add(treasureCountField);
+		
+		JLabel treasureCountLabel = new JLabel("회 시도");
+		treasurePanel.add(treasureCountLabel);
+		
+		JButton treasureExecuteButton = new JButton("시작하기");
+		treasureExecuteButton.setBackground(new Color(9, 132, 227));
+		treasureExecuteButton.setForeground(Color.white);
+		treasureExecuteButton.setFont(buttonFont);
+		treasureExecuteButton.addActionListener(e->{
+			treasureAction();
+		});
+		treasurePanel.add(treasureExecuteButton);
+		
+		contentPanel.add(treasurePanel);
+		
+		waitingComponentList.add(treasureCountField);
+		waitingComponentList.add(treasureExecuteButton);
+		
 		//텍스트 자동발송 설정
 		JPanel noticePanel = new JPanel(new MigLayout("wrap 5", "[grow]30[][]30[]10[]", ""));
 		noticePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "반복 텍스트 입력"));
@@ -1064,23 +1089,23 @@ public class MainFrame extends JFrame {
 		setPlayingState(false);
 	}
 	
-	private boolean multiclickFlag = false;
-	private Thread multiclickThread = null;
+	private boolean flag = false;
+	private Thread thread = null;
 	private void multiclickRepeatAction() {
 		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
-		if(multiclickFlag == true) return;
-		if(multiclickThread != null) return;
+		if(flag == true) return;
+		if(thread != null) return;
 		
 		LogUtils.println("starting multiclick repeat");
 		
-		multiclickThread = new Thread(()->{
+		thread = new Thread(()->{
 			Point p = MouseInfo.getPointerInfo().getLocation();
-			multiclickFlag = true;
+			flag = true;
 			try {
-				while(multiclickFlag) {
+				while(flag) {
 					MouseMirrorUtils.click(p);
 					for(int i=0; i < 10; i++) Thread.sleep(50L);
 				}
@@ -1089,9 +1114,26 @@ public class MainFrame extends JFrame {
 				LogUtils.println("finish multiclick repeat");
 			}
 		});
-		multiclickThread.start();
+		thread.start();
 		
 		setPlayingState(true);
+	}
+	
+	private void treasureAction() {
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
+			return;
+		if (timelinesGroup.isPlaying())
+			return;
+		timelinesGroup.clear();
+		
+		try {
+			MacroCreator.보물소환(timelinesGroup, PropertyManager.getMacroStatus());
+			timelinesGroup.playOnce();
+			setPlayingState(true);
+		} catch (Exception e) {
+			setPlayingState(false);
+		}
+		
 	}
 
 	private void playDarkforceMacroOnce() throws Exception {
@@ -1209,12 +1251,12 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying()) {
 			timelinesGroup.stop();
 		}
-		if(multiclickFlag) {
-			multiclickFlag = false;
+		if(flag) {
+			flag = false;
 		}
-		if(multiclickThread != null) {
-			multiclickThread.interrupt();
-			multiclickThread = null;
+		if(thread != null) {
+			thread.interrupt();
+			thread = null;
 		}
 		setPlayingState(false);
 	}
