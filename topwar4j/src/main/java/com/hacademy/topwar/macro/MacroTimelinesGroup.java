@@ -87,4 +87,9 @@ public class MacroTimelinesGroup {
 		if(timelinesList.isEmpty()) return null;
 		return timelinesList.getLast();
 	}
+	public MacroTimelines getFromLast(int offset) {
+		if(timelinesList.isEmpty()) return null;
+		if(offset >= timelinesList.size()) return null;
+		return timelinesList.get(timelinesList.size() - offset - 1);
+	}
 }

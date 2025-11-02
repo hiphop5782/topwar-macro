@@ -126,6 +126,12 @@ public class MacroCreator {
 	public static void moveIntoBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		MacroTimelines last = timelinesGroup.getLast();
 		if(last != null && last.isInner()) return;
+		int offset=1;
+		while(true) {
+			last = timelinesGroup.getFromLast(offset++);
+			if(last == null) break;
+			if(last.isOuter()) break;
+		}
 		
 		MacroTimelines timelines = new MacroTimelines(
 				"기지내부로이동", MacroTimelines.INTEGRATED
@@ -140,6 +146,12 @@ public class MacroCreator {
 	public static void moveOutofBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		MacroTimelines last = timelinesGroup.getLast();
 		if(last != null && last.isOuter()) return;
+		int offset=1;
+		while(true) {
+			last = timelinesGroup.getFromLast(offset++);
+			if(last == null) break;
+			if(last.isInner()) break;
+		}
 		
 		MacroTimelines timelines = new MacroTimelines(
 				"기지외부로이동", MacroTimelines.INTEGRATED
@@ -322,13 +334,11 @@ public class MacroCreator {
 		MacroTimelines timelines = new MacroTimelines(
 			"보물소환", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 		);
-		for(int i=0; i < status.getTreasureCount(); i++) {
-			for (RectData rectData : status.getScreenList()) {
-				if(rectData.active == false) continue;
-				Rectangle screenRect = rectData.toRectangle();
-				MacroTimeline timeline = MacroTimelineFactory.보물1회매크로(status, screenRect.getLocation());
-				timelines.add(timeline);
-			}
+		for (RectData rectData : status.getScreenList()) {
+			if(rectData.active == false) continue;
+			Rectangle screenRect = rectData.toRectangle();
+			MacroTimeline timeline = MacroTimelineFactory.보물1회매크로(status, screenRect.getLocation());
+			timelines.add(timeline);
 		}
 		timelinesGroup.add(timelines);
 	}

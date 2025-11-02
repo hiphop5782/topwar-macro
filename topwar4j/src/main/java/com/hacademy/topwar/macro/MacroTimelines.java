@@ -131,4 +131,7 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 	public boolean isOuter() {
 		return where == OUTER;
 	}
+	public boolean isAnywhere() {
+		return where == ANYWHERE;
+	}
 }
