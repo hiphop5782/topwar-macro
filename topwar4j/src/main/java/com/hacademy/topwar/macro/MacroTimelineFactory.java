@@ -375,6 +375,8 @@ public class MacroTimelineFactory {
 		//1. 보물 상점인 경우 처리
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
 
 		//2. 장비 수리인 경우 처리
 		for(int i=0; i < 5; i++) {
@@ -399,7 +401,10 @@ public class MacroTimelineFactory {
 		//나가기
 		timeline.add(뒤로가기(status, basePoint));
 		timeline.add(뒤로가기(status, basePoint));
-		
+		timeline.add(뒤로가기(status, basePoint));
+
+		timeline.add(randomDelay(status, 2, 3));
+
 		return timeline;
 	}
 	private static MacroAction 보물고급수위병소환버튼(MacroStatus status, Point basePoint) {

@@ -615,6 +615,12 @@ public class MainFrame extends JFrame {
 		
 		NumberField treasureCountField = new NumberField();
 		treasureCountField.setText(String.valueOf(PropertyManager.getMacroStatus().getTreasureCount()));
+		treasureCountField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				PropertyManager.getMacroStatus().setTreasureCount(Integer.parseInt(treasureCountField.getText()));
+			}
+		});
 		treasurePanel.add(treasureCountField);
 		
 		JLabel treasureCountLabel = new JLabel("회 시도");
@@ -1124,11 +1130,14 @@ public class MainFrame extends JFrame {
 			return;
 		if (timelinesGroup.isPlaying())
 			return;
+		if(PropertyManager.getMacroStatus().getTreasureCount() <= 0) 
+			return;
 		timelinesGroup.clear();
 		
 		try {
 			MacroCreator.보물소환(timelinesGroup, PropertyManager.getMacroStatus());
-			timelinesGroup.playOnce();
+			//timelinesGroup.playOnce();
+			timelinesGroup.play(PropertyManager.getMacroStatus().getTreasureCount());
 			setPlayingState(true);
 		} catch (Exception e) {
 			setPlayingState(false);
