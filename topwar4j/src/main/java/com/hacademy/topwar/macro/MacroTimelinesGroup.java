@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.hacademy.topwar.ui.LogDialog;
-
 import lombok.Data;
 
 @Data
@@ -84,5 +82,9 @@ public class MacroTimelinesGroup {
 			System.out.println("service shutdown called");
 		}
 		if(listener != null) listener.finish(null);
+	}
+	public MacroTimelines getLast() {
+		if(timelinesList.isEmpty()) return null;
+		return timelinesList.getLast();
 	}
 }

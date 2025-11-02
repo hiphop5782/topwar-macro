@@ -1,5 +1,6 @@
 package com.hacademy.topwar.util;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacademy.topwar.ui.LogDialog;
 
@@ -13,6 +14,9 @@ public class JsonConfigUtil {
     	if(!root.exists()) {
     		root.mkdirs();
     	}
+    	
+    	//mapper에 정의되지 않은 속성을 무시하도록 설정
+    	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public static <T> T load(Class<T> clazz) {

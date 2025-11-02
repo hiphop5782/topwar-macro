@@ -11,14 +11,18 @@ import lombok.Data;
 @Data
 public class MacroStatus implements Serializable{
 	private static final long serialVersionUID = 1L;
+	
 	private int darkforceAttackCount = 1;
 	private String darkforceLevel = "random";
 	private int darkforceDuration = 300;
 	private int darkforceMarchNumber = 1;
+	
 	private String warhammerLevel = "random";
 	private String warhammerType = "워해머-4K";
 	private int warhammerDuration = 60;
-	private boolean potion = true;
+	
+	private boolean potion = true;//물약 사용
+	private boolean materialRequest = false;//재료 요청
 	
 	private int terror4kLevel = 5;
 	private boolean terror4kManual = false;
@@ -36,13 +40,17 @@ public class MacroStatus implements Serializable{
 	private boolean dailyNormalIncrutAndSkill = false;
 	private boolean dailyAdvancedIncruit = false;
 	private boolean dailyCrossBattle = true;
-	private boolean goldRequest = true;
 	private boolean allianceDonation = true;
 	private boolean productMaterial = true;
 	private String productMaterialType = "강철";
 //	private boolean armyUnitTraining = true;
 //	private boolean navyUnitTraining = true;
 //	private boolean airforceUnitTraining = true;
+	private boolean dailyGoldRequest = true;
+	private boolean dailyTruckRequest = true;
+	private boolean dailyRequiredQuest = true;
+	private boolean empireRelics = true;
+	private int treasureCount = 1;
 	
 	//weekly task
 	private boolean weeklyDecorFreeToken = true;

@@ -23,9 +23,9 @@ public class Topwar4jApplication {
 	public static void main(String[] args) {
 		//로그 리디렉션
 		try {
-			PrintStream out = new PrintStream(new FileOutputStream("log.txt", true));
-			System.setOut(out);
-			System.setErr(out);
+//			PrintStream out = new PrintStream(new FileOutputStream("log.txt", true));
+//			System.setOut(out);
+//			System.setErr(out);
 			
 			//dll 로드
 			JNativeLoader.init();

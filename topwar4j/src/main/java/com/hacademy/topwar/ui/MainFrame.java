@@ -1,8 +1,8 @@
 package com.hacademy.topwar.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -49,6 +49,7 @@ import com.hacademy.topwar.ui.components.CheckButton;
 import com.hacademy.topwar.ui.components.NumberField;
 import com.hacademy.topwar.ui.components.StatusCheckBox;
 import com.hacademy.topwar.util.LogUtils;
+import com.hacademy.topwar.util.Mouse;
 import com.hacademy.topwar.util.MouseMirrorUtils;
 import com.hacademy.topwar.util.PropertyManager;
 import com.hacademy.topwar.util.RectData;
@@ -136,6 +137,9 @@ public class MainFrame extends JFrame {
 	
 	private JPanel sidePanel = new JPanel(new MigLayout("wrap1, inset 5, hidemode 3", "[grow,fill]", ""));
 	private JCheckBox mirrorMode = new JCheckBox("동시 클릭하기(F9)", false);
+	private JLabel multiclickRepeat = new JLabel("같은 지점 계속 클릭하기(F10)", JLabel.LEFT);
+	
+	private Font buttonFont = new Font("", Font.BOLD, 14);
 	
 	public MainFrame() throws Exception {
 		this.setAlwaysOnTop(false);
@@ -232,8 +236,6 @@ public class MainFrame extends JFrame {
 	}
 
 	public void components() {
-		Font buttonFont = new Font("", Font.BOLD, 14);
-		
 		// 메인 패널
 		JPanel mainPanel = new JPanel(new MigLayout("wrap 2, inset 0, hidemode 3", "[]5[]", ""));
 		this.setContentPane(mainPanel);
@@ -294,17 +296,20 @@ public class MainFrame extends JFrame {
 		contentPanel.add(darkforceMarchPanel);
 
 		// 물약사용 체크박스
-		JPanel useVitPanel = new JPanel(new BorderLayout());
+		JPanel useVitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 //		JCheckBox useVit = new JCheckBox("물약 사용", status.isPotion());
 //		useVit.addActionListener(e -> {
 //			status.setPotion(useVit.isSelected());
 //		});
 		StatusCheckBox useVit = new StatusCheckBox("물약 사용", "potion");
+		StatusCheckBox materialRequest = new StatusCheckBox("재료 지원 요청(암흑, 워해머, 테러 시)", "materialRequest");
 
 		useVitPanel.add(useVit);
+		useVitPanel.add(materialRequest);
 		contentPanel.add(useVitPanel);
 		waitingComponentList.add(useVit);
+		waitingComponentList.add(materialRequest);
 
 		// 암흑사냥
 		JPanel darkforcePanel = new JPanel(new MigLayout("inset 5", "[]10[grow,fill]", ""));
@@ -604,6 +609,31 @@ public class MainFrame extends JFrame {
 
 		contentPanel.add(terror4kPanel);
 		
+		//보물 연맹
+		JPanel treasurePanel = new JPanel(new MigLayout("wrap 5", "[]5[]30[]"));
+		treasurePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "보물 연맹"));
+		
+		NumberField treasureCountField = new NumberField();
+		treasureCountField.setText(String.valueOf(PropertyManager.getMacroStatus().getTreasureCount()));
+		treasurePanel.add(treasureCountField);
+		
+		JLabel treasureCountLabel = new JLabel("회 시도");
+		treasurePanel.add(treasureCountLabel);
+		
+		JButton treasureExecuteButton = new JButton("시작하기");
+		treasureExecuteButton.setBackground(new Color(9, 132, 227));
+		treasureExecuteButton.setForeground(Color.white);
+		treasureExecuteButton.setFont(buttonFont);
+		treasureExecuteButton.addActionListener(e->{
+			treasureAction();
+		});
+		treasurePanel.add(treasureExecuteButton);
+		
+		contentPanel.add(treasurePanel);
+		
+		waitingComponentList.add(treasureCountField);
+		waitingComponentList.add(treasureExecuteButton);
+		
 		//텍스트 자동발송 설정
 		JPanel noticePanel = new JPanel(new MigLayout("wrap 5", "[grow]30[][]30[]10[]", ""));
 		noticePanel.setBorder(BorderFactory.createTitledBorder(lineBorder2, "반복 텍스트 입력"));
@@ -654,8 +684,12 @@ public class MainFrame extends JFrame {
 		dailyTaskCheckboxes.add(new StatusCheckBox("일반&스킬모집", "dailyNormalIncrutAndSkill", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("고급모집(2회)", "dailyAdvancedIncruit", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("일일업무", "dailyQuestReward", dailyTaskCheckButton));
-		dailyTaskCheckboxes.add(new StatusCheckBox("크로스패배(10회)", "dailyCrossBattle", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("제국의유물", "empireRelics", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("필수퀘스트", "dailyRequiredQuest", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("트럭운송", "dailyTruckRequest", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("골드지원요청", "dailyGoldRequest", dailyTaskCheckButton));
 		dailyTaskCheckboxes.add(new StatusCheckBox("무료다이아(20회)", "dailyGemReward", dailyTaskCheckButton));
+		dailyTaskCheckboxes.add(new StatusCheckBox("크로스패배(10회)", "dailyCrossBattle", dailyTaskCheckButton));
 		for (StatusCheckBox checkbox : dailyTaskCheckboxes) {
 			dailyTaskPanel.add(checkbox);
 			waitingComponentList.add(checkbox);
@@ -855,9 +889,12 @@ public class MainFrame extends JFrame {
 		darkforceInputButton2.setFont(darkforceInputButton.getFont());
 		darkforceInputButton2.addActionListener(e -> {
 			try {
-				playDarkforceMacroLoop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playDarkforceMacroLoop(count);
+				}
+			} catch (Exception ex) {
 			}
 		});
 		waitingComponentList.add(darkforceInputButton2);
@@ -868,9 +905,12 @@ public class MainFrame extends JFrame {
 		warhammerCustomButton2.setFont(warhammerCustomButton.getFont());
 		warhammerCustomButton2.addActionListener(e -> {
 			try {
-				playWarhammerMacroLoop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playWarhammerMacroLoop(count);
+				}
+			} catch (Exception ex) {
 			}
 		});
 		waitingComponentList.add(warhammerCustomButton2);
@@ -881,9 +921,12 @@ public class MainFrame extends JFrame {
 		terror4kLoopButton2.setFont(terror4kLoopButton.getFont());
 		terror4kLoopButton2.addActionListener(e -> {
 			try {
-				playTerror4kMacroLoop(10);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+				String input = JOptionPane.showInputDialog(MainFrame.this, "횟수 입력");
+				int count = Integer.parseInt(input);
+				if (count > 0) {
+					playTerror4kMacroLoop(count);
+				}
+			} catch (Exception ex) {
 			}
 		});
 		waitingComponentList.add(terror4kLoopButton2);
@@ -897,18 +940,18 @@ public class MainFrame extends JFrame {
 		waitingComponentList.add(taskRunButton2);
 
 		
-		JButton facilityButton = new JButton("시설");
-		facilityButton.setBackground(new Color(42, 52, 54));
-		facilityButton.setForeground(Color.white);
-		facilityButton.setFont(buttonFont);
-		facilityButton.addActionListener(e->{
-			try {
-				playFacilityMacro();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		});
-		waitingComponentList.add(facilityButton);
+//		JButton facilityButton = new JButton("시설");
+//		facilityButton.setBackground(new Color(42, 52, 54));
+//		facilityButton.setForeground(Color.white);
+//		facilityButton.setFont(buttonFont);
+//		facilityButton.addActionListener(e->{
+//			try {
+//				playFacilityMacro();
+//			} catch (Exception e1) {
+//				e1.printStackTrace();
+//			}
+//		});
+//		waitingComponentList.add(facilityButton);
 
 		JButton macroStopButton2 = new JButton("실행중지");
 		macroStopButton2.setBackground(macroStopButton.getBackground());
@@ -923,7 +966,7 @@ public class MainFrame extends JFrame {
 		minimizePanel.add(warhammerCustomButton2);
 		minimizePanel.add(terror4kLoopButton2);
 		minimizePanel.add(taskRunButton2);
-		minimizePanel.add(facilityButton);
+//		minimizePanel.add(facilityButton);
 		minimizePanel.add(macroStopButton2);
 		
 		//사이드패널
@@ -948,16 +991,15 @@ public class MainFrame extends JFrame {
 				case GlobalKeyEvent.VK_F3:
 					removeScreenRect();
 					break;
-//				case GlobalKeyEvent.VK_F5:
-//					playDarkforceMacroOnce();
-//					break;
+				case GlobalKeyEvent.VK_F5:
+					Mouse.create().wheelUp(300).hold();
+					break;
+				case GlobalKeyEvent.VK_F6:
+					Mouse.create().wheelDown(300).hold();
+					break;
 				case GlobalKeyEvent.VK_ESCAPE:
 					stopMacro();
 					break;
-//				case GlobalKeyEvent.VK_F7:
-//					Point location = MouseInfo.getPointerInfo().getLocation();
-//					timeline.add(new MacroMouseAction(location, MacroMouseActionType.CLICK));
-//					break;
 				case GlobalKeyEvent.VK_F8:
 					Point p = MouseInfo.getPointerInfo().getLocation();
 					MouseMirrorUtils.click(p);
@@ -965,8 +1007,17 @@ public class MainFrame extends JFrame {
 				case GlobalKeyEvent.VK_F9:
 					mirrorMode.doClick();
 					break;
+				case GlobalKeyEvent.VK_F10:
+					multiclickRepeatAction();
+					break;
 				}
 			}
+		});
+		
+		mirrorMode.addActionListener(e->{
+			JCheckBox source = (JCheckBox)e.getSource();
+			MouseMirrorUtils.setMirrorMode(source.isSelected());
+			LogUtils.println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
 		});
 	}
 
@@ -1007,13 +1058,11 @@ public class MainFrame extends JFrame {
 			sidePanel.add(new JSeparator(), "span, growx, wrap");
 		}
 		
-		mirrorMode.addActionListener(e->{
-			JCheckBox source = (JCheckBox)e.getSource();
-			MouseMirrorUtils.setMirrorMode(source.isSelected());
-			LogUtils.println("마우스 복제 모드 "+(source.isSelected()?"설정":"해제"));
-		});
 		waitingComponentList.add(mirrorMode);
 		sidePanel.add(mirrorMode, "aligny top");
+		
+		sidePanel.add(new JSeparator(), "span, growx, wrap");
+		sidePanel.add(multiclickRepeat, "aligny top");
 		
 		sidePanel.repaint();
 		sidePanel.revalidate();
@@ -1038,6 +1087,53 @@ public class MainFrame extends JFrame {
 		setTitle("TW-Macro (설정된 화면 : " + PropertyManager.getMacroStatus().getScreenList().size() + ")");
 		refreshScreenSelectBox();
 		setPlayingState(false);
+	}
+	
+	private boolean flag = false;
+	private Thread thread = null;
+	private void multiclickRepeatAction() {
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
+			return;
+		if (timelinesGroup.isPlaying())
+			return;
+		if(flag == true) return;
+		if(thread != null) return;
+		
+		LogUtils.println("starting multiclick repeat");
+		
+		thread = new Thread(()->{
+			Point p = MouseInfo.getPointerInfo().getLocation();
+			flag = true;
+			try {
+				while(flag) {
+					MouseMirrorUtils.click(p);
+					for(int i=0; i < 10; i++) Thread.sleep(50L);
+				}
+			}
+			catch(Exception e) {
+				LogUtils.println("finish multiclick repeat");
+			}
+		});
+		thread.start();
+		
+		setPlayingState(true);
+	}
+	
+	private void treasureAction() {
+		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
+			return;
+		if (timelinesGroup.isPlaying())
+			return;
+		timelinesGroup.clear();
+		
+		try {
+			MacroCreator.보물소환(timelinesGroup, PropertyManager.getMacroStatus());
+			timelinesGroup.playOnce();
+			setPlayingState(true);
+		} catch (Exception e) {
+			setPlayingState(false);
+		}
+		
 	}
 
 	private void playDarkforceMacroOnce() throws Exception {
@@ -1151,20 +1247,18 @@ public class MainFrame extends JFrame {
 		setPlayingState(true);
 	}
 	
-	private void playFacilityMacro() throws Exception {
-		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
-			return;
-		if (timelinesGroup.isPlaying())
-			return;
-		MacroCreator.facility(timelinesGroup, PropertyManager.getMacroStatus());
-		timelinesGroup.playOnce();
-		setPlayingState(true);
-	}
-
 	private void stopMacro() {
 		if (timelinesGroup.isPlaying()) {
 			timelinesGroup.stop();
 		}
+		if(flag) {
+			flag = false;
+		}
+		if(thread != null) {
+			thread.interrupt();
+			thread = null;
+		}
+		setPlayingState(false);
 	}
 	
 	private void playNoticeMacro() throws Exception {
@@ -1195,16 +1289,6 @@ public class MainFrame extends JFrame {
 		if (timelinesGroup.isPlaying())
 			return;
 		MacroCreator.task(timelinesGroup, PropertyManager.getMacroStatus());
-		timelinesGroup.playOnce();
-		setPlayingState(true);
-	}
-
-	private void playSmartTaskMacro() throws Exception {
-		if (PropertyManager.getMacroStatus().getScreenList().isEmpty())
-			return;
-		if (timelinesGroup.isPlaying())
-			return;
-		MacroCreator.task(timelinesGroup, PropertyManager.getMacroStatus(), true);
 		timelinesGroup.playOnce();
 		setPlayingState(true);
 	}

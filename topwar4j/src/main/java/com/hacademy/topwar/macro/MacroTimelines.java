@@ -13,6 +13,11 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 	private List<MacroTimeline> timelineList = new ArrayList<>();
 	private List<Double> delayList = new ArrayList<>();
 	private boolean seperate;
+	private int where;
+	
+	public static final int OUTER = 1, ANYWHERE = 0, INNER = -1;
+	public static final boolean SEPERATE = true , INTEGRATED = false; 
+	
 	public MacroTimelines(String name) {
 		this.name = name;
 		this.seperate = false;
@@ -20,6 +25,11 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 	public MacroTimelines(String name, boolean seperate) {
 		this.name = name;
 		this.seperate = seperate;
+	}
+	public MacroTimelines(String name, boolean seperate, int where) {
+		this.name = name;
+		this.seperate = seperate;
+		this.where = where;
 	}
 	public void add(MacroTimeline timeline) {
 		timelineList.add(timeline);
@@ -46,7 +56,7 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 					timeline.play(delay);
 				}
 			}
-			else {//종속 매크로
+			else {//일괄 매크로
 				int size = 0;//가장 긴 행의 개수
 				for(int i=0; i < timelineList.size(); i++) {
 					if(timelineList.get(i).size() > size) {
@@ -113,5 +123,12 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 	@Override
 	public Iterator<MacroTimeline> iterator() {
 		return timelineList.iterator();
+	}
+	
+	public boolean isInner() {
+		return where == INNER;
+	}
+	public boolean isOuter() {
+		return where == OUTER;
 	}
 }
