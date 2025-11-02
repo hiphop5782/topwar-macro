@@ -23,16 +23,16 @@ import static org.bytedeco.opencv.global.opencv_imgproc.adaptiveThreshold;
 import static org.bytedeco.opencv.global.opencv_imgproc.contourArea;
 import static org.bytedeco.opencv.global.opencv_imgproc.cvtColor;
 import static org.bytedeco.opencv.global.opencv_imgproc.dilate;
-import static org.bytedeco.opencv.global.opencv_imgproc.fillPoly;
-import static org.bytedeco.opencv.global.opencv_imgproc.filter2D;
 //imgproc 함수
 import static org.bytedeco.opencv.global.opencv_imgproc.drawContours;
+import static org.bytedeco.opencv.global.opencv_imgproc.filter2D;
 import static org.bytedeco.opencv.global.opencv_imgproc.findContours;
 import static org.bytedeco.opencv.global.opencv_imgproc.floodFill;
 import static org.bytedeco.opencv.global.opencv_imgproc.getStructuringElement;
 import static org.bytedeco.opencv.global.opencv_imgproc.morphologyEx;
 import static org.bytedeco.opencv.global.opencv_imgproc.resize;
 import static org.bytedeco.opencv.global.opencv_imgproc.threshold;
+//import static org.bytedeco.opencv.global.opencv_imgproc.copyMakeBorder;
 
 import java.io.File;
 
@@ -42,6 +42,7 @@ import org.bytedeco.javacpp.indexer.FloatIndexer;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.MatVector;
 import org.bytedeco.opencv.opencv_core.Point;
+import org.bytedeco.opencv.opencv_core.Rect;
 import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_core.Size;
 
@@ -169,11 +170,22 @@ public class ImageProcessor {
 //	}
 	public static Mat pre(Mat origin) {
 		origin = resizeImage(origin, 7);
+		origin = addPadding(origin, 10, new Scalar(0));
 		origin = grayScale(origin);
 		origin = binarize(origin);
-		origin = dilateImage(origin, 5);
+		origin = dilateImage(origin, 6);
 		origin = reverse(origin);
 		return origin;
+	}
+	public static Mat addPadding(Mat origin, int px, Scalar bg) {
+		int h = origin.rows();
+		int w = origin.cols();
+		Mat result = new Mat(h+px*2, w+px*2, origin.type(), bg);
+		Mat roi = result.apply(new Rect(px, px, w, h));
+		origin.copyTo(roi);
+		roi.release();
+		origin.release();
+		return result;
 	}
 	public static Mat reverse(Mat origin) {
 		Mat result = new Mat();

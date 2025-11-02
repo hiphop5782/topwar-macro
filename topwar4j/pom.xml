@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>org.bytedeco</groupId>
 			<artifactId>javacv-platform</artifactId>
-			<version>1.5.11</version>
+			<version>1.5.12</version>
 		</dependency>
 
 		<!-- look and feel -->
@@ -27,21 +27,7 @@
 			<artifactId>flatlaf</artifactId>
 			<version>3.5.1</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>io.github.vincenzopalazzo</groupId>
-			<artifactId>material-ui-swing</artifactId>
-			<version>1.1.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.pushing-pixels</groupId>
-			<artifactId>radiance-substance</artifactId>
-			<version>4.5.0</version>
-			<scope>test</scope>
-		</dependency>
 		
-		 -->
 		<!-- global key hook -->
 		<dependency>
 			<groupId>lc.kra.system</groupId>
@@ -106,7 +92,7 @@
 		    <artifactId>org.eclipse.jgit</artifactId>
 		    <version>7.3.0.202506031305-r</version>
 		</dependency>
-
+	
 	</dependencies>
 	
 	<properties>

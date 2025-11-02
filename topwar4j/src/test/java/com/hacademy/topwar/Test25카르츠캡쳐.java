@@ -154,10 +154,13 @@ public class Test25카르츠캡쳐 {
 	}
 	public static void saveImageWithProcess(BufferedImage image, int rank, String type) {
 		Mat src = ImageUtils.bufferedImageToMat(image);
-		Mat gray = ImageProcessor.grayScale(src);
+		Mat increase = ImageProcessor.resizeImage(src, 7);
+		Mat gray = ImageProcessor.grayScale(increase);
 		Mat binary = ImageProcessor.binarizeOtsu(gray);
 		Mat reverse = ImageProcessor.reverse(binary);
 		imwrite("./ocr/kartz/kartz-"+rank+"-"+type+".png", reverse);
+//		Mat result = ImageProcessor.pre(src);
+//		imwrite("./ocr/kartz/kartz-"+rank+"-"+type+".png", result);
 	}
     
     public static BufferedImage crop(BufferedImage src, int x, int y, int width, int height) {
