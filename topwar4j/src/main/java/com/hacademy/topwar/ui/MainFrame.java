@@ -224,6 +224,21 @@ public class MainFrame extends JFrame {
 		JMenu setting = new JMenu("설정");
 		bar.add(setting);
 		
+		JMenuItem delay = new JMenuItem("매크로 간격 설정");
+		delay.addActionListener(e->{
+			String value = JOptionPane.showInputDialog(MainFrame.this, "매크로 간격 설정(초)", PropertyManager.getMacroStatus().getMacroDelay());
+			try {
+				double newDelay = Double.parseDouble(value);
+				PropertyManager.getMacroStatus().setMacroDelay(newDelay);
+			}
+			catch(Exception ex) {
+				JOptionPane.showMessageDialog(MainFrame.this, "딜레이는 숫자(초)로 설정, 소수점 가능", "딜레이 설정 오류", JOptionPane.WARNING_MESSAGE);
+			}
+		});
+		setting.add(delay);
+		
+		setting.addSeparator();
+		
 		JMenuItem minimize = new JMenuItem("미니모드");
 		minimize.setAccelerator(KeyStroke.getKeyStroke("F11"));
 		minimize.addActionListener(e->setMinimode(true));
@@ -233,8 +248,6 @@ public class MainFrame extends JFrame {
 		maximize.setAccelerator(KeyStroke.getKeyStroke("F12"));
 		maximize.addActionListener(e->setMinimode(false));
 		setting.add(maximize);
-		
-		
 	}
 
 	public void components() {

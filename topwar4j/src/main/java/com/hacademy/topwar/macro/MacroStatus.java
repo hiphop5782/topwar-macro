@@ -65,4 +65,7 @@ public class MacroStatus implements Serializable{
 	private int foodFacilityLevel = 5;
 	private boolean odinFacility = true;
 	private int odinFacilityLevel = 3;
+	
+	//매크로 사이 기본 간격
+	private double macroDelay = 0.5d;
 }
