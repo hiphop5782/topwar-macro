@@ -227,6 +227,7 @@ public class MainFrame extends JFrame {
 		JMenuItem delay = new JMenuItem("매크로 간격 설정");
 		delay.addActionListener(e->{
 			String value = JOptionPane.showInputDialog(MainFrame.this, "매크로 간격 설정(초)", PropertyManager.getMacroStatus().getMacroDelay());
+			if(value == null) return;
 			try {
 				double newDelay = Double.parseDouble(value);
 				PropertyManager.getMacroStatus().setMacroDelay(newDelay);
