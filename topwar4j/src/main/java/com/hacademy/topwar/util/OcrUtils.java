@@ -59,20 +59,21 @@ public class OcrUtils {
 	public static List<String> doOcrDirectory(File dir) throws IOException {
 		return doOcrDirectory(dir.getAbsolutePath());
 	}
+	
+	// 정규표현식 패턴: "text":" 뒤에 오는 큰따옴표 안의 문자열
+	private static Pattern pattern = Pattern.compile("\"text\":\"(.*?)\"");
 
 	public static List<String> doOcrDirectory(String path) throws IOException {
 		List<String> list = new ArrayList<>();
 		Path folder = Paths.get(path); // 이미지 폴더 경로
 		HttpClient client = HttpClient.newHttpClient();
-		
-		// 정규표현식 패턴: "text":" 뒤에 오는 큰따옴표 안의 문자열
-        Pattern pattern = Pattern.compile("\"text\":\"(.*?)\"");
 
-		Files.list(folder).filter(p -> p.toString().endsWith(".png") || p.toString().endsWith(".jpg")).sorted()
+		Files.list(folder).filter(p -> p.toString().endsWith(".png") || p.toString().endsWith(".tif")).sorted()
 			.forEach(imagePath -> {
 				try {
 					String result = sendImage(client, imagePath);
-					System.out.printf("%s [%s] → %s%n", path, imagePath.getFileName(), result);
+					System.out.printf("%s [%s]\n\t→%s\n", path, imagePath.getFileName(), result);
+					
 					Matcher matcher = pattern.matcher(result);
 					if(matcher.find()) {
 						String cp = matcher.group(1);
@@ -89,12 +90,27 @@ public class OcrUtils {
 
 	public static String doOcrFile(Path imagePath) throws IOException, InterruptedException {
 		HttpClient client = HttpClient.newHttpClient();
-		String jsonStr = sendImage(client, imagePath);
-		ObjectMapper parser = new ObjectMapper();
-		Map<String, String> map = parser.readValue(jsonStr, new TypeReference<Map<String, String>>() {
-		});
-		System.out.println(imagePath.getFileName() + " → " + map.get("text"));
-		return map.get("text");
+//		String jsonStr = sendImage(client, imagePath);
+//		ObjectMapper parser = new ObjectMapper();
+//		Map<String, String> map = parser.readValue(jsonStr, new TypeReference<Map<String, String>>() {
+//		});
+//		System.out.println(imagePath.getFileName() + " → " + map.get("text"));
+//		return map.get("text");
+		
+		try {
+			String result = sendImage(client, imagePath);
+			Matcher matcher = pattern.matcher(result);
+			if(matcher.find()) {
+				String value = matcher.group(1);
+				System.out.printf("%s → %s%n", imagePath.getFileName(), value);
+				return value;
+			}
+			//System.out.println("OCR 완료 (" + imagePath.getFileName() + ")");
+		} catch (Exception e) {
+			//System.err.println("❌ 오류: " + imagePath + " → " + e.getMessage());
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static List<String> doOcrDirectoryByTesseract(File dir) throws IOException {
@@ -103,17 +119,27 @@ public class OcrUtils {
 
 	public static List<String> doOcrDirectoryByTesseract(String path) throws IOException {
 		Path folder = Paths.get(path); // 이미지 폴더 경로
+		System.out.println(folder.toString()+" 분석 시작");
 
 		Tesseract tesseract = new Tesseract();
 		tesseract.setDatapath("C:/Program Files/Tesseract-OCR/tessdata");
 		tesseract.setLanguage("eng");
 		tesseract.setVariable("tessedit_char_whitelist", "0123456789.M");
+		tesseract.setVariable("tessedit_char_blacklist", "abcdefghijklmnopqrstuvwxyz!@#$%^&*()<>?{}[]|\\/:;'\"`~");
+		tesseract.setVariable("load_system_dawg", "F");
+		tesseract.setVariable("load_freq_dawg", "F");
+		tesseract.setVariable("user_patterns_file", "D:/tesseract-training/patterns.txt");
+		tesseract.setOcrEngineMode(1);
+		tesseract.setPageSegMode(8);
+		tesseract.setVariable("classify_bln_numeric_mode", "1");
 
 		List<String> list = new ArrayList<>();
-		Files.list(folder).filter(p -> p.toString().endsWith(".png") || p.toString().endsWith(".jpg")).sorted()
+		
+		Files.list(folder).filter(p -> p.toString().endsWith(".tif")).sorted()
 				.forEach(imagePath -> {
 					try {
 						String result = tesseract.doOCR(imagePath.toFile()).trim();
+						System.out.println(imagePath+" → "+result);
 						list.add(result);
 					} catch (TesseractException e) {
 						e.printStackTrace();

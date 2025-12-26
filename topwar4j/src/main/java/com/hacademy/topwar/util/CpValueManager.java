@@ -1,6 +1,7 @@
 package com.hacademy.topwar.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Data;
@@ -10,6 +11,7 @@ public class CpValueManager {
 	private List<String> strList;
 	private List<Double> cpList;
 	private List<Double> diffList;
+	private List<Double> errorList;
 	public CpValueManager(List<String> strList) {
 		this.strList = strList;
 		createSubList();
@@ -47,6 +49,26 @@ public class CpValueManager {
 				cpList.get(i) - cpList.get(i+1)
 			);
 		}
+	}
+	
+	public void filterValue() {
+		this.errorList = new ArrayList<>();
+		if(cpList.size() < 3) return;
+
+		List<Integer> memory = new ArrayList<>();
+		for(int i=1; i < cpList.size()-1; i++) {
+			double prev = cpList.get(i-1);
+			double curr = cpList.get(i);
+			double next = cpList.get(i+1);
+			if(prev >= curr && curr >= next) continue;
+			memory.add(i);
+		}
+
+		Collections.sort(memory, Collections.reverseOrder());
+		for(int index : memory) {
+			errorList.add(cpList.remove(index));
+		}
+		Collections.sort(errorList, Collections.reverseOrder());
 	}
 	
 //	소수점이 사라지는 경우만 처리
