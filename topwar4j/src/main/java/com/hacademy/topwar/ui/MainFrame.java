@@ -233,6 +233,8 @@ public class MainFrame extends JFrame {
 		maximize.setAccelerator(KeyStroke.getKeyStroke("F12"));
 		maximize.addActionListener(e->setMinimode(false));
 		setting.add(maximize);
+		
+		
 	}
 
 	public void components() {

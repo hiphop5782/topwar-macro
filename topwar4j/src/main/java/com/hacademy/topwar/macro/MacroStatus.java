@@ -28,6 +28,9 @@ public class MacroStatus implements Serializable{
 	private boolean terror4kManual = false;
 	
 	private List<RectData> screenList = new ArrayList<>();
+	public long getActiveScreen() {
+		return screenList.stream().filter(screen->screen.active).count();
+	}
 	
 	//기지 내부 작업
 	//daily task

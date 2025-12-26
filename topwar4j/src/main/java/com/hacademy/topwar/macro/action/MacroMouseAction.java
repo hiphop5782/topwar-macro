@@ -12,7 +12,7 @@ public class MacroMouseAction implements MacroAction {
 	private int x, y, wheel, tx, ty;
 	private MacroMouseActionType type;
 	private boolean single;
-	private long singleDelay = 100L;
+	private long singleDelay = 1000L;
 	
 	public MacroMouseAction(int x, int y, MacroMouseActionType type, boolean single) {
 		this.x = x;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hacademy.topwar.macro.action.MacroAction;
 import com.hacademy.topwar.ui.LogDialog;
+import com.hacademy.topwar.util.PropertyManager;
 
 import lombok.Setter;
 
@@ -94,6 +95,11 @@ public class MacroTimeline {
 		}
 	}
 	private void pause(double delaySecond) throws InterruptedException {
+		//실행되는 화면이 2개 이하일 때는 강제로 딜레이 보정
+		if(PropertyManager.getMacroStatus().getActiveScreen() <= 2) {
+			delaySecond = 0.75d;
+		}
+		System.out.println("├──── pause : " + delaySecond + "s ──┤");
 		Thread.sleep((long)(delaySecond * 1000L));
 	}
 	public void stop() {
