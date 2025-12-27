@@ -359,7 +359,7 @@ public class MacroCreator {
 	}
 	public static void 무료보석(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if (status.isDailyGemReward()) {
-			moveIntoBase(timelinesGroup, status);
+			//moveIntoBase(timelinesGroup, status);
 			MacroTimelines timelines = new MacroTimelines(
 				"무료보석", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 			);

@@ -6,6 +6,7 @@ import com.hacademy.topwar.macro.action.MacroAction;
 import com.hacademy.topwar.macro.action.MacroDelayAction;
 import com.hacademy.topwar.macro.action.MacroMouseAction;
 import com.hacademy.topwar.macro.action.MacroMouseActionType;
+import com.hacademy.topwar.ui.ScreenMode;
 
 public class MacroTimelineFactory {
 	
@@ -559,51 +560,6 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}
-	public static MacroTimeline 원정탐험매크로(MacroStatus status, Point basePoint) {
-		MacroTimeline timeline = new MacroTimeline();
-		
-		timeline.add(일일임무버튼(status, basePoint));		
-		timeline.add(원정탐험으로휠이동(status, basePoint));	
-		timeline.add(원정탐험선택(status, basePoint));		
-		
-		timeline.add(randomDelay(status, 3, 5));		
-		
-		timeline.add(원정탐험보상클릭(status, basePoint));	
-		timeline.add(원정탐험보상수령(status, basePoint));	
-		
-		timeline.add(원정탐험빠른전투클릭(status, basePoint));	
-		timeline.add(원정탐험빠른전투시작(status, basePoint));	timeline.add(randomDelay(status, 3, 5));		
-		timeline.add(원정탐험빠른전투스킵(status, basePoint));	timeline.add(randomDelay(status, 3, 5));
-		timeline.add(원정탐험보상수령(status, basePoint));	
-		
-		timeline.add(뒤로가기(status, basePoint));			
-		timeline.add(뒤로가기(status, basePoint));		
-		
-		return timeline;
-	}
-	public static MacroTimeline 섬대작전매크로(MacroStatus status, Point basePoint) {
-		MacroTimeline timeline = new MacroTimeline();
-		
-		timeline.add(일일임무버튼(status, basePoint));		
-		timeline.add(섬대작전으로이동(status, basePoint));	
-		timeline.add(섬대작전선택(status, basePoint));		
-		
-		for(int i=0; i < 2; i++) {
-			timeline.add(randomDelay(status, 2, 3));
-			timeline.add(섬대작전리셋(status, basePoint));
-			timeline.add(randomDelay(status, 2, 3));
-			timeline.add(섬대작전소탕(status, basePoint));
-			timeline.add(섬대작전소탕시작(status, basePoint));
-			timeline.add(randomDelay(status, 2, 3));
-			timeline.add(섬대작전소탕완료(status, basePoint));
-		}
-		timeline.add(randomDelay(status, 2, 3));
-		
-		timeline.add(섬대작전나가기(status, basePoint));		
-		timeline.add(뒤로가기(status, basePoint));		
-		
-		return timeline;
-	}
 	public static MacroTimeline 패키지무료보상매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
 		
@@ -835,72 +791,14 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 1, 1.5));
 		timeline.add(월드기지전환버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1, 1.5));
+		timeline.add(레이더버튼(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.5));
 		timeline.add(뒤로가기(status, basePoint));
 		return timeline;
 	}
 	public static MacroTimeline 기지내부로이동(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = 기지외부로이동(status, basePoint);
 		timeline.add(월드기지전환버튼(status, basePoint));
-		return timeline;
-	}
-	public static MacroTimeline 육군훈련(MacroStatus status, Point basePoint, int count) {
-		MacroTimeline timeline = new MacroTimeline();
-		
-		timeline.add(좌측사이드메뉴선택(status, basePoint));
-		timeline.add(randomDelay(status, 1.2, 1.5));
-		timeline.add(좌측사이드메뉴육군훈련버튼(status, basePoint));
-		timeline.add(randomDelay(status, 1.2, 1.5));
-		timeline.add(유닛생산취소버튼(status, basePoint));
-		timeline.add(randomDelay(status, 0.5, 0.7));
-		timeline.add(유닛생산훈련소클릭(status, basePoint));
-		
-		for(int i=0; i < count; i++) {
-			timeline.add(유닛생산버튼클릭(status, basePoint));
-//			timeline.add(randomDelay(status, 0.5, 0.7));
-		}
-		
-		timeline.add(뒤로가기(status, basePoint));
-		
-		return timeline;
-	}
-	public static MacroTimeline 해군훈련(MacroStatus status, Point basePoint, int count) {
-		MacroTimeline timeline = new MacroTimeline();
-		
-		timeline.add(좌측사이드메뉴선택(status, basePoint));
-		timeline.add(randomDelay(status, 1.2, 1.5));
-		timeline.add(좌측사이드메뉴해군훈련버튼(status, basePoint));
-		timeline.add(randomDelay(status, 1.2, 1.5));
-		timeline.add(유닛생산취소버튼(status, basePoint));
-		timeline.add(randomDelay(status, 0.5, 0.7));
-		timeline.add(유닛생산훈련소클릭(status, basePoint));
-		
-		for(int i=0; i < count; i++) {
-			timeline.add(유닛생산버튼클릭(status, basePoint));
-//			timeline.add(randomDelay(status, 0.5, 0.7));
-		}
-		
-		timeline.add(뒤로가기(status, basePoint));
-		
-		return timeline;
-	}
-	public static MacroTimeline 공군훈련(MacroStatus status, Point basePoint, int count) {
-		MacroTimeline timeline = new MacroTimeline();
-		
-		timeline.add(좌측사이드메뉴선택(status, basePoint));
-		timeline.add(randomDelay(status, 1.2, 1.5));
-		timeline.add(좌측사이드메뉴공군훈련버튼(status, basePoint));
-		timeline.add(randomDelay(status, 1.2, 1.5));
-		timeline.add(유닛생산취소버튼(status, basePoint));
-		timeline.add(randomDelay(status, 0.5, 0.7));
-		timeline.add(유닛생산훈련소클릭(status, basePoint));
-		
-		for(int i=0; i < count; i++) {
-			timeline.add(유닛생산버튼클릭(status, basePoint));
-//			timeline.add(randomDelay(status, 0.5, 0.7));
-		}
-		
-		timeline.add(뒤로가기(status, basePoint));
-		
 		return timeline;
 	}
 	public static MacroTimeline 길드기부매크로(MacroStatus status, Point basePoint, int count) {
@@ -976,6 +874,20 @@ public class MacroTimelineFactory {
 	
 	//부대선택
 	private static MacroAction 부대번호선택(MacroStatus status, Point basePoint, int number) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return switch(number) {
+			case 1 -> new MacroMouseAction(basePoint, 370, 365, status.getScreenList().size() < singleCount);//1번부대선택
+			case 2 -> new MacroMouseAction(basePoint, 388, 365, status.getScreenList().size() < singleCount);//2번부대선택
+			case 3 -> new MacroMouseAction(basePoint, 404, 365, status.getScreenList().size() < singleCount);//3번부대선택
+			case 4 -> new MacroMouseAction(basePoint, 422, 365, status.getScreenList().size() < singleCount);//4번부대선택
+			case 5 -> new MacroMouseAction(basePoint, 440, 365, status.getScreenList().size() < singleCount);//5번부대선택
+			case 6 -> new MacroMouseAction(basePoint, 458, 365, status.getScreenList().size() < singleCount);//6번부대선택
+			case 7 -> new MacroMouseAction(basePoint, 476, 365, status.getScreenList().size() < singleCount);//7번부대선택
+			case 8 -> new MacroMouseAction(basePoint, 492, 365, status.getScreenList().size() < singleCount);//8번부대선택
+			default -> throw new IllegalArgumentException("Unexpected value: " + number);
+			};
+		}
+		
 		return switch(number) {
 		case 1 -> new MacroMouseAction(basePoint, 286, 591, status.getScreenList().size() < singleCount);//1번부대선택
 		case 2 -> new MacroMouseAction(basePoint, 315, 591, status.getScreenList().size() < singleCount);//2번부대선택
@@ -992,36 +904,63 @@ public class MacroTimelineFactory {
 		return 부대번호선택(status, basePoint, status.getDarkforceMarchNumber());
 	}
 	private static MacroAction 상단창좌측공격버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 207, 154, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 184, 260, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 상단창우측공격버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 295, 154, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 319, 260, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 하단창좌측공격버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 207, 347, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 184, 564, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 하단창우측공격버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 295, 347, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 319, 564, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 출정버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 247, 175, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 246, 288, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 체력충전창열기(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 104, 19, status.getScreenList().size() < singleCount);//체력충전 창열기
-	}
 	private static MacroAction 체력물약선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 189, 227, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 155, 378, status.getScreenList().size() < singleCount);//물약선택
 	}
 	private static MacroAction 체력물약사용(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 249, 294, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 257, 486, status.getScreenList().size() < singleCount);//물약사용
 	}
 	private static MacroAction 체력충전창닫기(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 351, 134, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 412, 219, status.getScreenList().size() < singleCount);//체력충전 창닫기
 	}
 	private static MacroAction 빈공간선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 105, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 250, 170, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 돋보기버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 155, 410, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 87, 665, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 랜덤암흑유닛선택(MacroStatus status, Point basePoint) {
@@ -1037,21 +976,39 @@ public class MacroTimelineFactory {
 		return 워해머레벨선택(status, basePoint, level);
 	}
 	private static MacroAction 적군탭선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 163, 192, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 109, 317, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 집결탭선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 282, 192, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 300, 317, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 제국의유물탭선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 341, 192, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 395, 317, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 제국의유물스크롤바우측선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 295, 363, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 320, 597, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 제국의유물레벨더하기버튼선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 314, 361, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 355, 597, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 제국의유물검색버튼선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 253, 401, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 253, 654, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 제국의유물랜덤군종선택(MacroStatus status, Point basePoint) {
@@ -1063,24 +1020,45 @@ public class MacroTimelineFactory {
 		};
 	}
 	private static MacroAction 제국의유물육군선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 176, 265, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 131, 433, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 제국의유물해군선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 252, 265, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 257, 433, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 제국의유물공군선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 333, 265, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 386, 433, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 암흑오딘유닛선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 176, 268, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 131, 437, status.getScreenList().size() < singleCount);//암흑 오딘
 	}
 	private static MacroAction 워해머선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 176, 268, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 134, 437, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 테러선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 255, 267, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 257, 437, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 하트팡팡선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 319, 268, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 383, 437, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 암흑레벨선택(MacroStatus status, Point basePoint, int level) {
@@ -1128,287 +1106,479 @@ public class MacroTimelineFactory {
 		return new MacroDelayAction(delay / status.getScreenList().size());
 	}
 	private static MacroAction 레이더버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 476, 215, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 460, 352, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 적군검색(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 396, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 249, 652, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 적선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 214, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 246, 353, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction VIP버튼선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 29, 42, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 45, 70, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일일VIP보상클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 338, 69, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 390, 120, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction VIP상점버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 181, 113, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 140, 180, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 처음탭으로이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 232, 42, MacroMouseActionType.WHEELDOWN, 20, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 225, 75, MacroMouseActionType.WHEELDOWN, 20, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 마지막탭으로이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 232, 42, MacroMouseActionType.WHEELUP, 200, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 225, 75, MacroMouseActionType.WHEELUP, 200, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 장바구니탭선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 232, 42, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 225, 75, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 장바구니빠른교환클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 335, 402, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 387, 662, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 뒤로가기(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 137, 12, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 83, 23, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 패키지상점(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 468, 17, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 445, 30, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 특별패키지탭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 234, 44, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 223, 70, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 특별패키지무료보상클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 347, 91, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 410, 150, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 주간카드탭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 345, 41, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 342, 72, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 주간카드탭으로이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 330, 45, 247, 45, MacroMouseActionType.DRAG);
+		}
 		return new MacroMouseAction(basePoint, 342, 72, 189, 72, MacroMouseActionType.DRAG);
 	}
 	private static MacroAction 보석함클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 338, 91, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 397, 141, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 주간카드무료다이아수령(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 309, 189, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 354, 318, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일일임무버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 146, 359, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 77, 580, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일일임무일괄수령버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 313, 81, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 348, 135, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일일임무일괄수령진행버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 336, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 250, 550, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일일임무일괄수령확인버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 370, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 250, 615, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 사판훈련으로이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 350, 370, 350, 235, MacroMouseActionType.DRAG, status.getScreenList().size() < singleCount);
+		}
 		//return new MacroMouseAction(basePoint, 354, 640, MacroMouseActionType.WHEELDOWN, 10);
 		return new MacroMouseAction(basePoint, 354, 640, 354, 430, MacroMouseActionType.DRAG, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 사판훈련(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 312, 392, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 353, 640, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 제국의유물(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 353, 500, status.getScreenList().size() < singleCount);
-	}
 	private static MacroAction 사판훈련도전(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 213, 403, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 200, 663, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 전투스킵(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 14, 68, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 25, 116, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 사판훈련재도전(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 210, 377, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 187, 615, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 영웅메뉴(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 475, 250, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 466, 408, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 영웅모집(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 329, 406, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 381, 660, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일반모집(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 150, 397, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 85, 645, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 스킬모집(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 350, 397, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 410, 645, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 모집1회(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 193, 327, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 159, 532, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 모집10회(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 305, 328, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 341, 533, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 장바구니확인버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 304, 282, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 337, 463, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 미지의작전이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 311, 174, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 353, 166, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 미지의작전보상버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 154, 84, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 95, 143, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 미지의작전보상수령(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 249, 342, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 249, 568, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 원정탐험으로휠이동(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 359, 626, MacroMouseActionType.WHEELDOWN, 15, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 원정탐험선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 359, 626, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 원정탐험보상클릭(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 175, 573, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 원정탐험보상수령(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 252, 621, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 원정탐험빠른전투클릭(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 382, 654, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 원정탐험빠른전투시작(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 249, 490, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 원정탐험빠른전투스킵(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 415, 603, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 섬대작전으로이동(MacroStatus status ,Point basePoint) {
-		return new MacroMouseAction(basePoint, 349, 660, MacroMouseActionType.WHEELDOWN, 300, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 섬대작전선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 349, 660, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 섬대작전리셋(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 338, 402, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 섬대작전소탕(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 80, 640, status.getScreenList().size() < singleCount);
-	}	
-	private static MacroAction 섬대작전소탕시작(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 247, 571, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 섬대작전소탕완료(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 248, 584, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 섬대작전나가기(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 244, 404, status.getScreenList().size() < singleCount);
-	}
 	private static MacroAction 장식세트상점탭클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 145, 40, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 74, 70, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 장식세트토큰받기버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 309, 405, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 352, 663, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 장식세트무료토큰받기클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 193, 75, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 162, 137, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 자원지탭선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 222, 194, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 205, 319, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 유전선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 169, 265, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 123, 435, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 농지선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 252, 265, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 247, 435, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 오딘광맥선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 331, 265, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 383, 435, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 레벨더하기버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 315, 360, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 354, 595, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 레벨빼기버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 185, 360, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 146, 595, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 자원지검색버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 395, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 244, 644, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 화면중앙클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 212, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 246, 345, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 채집시설버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 211, 164, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 189, 267, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 빠른출전버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 483, 341, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 467, 548, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 자원건설확인버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 279, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 248, 456, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 자원지마지막탭으로이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 252, 265, MacroMouseActionType.WHEELUP, 100, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 247, 435, MacroMouseActionType.WHEELUP, 100, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 일반모집탭선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 150, 395, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 80, 645, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 스킬모집탭선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 350, 395, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 414, 645, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 크로스훈련구매창X버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 347, 117, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 417, 193, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 크로스훈련X버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 348, 68, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 409, 111, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 크로스훈련뒤로버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			
+		}
 		return new MacroMouseAction(basePoint, 251, 604, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 전투버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			
+		}
 		return new MacroMouseAction(basePoint, 244, 285, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 첫번째유닛선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 24, 397, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 29, 643, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯9번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 293, 331, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 318, 538, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯8번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 222, 318, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 202, 519, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯7번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 156, 302, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 89, 497, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯6번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 324, 291, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 363, 481, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯5번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 252, 279, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 249, 458, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯4번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 175, 269, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 129, 439, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯3번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 345, 258, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 404, 420, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯2번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 271, 245, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 289, 400, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 슬롯1번선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			
+		}
 		return new MacroMouseAction(basePoint, 181, 376, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 크로스훈련적선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			
+		}
 		return new MacroMouseAction(basePoint, 365, 550, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 크로스훈련도전버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 205, 230, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 251, 653, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 크로스훈련선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 353, 228, status.getScreenList().size() < singleCount);
-	}
 	private static MacroAction 크로스훈련으로절반이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 351, 386, 351, 208, MacroMouseActionType.DRAG);
+		}
 		//return new MacroMouseAction(basePoint, 351, 623, MacroMouseActionType.WHEELUP, 20);
 		return new MacroMouseAction(basePoint, 351, 660, 351, 370, MacroMouseActionType.DRAG);
 	}
 	private static MacroAction 길드메뉴(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 475, 291, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 471, 469, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 309, 245, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 348, 398, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원요청또는요청취소(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 319, 370, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 366, 607, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원요청또는요청취소옆빈공간(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 270, 370, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 241, 607, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원요청취소확인창에서취소버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 203, 277, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 174, 462, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원요청취소확인창에서확인버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 298, 280, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 328, 462, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원재료선택(MacroStatus status, Point basePoint, int type) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return switch(type) {
+			case 1 -> new MacroMouseAction(basePoint, 173, 145, status.getScreenList().size() < singleCount);
+			case 2 -> new MacroMouseAction(basePoint, 223, 145, status.getScreenList().size() < singleCount);
+			case 3 -> new MacroMouseAction(basePoint, 276, 145, status.getScreenList().size() < singleCount);
+			case 4 -> new MacroMouseAction(basePoint, 326, 145, status.getScreenList().size() < singleCount);
+			default -> null;
+			};
+		}
 		return switch(type) {
 		case 1 -> new MacroMouseAction(basePoint, 129, 240, status.getScreenList().size() < singleCount);
 		case 2 -> new MacroMouseAction(basePoint, 214, 240, status.getScreenList().size() < singleCount);
@@ -1418,57 +1588,90 @@ public class MacroTimelineFactory {
 		};
 	}
 	private static MacroAction 길드지원골드선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 224, 234, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 205, 384, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원재료선택창에서지원요청버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 307, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 255, 517, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 길드지원모두지원버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 318, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 252, 510, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 최소레벨선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 203, 367, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 175, 594, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 좌측사이드메뉴선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 8, 215, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 10, 349, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 좌측사이드메뉴육군훈련버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 99, 140, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 160, 229, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 좌측사이드메뉴해군훈련버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 99, 163, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 160, 267, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 좌측사이드메뉴공군훈련버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 99, 186, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 160, 302, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 좌측사이드메뉴재료생산버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 99, 273, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 160, 441, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 좌측사이드메뉴길드기부버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 99, 292, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 160, 476, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 월드기지전환버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 347, 411, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 409, 665, status.getScreenList().size() < singleCount);
 	}
-	private static MacroAction 내기지선택(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 248, 347, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 내기지입장(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 171, 489, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 유닛생산취소버튼(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 327, 424, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 유닛생산훈련소클릭(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 250, 366, status.getScreenList().size() < singleCount);
-	}
-	private static MacroAction 유닛생산버튼클릭(MacroStatus status, Point basePoint) {
-		return new MacroMouseAction(basePoint, 250, 329, status.getScreenList().size() < singleCount);
-	}
 	private static MacroAction 길드과학기술기부버튼클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 305, 317, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 336, 515, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 재료생산클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			switch(status.getProductMaterialType()) {
+			case "강철": 		return new MacroMouseAction(basePoint, 170, 321, status.getScreenList().size() < singleCount);
+			case "나사":		return new MacroMouseAction(basePoint, 225, 321, status.getScreenList().size() < singleCount);
+			case "트랜지스터":	return new MacroMouseAction(basePoint, 275, 321, status.getScreenList().size() < singleCount);
+			case "고무":		return new MacroMouseAction(basePoint, 325, 321, status.getScreenList().size() < singleCount);
+			case "텅스텐":	return new MacroMouseAction(basePoint, 170, 375, status.getScreenList().size() < singleCount);
+			case "배터리":	return new MacroMouseAction(basePoint, 225, 375, status.getScreenList().size() < singleCount);
+			case "유리":		return new MacroMouseAction(basePoint, 275, 375, status.getScreenList().size() < singleCount);
+			default:		return new MacroMouseAction(basePoint, 170, 321, status.getScreenList().size() < singleCount);
+			}
+		}
 		switch(status.getProductMaterialType()) {
 		case "강철": 		return new MacroMouseAction(basePoint, 117, 522, status.getScreenList().size() < singleCount);
 		case "나사":		return new MacroMouseAction(basePoint, 206, 522, status.getScreenList().size() < singleCount);
@@ -1482,12 +1685,27 @@ public class MacroTimelineFactory {
 	}
 	
 	private static MacroAction 맨아래로이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 258, 257, MacroMouseActionType.WHEELDOWN, 200, status.getScreenList().size() < singleCount);
+		}
 		return new MacroMouseAction(basePoint, 246, 345, MacroMouseActionType.WHEELDOWN, 200, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 화물차쟁탈전(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 315, 350);
+		}
 		return new MacroMouseAction(basePoint, 355, 567);
 	}
 	private static MacroAction 화물차선택(MacroStatus status, Point basePoint, int order) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return switch(order) {
+			case 1->new MacroMouseAction(basePoint, 169, 255);
+			case 2->new MacroMouseAction(basePoint, 209, 255);
+			case 3->new MacroMouseAction(basePoint, 251, 255);
+			case 4->new MacroMouseAction(basePoint, 290, 255);
+			default->new MacroMouseAction(basePoint, 332, 255);
+			};
+		}
 		return switch(order) {
 		case 1->new MacroMouseAction(basePoint, 117, 415);
 		case 2->new MacroMouseAction(basePoint, 186, 415);
@@ -1497,15 +1715,32 @@ public class MacroTimelineFactory {
 		};
 	}
 	private static MacroAction 화물차운송버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 249, 360);
+		}
 		return new MacroMouseAction(basePoint, 244, 585);
 	}
 	private static MacroAction 화물차운송안내닫기(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 341, 145);
+		}
 		return new MacroMouseAction(basePoint, 396, 235);
 	}
 	private static MacroAction 화물차갱신버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 345, 138);
+		}
 		return new MacroMouseAction(basePoint, 408, 225);
 	}
 	private static MacroAction 필수퀘스트지점(MacroStatus status, Point basePoint, int order) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return switch(order) {
+			case 1->new MacroMouseAction(basePoint, 208, 145);
+			case 2->new MacroMouseAction(basePoint, 295, 145);
+			case 3->new MacroMouseAction(basePoint, 208, 180);
+			default->new MacroMouseAction(basePoint, 295, 180);
+			};
+		}
 		return switch(order) {
 		case 1->new MacroMouseAction(basePoint, 180, 240);
 		case 2->new MacroMouseAction(basePoint, 320, 240);
@@ -1514,21 +1749,39 @@ public class MacroTimelineFactory {
 		};
 	}
 	private static MacroAction 필수퀘스트이동버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 249, 329);
+		}
 		return new MacroMouseAction(basePoint, 249, 544);
 	}
 	private static MacroAction 필수퀘스트구조하기버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 248, 343);
+		}
 		return new MacroMouseAction(basePoint, 242, 562);
 	}
 	private static MacroAction 레이더글자클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 247, 14);
+		}
 		return new MacroMouseAction(basePoint, 260, 30);
 	}
 	private static MacroAction 암흑잔재공격버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 153);
+		}
 		return new MacroMouseAction(basePoint, 252, 256);
 	}
 	private static MacroAction 제국의유물공격버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 290, 334);
+		}
 		return new MacroMouseAction(basePoint, 280, 540);
 	}
 	private static MacroAction 보물연맹이동(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 311, 315);
+		}
 		return new MacroMouseAction(basePoint, 355, 515);
 	}
 }

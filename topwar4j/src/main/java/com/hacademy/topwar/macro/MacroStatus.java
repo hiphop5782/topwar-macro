@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hacademy.topwar.ui.ScreenMode;
 import com.hacademy.topwar.util.RectData;
 
 import lombok.Data;
@@ -68,4 +69,6 @@ public class MacroStatus implements Serializable{
 	
 	//매크로 사이 기본 간격
 	private double macroDelay = 0.5d;
+	
+	private int screenMode = ScreenMode.NORMAL;
 }

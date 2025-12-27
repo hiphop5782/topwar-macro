@@ -21,8 +21,11 @@ import javax.swing.JPanel;
 import com.hacademy.topwar.util.ImageUtils;
 import com.hacademy.topwar.util.LogUtils;
 import com.hacademy.topwar.util.MonitorUtils;
+import com.hacademy.topwar.util.PropertyManager;
 
 public class ScreenRectDialog extends JDialog {
+	public static final int MINI = 0;
+	public static final int NORMAL = 1;
 	
 	private BufferedImage background;
 	
@@ -83,9 +86,12 @@ public class ScreenRectDialog extends JDialog {
 		this.setModal(true);
 		//Rectangle rect = MonitorUtils.getCurrentMonitorCenterBounds(500, 700);
 		//Rectangle rect = MonitorUtils.getAppLocatedMonitorCenterBounds(parent.getX(), parent.getY(), 500, 700);
+		int screenMode = PropertyManager.getMacroStatus().getScreenMode();
+		int width = 500;
+		int height = screenMode == ScreenMode.NORMAL ? 700 : 430;
 		Rectangle rect = parent == null ? 
-				MonitorUtils.getCurrentMonitorCenterBounds(500, 700) :
-					MonitorUtils.getAppLocatedMonitorCenterBounds(parent.getX(), parent.getY(), 500, 700);
+				MonitorUtils.getCurrentMonitorCenterBounds(width, height) :
+					MonitorUtils.getAppLocatedMonitorCenterBounds(parent.getX(), parent.getY(), width, height);
 		this.setBounds(rect);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setUndecorated(true);

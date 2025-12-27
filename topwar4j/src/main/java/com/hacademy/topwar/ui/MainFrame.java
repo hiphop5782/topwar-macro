@@ -24,6 +24,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -34,6 +35,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
@@ -240,6 +242,11 @@ public class MainFrame extends JFrame {
 		
 		setting.addSeparator();
 		
+//		JCheckBoxMenuItem gridMode = new JCheckBoxMenuItem("바둑판모드", false);
+//		gridMode.addActionListener(e->{});
+//		setting.add(gridMode);
+//		setting.addSeparator();
+		
 		JMenuItem minimize = new JMenuItem("미니모드");
 		minimize.setAccelerator(KeyStroke.getKeyStroke("F11"));
 		minimize.addActionListener(e->setMinimode(true));
@@ -249,6 +256,31 @@ public class MainFrame extends JFrame {
 		maximize.setAccelerator(KeyStroke.getKeyStroke("F12"));
 		maximize.addActionListener(e->setMinimode(false));
 		setting.add(maximize);
+		
+		setting.addSeparator();
+		
+		JRadioButtonMenuItem smallScreen = new JRadioButtonMenuItem("미니 모드(500x430)");
+		smallScreen.addActionListener(e->{
+			PropertyManager.getMacroStatus().setScreenMode(ScreenMode.SMALL);
+		});
+		setting.add(smallScreen);
+		
+		JRadioButtonMenuItem normalScreen = new JRadioButtonMenuItem("일반 모드(500x700)");
+		normalScreen.addActionListener(e->{
+			PropertyManager.getMacroStatus().setScreenMode(ScreenMode.NORMAL);
+		});
+		setting.add(normalScreen);
+
+		if(PropertyManager.getMacroStatus().getScreenMode() == ScreenMode.SMALL) {
+			smallScreen.setSelected(true);
+		}
+		else {
+			normalScreen.setSelected(true);
+		}
+		
+		ButtonGroup grp = new ButtonGroup();
+		grp.add(smallScreen);
+		grp.add(normalScreen);
 	}
 
 	public void components() {
