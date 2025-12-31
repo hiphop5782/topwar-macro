@@ -437,6 +437,20 @@ public class MacroCreator {
 			timelinesGroup.add(timelines);
 		}
 	}
+	public static void 괴물기부(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
+		if(status.isMonsterDonation()) {
+			MacroTimelines timelines = new MacroTimelines(
+				"길드기부", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
+			);
+			for (RectData rectData : status.getScreenList()) {
+				if(rectData.active == false) continue;
+				Rectangle screenRect = rectData.toRectangle();
+				MacroTimeline timeline = MacroTimelineFactory.괴물기부매크로(status, screenRect.getLocation(), 10);
+				timelines.add(timeline);
+			}
+			timelinesGroup.add(timelines);
+		}
+	}
 	public static void 재료생산(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if(status.isProductMaterial()) {
 			moveIntoBase(timelinesGroup, status);
@@ -521,6 +535,7 @@ public class MacroCreator {
 		주간장식세트무료토큰(timelinesGroup, status, considerWeek);
 		
 		길드기부(timelinesGroup, status);
+		괴물기부(timelinesGroup, status);
 		재료생산(timelinesGroup, status);
 //		육군훈련(timelinesGroup, status);
 //		해군훈련(timelinesGroup, status);

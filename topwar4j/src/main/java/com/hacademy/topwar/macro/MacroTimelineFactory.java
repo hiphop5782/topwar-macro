@@ -835,6 +835,28 @@ public class MacroTimelineFactory {
 		
 		return timeline;
 	}
+	public static MacroTimeline 괴물기부매크로(MacroStatus status, Point basePoint, int count) {
+		MacroTimeline timeline = new MacroTimeline();
+		
+		timeline.add(길드메뉴(status, basePoint));
+		timeline.add(randomDelay(status, 1, 1.5));
+		timeline.add(맨아래로이동(status, basePoint));
+		timeline.add(길드메뉴에서괴물클릭(status, basePoint));
+		
+		timeline.add(randomDelay(status, 1, 1.5));
+		
+		timeline.add(길드괴물레벨업버튼(status, basePoint));
+		
+		for(int i=0; i < count; i++) {
+			timeline.add(길드괴물기부버튼(status, basePoint));
+		}
+		
+		timeline.add(길드괴물기부닫기버튼(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		timeline.add(뒤로가기(status, basePoint));
+		
+		return timeline;
+	}
 	
 	public static MacroTimeline 일일매크로(MacroStatus status, Point basePoint) {
 		MacroTimeline timeline = new MacroTimeline();
@@ -1078,6 +1100,19 @@ public class MacroTimelineFactory {
 		};
 	}
 	private static MacroAction 워해머레벨선택(MacroStatus status, Point basePoint, int level) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return switch(level) {
+			case 1 -> new MacroMouseAction(basePoint, 205, 366, status.getScreenList().size() < singleCount);
+			case 2 -> new MacroMouseAction(basePoint, 216, 366, status.getScreenList().size() < singleCount);
+			case 3 -> new MacroMouseAction(basePoint, 230, 366, status.getScreenList().size() < singleCount);
+			case 4 -> new MacroMouseAction(basePoint, 243, 366, status.getScreenList().size() < singleCount);
+			case 5 -> new MacroMouseAction(basePoint, 257, 366, status.getScreenList().size() < singleCount);
+			case 6 -> new MacroMouseAction(basePoint, 271, 366, status.getScreenList().size() < singleCount);
+			case 7 -> new MacroMouseAction(basePoint, 285, 366, status.getScreenList().size() < singleCount);
+			case 8 -> new MacroMouseAction(basePoint, 298, 366, status.getScreenList().size() < singleCount);
+			default -> throw new IllegalArgumentException("Unexpected value: " + level);
+			};
+		}
 		return switch(level) {
 		case 1 -> new MacroMouseAction(basePoint, 170, 597, status.getScreenList().size() < singleCount);
 		case 2 -> new MacroMouseAction(basePoint, 193, 597, status.getScreenList().size() < singleCount);
@@ -1167,7 +1202,7 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 뒤로가기(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 137, 12, status.getScreenList().size() < singleCount);
+			return new MacroMouseAction(basePoint, 145, 19, status.getScreenList().size() < singleCount);
 		}
 		return new MacroMouseAction(basePoint, 83, 23, status.getScreenList().size() < singleCount);
 	}
@@ -1783,6 +1818,30 @@ public class MacroTimelineFactory {
 			return new MacroMouseAction(basePoint, 311, 315);
 		}
 		return new MacroMouseAction(basePoint, 355, 515);
+	}
+	private static MacroAction 길드메뉴에서괴물클릭(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 191, 352);
+		}
+		return new MacroMouseAction(basePoint, 169, 575);
+	}
+	private static MacroAction 길드괴물레벨업버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 314, 370);
+		}
+		return new MacroMouseAction(basePoint, 354, 606);
+	}
+	private static MacroAction 길드괴물기부버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 251, 361);
+		}
+		return new MacroMouseAction(basePoint, 251, 588);
+	}
+	private static MacroAction 길드괴물기부닫기버튼(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 347, 58);
+		}
+		return new MacroMouseAction(basePoint, 403, 93);
 	}
 }
 

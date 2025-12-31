@@ -774,6 +774,11 @@ public class MainFrame extends JFrame {
 		allianceDonationPanel.add(allianceDonationCheckbox);
 		etcTaskPanel.add(allianceDonationPanel);
 		
+		JPanel monsterDonationPanel = new JPanel(new MigLayout("inset 0", "", ""));
+		StatusCheckBox monsterDonationCheckbox = new StatusCheckBox("괴물기부(10회)", "monsterDonation", etcTaskCheckButton); 
+		monsterDonationPanel.add(monsterDonationCheckbox);
+		etcTaskPanel.add(monsterDonationPanel);
+		
 		JPanel materialPanel = new JPanel(new MigLayout("inset 0", "[grow][]", ""));
 		JComboBox<String> materialTypebox = new JComboBox<>(new String[] {"강철","나사","트랜지스터", "고무", "텅스텐", "배터리", "유리"});
 		StatusCheckBox materialCheckbox = new StatusCheckBox("재료생산", "productMaterial", etcTaskCheckButton, materialTypebox);
@@ -846,6 +851,7 @@ public class MainFrame extends JFrame {
 		facilityTaskCheckboxes.add(odinTaskCheckbox);
 		
 		etcTaskCheckboxes.add(allianceDonationCheckbox);
+		etcTaskCheckboxes.add(monsterDonationCheckbox);
 		etcTaskCheckboxes.add(materialCheckbox);
 		
 		waitingComponentList.add(oilTaskLevel);
@@ -1153,14 +1159,22 @@ public class MainFrame extends JFrame {
 		if(flag == true) return;
 		if(thread != null) return;
 		
+		String input = JOptionPane.showInputDialog(MainFrame.this, "미입력 시 무한반복, 취소 시 종료", "횟수 설정", JOptionPane.QUESTION_MESSAGE);
+		if(input == null) return;
+
+		final int limit = input.isEmpty() ? 0 : Integer.parseInt(input);
+		
 		LogUtils.println("starting multiclick repeat");
 		
 		thread = new Thread(()->{
 			Point p = MouseInfo.getPointerInfo().getLocation();
+			int count = 0;
 			flag = true;
 			try {
-				while(flag) {
+				while(true) {
 					MouseMirrorUtils.click(p);
+					count++;
+					if(limit > 0 && count == limit) break;
 					for(int i=0; i < 10; i++) Thread.sleep(50L);
 				}
 			}
