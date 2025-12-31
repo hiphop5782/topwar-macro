@@ -440,7 +440,7 @@ public class MacroCreator {
 	public static void 괴물기부(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		if(status.isMonsterDonation()) {
 			MacroTimelines timelines = new MacroTimelines(
-				"길드기부", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
+				"괴물기부", MacroTimelines.INTEGRATED, MacroTimelines.ANYWHERE
 			);
 			for (RectData rectData : status.getScreenList()) {
 				if(rectData.active == false) continue;
