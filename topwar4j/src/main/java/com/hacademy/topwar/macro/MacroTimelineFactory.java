@@ -1126,6 +1126,16 @@ public class MacroTimelineFactory {
 		};
 	}
 	private static MacroAction 테러레벨선택(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return switch(status.getTerror4kLevel()) {
+			case 1 -> new MacroMouseAction(basePoint, 200, 363, status.getScreenList().size() < singleCount);
+			case 2 -> new MacroMouseAction(basePoint, 224, 363, status.getScreenList().size() < singleCount);
+			case 3 -> new MacroMouseAction(basePoint, 248, 363, status.getScreenList().size() < singleCount);
+			case 4 -> new MacroMouseAction(basePoint, 272, 363, status.getScreenList().size() < singleCount);
+			case 5 -> new MacroMouseAction(basePoint, 298, 363, status.getScreenList().size() < singleCount);
+			default -> throw new IllegalArgumentException("Unexpected value: " + status.getTerror4kLevel());
+			};
+		}
 		return switch(status.getTerror4kLevel()) {
 		case 1 -> new MacroMouseAction(basePoint, 170, 597, status.getScreenList().size() < singleCount);
 		case 2 -> new MacroMouseAction(basePoint, 210, 597, status.getScreenList().size() < singleCount);
