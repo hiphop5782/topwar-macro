@@ -17,20 +17,24 @@ public class MacroTimelineFactory {
 		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색(+다른창닫기)
 		timeline.add(돋보기버튼클릭(status, basePoint));//적군 검색
 		timeline.add(적군탭선택(status, basePoint));//적군
-		timeline.add(암흑오딘유닛선택(status, basePoint));//암흑 오딘
 		
-		//레벨선택은 랜덤하게 설정(98~102)
-		if(status.getDarkforceLevel() == null || status.getDarkforceLevel().equals("random")) {
-			timeline.add(랜덤암흑유닛선택(status, basePoint));//레벨선택
-		}
-		else {
-			timeline.add(암흑레벨선택(status, basePoint, 3));
-			for(int i=0; i < 3; i++) {
-				timeline.add(레벨빼기버튼클릭(status, basePoint));
+		//무시 설정일 경우는 암흑 종류나 레벨을 선택하지 않도록 변경
+		if(status.getDarkforceLevel().equals("무시") == false) {
+			timeline.add(암흑오딘유닛선택(status, basePoint));//암흑 오딘
+			
+			//레벨선택은 랜덤하게 설정(98~102)
+			if(status.getDarkforceLevel() == null || status.getDarkforceLevel().equals("랜덤")) {
+				timeline.add(랜덤암흑유닛선택(status, basePoint));//레벨선택
 			}
-			int level = Integer.parseInt(status.getDarkforceLevel());
-			for(int i=1; i < level; i++) {
-				timeline.add(레벨더하기버튼클릭(status, basePoint));
+			else {
+				timeline.add(암흑레벨선택(status, basePoint, 3));
+				for(int i=0; i < 3; i++) {
+					timeline.add(레벨빼기버튼클릭(status, basePoint));
+				}
+				int level = Integer.parseInt(status.getDarkforceLevel());
+				for(int i=1; i < level; i++) {
+					timeline.add(레벨더하기버튼클릭(status, basePoint));
+				}
 			}
 		}
 		
@@ -1084,6 +1088,22 @@ public class MacroTimelineFactory {
 		return new MacroMouseAction(basePoint, 383, 437, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 암흑레벨선택(MacroStatus status, Point basePoint, int level) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return switch(level) {
+			case 1 -> new MacroMouseAction(basePoint, 199, 368, status.getScreenList().size() < singleCount);
+			case 2 -> new MacroMouseAction(basePoint, 210, 368, status.getScreenList().size() < singleCount);
+			case 3 -> new MacroMouseAction(basePoint, 219, 368, status.getScreenList().size() < singleCount);
+			case 4 -> new MacroMouseAction(basePoint, 230, 368, status.getScreenList().size() < singleCount);
+			case 5 -> new MacroMouseAction(basePoint, 239, 368, status.getScreenList().size() < singleCount);
+			case 6 -> new MacroMouseAction(basePoint, 250, 368, status.getScreenList().size() < singleCount);
+			case 7 -> new MacroMouseAction(basePoint, 259, 368, status.getScreenList().size() < singleCount);
+			case 8 -> new MacroMouseAction(basePoint, 270, 368, status.getScreenList().size() < singleCount);
+			case 9 -> new MacroMouseAction(basePoint, 279, 368, status.getScreenList().size() < singleCount);
+			case 10 -> new MacroMouseAction(basePoint, 290, 368, status.getScreenList().size() < singleCount);
+			case 11 -> new MacroMouseAction(basePoint, 300, 368, status.getScreenList().size() < singleCount);
+			default -> throw new IllegalArgumentException("Unexpected value: " + level);
+			};
+		}
 		return switch(level) {
 		case 1 -> new MacroMouseAction(basePoint, 170, 597, status.getScreenList().size() < singleCount);
 		case 2 -> new MacroMouseAction(basePoint, 186, 597, status.getScreenList().size() < singleCount);

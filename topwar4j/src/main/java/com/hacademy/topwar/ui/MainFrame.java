@@ -383,7 +383,7 @@ public class MainFrame extends JFrame {
 		JPanel darkforceLevelPanel = new JPanel(new MigLayout("", "[]10[]", ""));
 		darkforceLevelPanel.setBorder(BorderFactory.createTitledBorder(lineBorder1, "레벨(영땅용)"));
 		
-		JComboBox<String> darkforceLevelBox = new JComboBox<>(new String[] {"random", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"});
+		JComboBox<String> darkforceLevelBox = new JComboBox<>(new String[] {"랜덤", "무시", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"});
 		darkforceLevelBox.setSelectedItem(PropertyManager.getMacroStatus().getDarkforceLevel());
 		darkforceLevelBox.addActionListener(e->PropertyManager.getMacroStatus().setDarkforceLevel((String) darkforceLevelBox.getSelectedItem()));
 		waitingComponentList.add(darkforceLevelBox);
