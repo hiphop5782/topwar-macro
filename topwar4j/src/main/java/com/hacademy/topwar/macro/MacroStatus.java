@@ -14,7 +14,7 @@ public class MacroStatus implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int darkforceAttackCount = 1;
-	private String darkforceLevel = "random";
+	private String darkforceLevel = "랜덤";
 	private int darkforceDuration = 300;
 	private int darkforceMarchNumber = 1;
 	
