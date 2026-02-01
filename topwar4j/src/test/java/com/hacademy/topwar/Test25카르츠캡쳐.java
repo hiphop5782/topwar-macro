@@ -106,14 +106,14 @@ public class Test25카르츠캡쳐 {
 				int ypos = height * k + k * 2;
 //				System.out.println("height = " + bm.getHeight() + ", k = " + k + ", ypos = " + ypos + " , height = " + height);
 				BufferedImage card = crop(bm, 0, ypos, 333, height);
-				BufferedImage server = crop(bm, 171, innerY + offset * k, 43, 15);
+				BufferedImage server = crop(bm, 173, innerY + offset * k, 43, 15);
 				BufferedImage stage = crop(bm, 225, innerY + 18 + offset * k, 25, 15);
 				if(isClearStage(server)) {
-					server = crop(bm, 171, innerY + offset * k + diff, 43, 15);
-					stage = crop(bm, 230, innerY + 18 + offset * k + diff, 25, 15);
+					server = crop(bm, 173, innerY + offset * k + diff, 43, 15);
+					stage = crop(bm, 231, innerY + 18 + offset * k + diff, 25, 15);
 				}
 				else {
-					BufferedImage damage = crop(bm, 176, innerY + 34 + offset * k, 68, 15);
+					BufferedImage damage = crop(bm, 177, innerY + 34 + offset * k, 68, 15);
 					saveImageWithProcess(damage, rank, "damage");
 				}
 				//saveImageWithoutProcess(card, rank, "card");

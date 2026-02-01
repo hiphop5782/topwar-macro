@@ -80,7 +80,7 @@ public class OcrUtils {
 						System.out.println("\t→최종CP : "+cp);
 						list.add(cp);
 					}
-					//System.out.println("OCR 완료 (" + imagePath.getFileName() + ")");
+					System.out.println("OCR 완료 (" + imagePath.getFileName() + ")");
 				} catch (Exception e) {
 					System.err.println("❌ 오류: " + imagePath + " → " + e.getMessage());
 				}

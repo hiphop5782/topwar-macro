@@ -53,7 +53,7 @@ public class CaptureUtils {
 			//System.out.println("y = " + (rect.y + y));
 			BufferedImage bm = ImageUtils.captureScreen(new Rectangle(rect.x + offsetX, rect.y + offsetY, 374, 65));
 //			ImageIO.write(bm, "png", new File(dir, "cp-"+df.format(i)+".png"));
-			BufferedImage cpImage = ImageUtils.crop(bm, 183, 40, 53, 20);
+			BufferedImage cpImage = ImageUtils.crop(bm, 180, 40, 53, 20);
 //			ImageIO.write(cpImage, "png", new File(dir, "cp-"+df.format(i)+".png"));
 			Mat origin = ImageUtils.bufferedImageToMat(cpImage);
 			Mat result = ImageProcessor.pre(origin);

@@ -73,7 +73,7 @@ public class Test24여러서버Top100분석4 {
 		for(JsonNode node : listNode) {
 			servers.add(node.asInt());
 		}
-		servers.sort((o1, o2)->Math.abs(3384-o1) - Math.abs(3384-o2));
+		servers.sort((o1, o2)->Math.abs(3453-o1) - Math.abs(3453-o2));
 //		final List<Integer> servers = List.of(
 //				2566
 //		);
@@ -106,17 +106,34 @@ public class Test24여러서버Top100분석4 {
 				serverUserData.printAll();
 				serverUserData.printCorrect();
 				serverUserData.printError();
+				System.out.println("** "+server+" 분석 종료 **");
+				
+				//check ocr state
+				if(serverUserData.getOkList().size() < 10)
+					throw new Exception("정상 결과물이 10개 미만");
+				if(serverUserData.getNokList().size() >= 10)
+					throw new Exception("이상 결과물이 10개 이상");
+				int cnt = 0;
+				for(String cp : serverUserData.getCpList()) {
+					if(cp.strip().isEmpty()) {
+						cnt++;
+						if(cnt >= 10)//10개 이상이면 이상데이터로 간주
+							throw new Exception("OCR 오류 10개 이상");
+					}
+				}
+				
+				//Github commit and push
+				try {
+					GithubUtils.commitAndPush();
+				} 
+				catch (ServiceUnavailableException | IOException | GitAPIException e) {
+					throw e;
+				}
 			}
 			catch(Exception e) {
 				e.printStackTrace();
 			}
 			
-			System.out.println("** "+server+" 분석 종료 **");
-			try {
-				GithubUtils.commitAndPush();
-			} catch (ServiceUnavailableException | IOException | GitAPIException e) {
-				e.printStackTrace();
-			}
 		}
 		
 		long end = System.currentTimeMillis();

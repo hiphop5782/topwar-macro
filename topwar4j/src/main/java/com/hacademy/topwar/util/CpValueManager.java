@@ -1,8 +1,8 @@
 package com.hacademy.topwar.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.Data;
 
@@ -10,65 +10,39 @@ import lombok.Data;
 public class CpValueManager {
 	private List<String> strList;
 	private List<Double> cpList;
-	private List<Double> diffList;
-	private List<Double> errorList;
+	private List<String> errorList;
 	public CpValueManager(List<String> strList) {
 		this.strList = strList;
 		createSubList();
 	}
 	
 	private void createSubList() {
-		this.cpList = new ArrayList<>();
+		this.cpList = new CopyOnWriteArrayList<>();
+		this.errorList = new CopyOnWriteArrayList<>();
 		
 		for(String str : strList) {
 			try {
-				cpList.add(
-						Double.parseDouble(
-							str.replace("M", "")
-								.replace("O", "0").replace("D", "0").replace("Q","0")
-								.replace("I", "1").replace("l", "1").replace("]", "1")
-								.replace("Z", "2").replace("z", "2")
-								.replace("B", "3").replace("E", "3")
-								.replace("S", "5")
-								.replace("b", "6")
-								.replace(")", "7").replace("T", "7")
-								.replace("A", "8")
-								.replace("N", "9").replace("#", "9")
-						)
-					);
+				double cp = Double.parseDouble(
+						str.replace("M", "")
+						.replace("O", "0").replace("D", "0").replace("Q","0")
+						.replace("I", "1").replace("l", "1").replace("]", "1")
+						.replace("Z", "2").replace("z", "2")
+						.replace("B", "3").replace("E", "3")
+						.replace("S", "5")
+						.replace("b", "6")
+						.replace(")", "7").replace("T", "7")
+						.replace("A", "8")
+						.replace("N", "9").replace("#", "9")
+				);
+				
+				if(cp >= 700d) throw new Exception(String.valueOf(cp));
+				
 			}
 			catch(Exception e) {
-				System.err.println("숫자 변환 오류 : " + e.getMessage());
+				//System.err.println("숫자 변환 오류 : " + e.getMessage());
+				this.errorList.add(e.getMessage());
 			}
 		}
-				
-		this.diffList = new ArrayList<>();
-		
-		for(int i=0; i < cpList.size()-1; i++) {
-			diffList.add(
-				cpList.get(i) - cpList.get(i+1)
-			);
-		}
-	}
-	
-	public void filterValue() {
-		this.errorList = new ArrayList<>();
-		if(cpList.size() < 3) return;
-
-		List<Integer> memory = new ArrayList<>();
-		for(int i=1; i < cpList.size()-1; i++) {
-			double prev = cpList.get(i-1);
-			double curr = cpList.get(i);
-			double next = cpList.get(i+1);
-			if(prev >= curr && curr >= next) continue;
-			memory.add(i);
-		}
-
-		Collections.sort(memory, Collections.reverseOrder());
-		for(int index : memory) {
-			errorList.add(cpList.remove(index));
-		}
-		Collections.sort(errorList, Collections.reverseOrder());
 	}
 	
 //	소수점이 사라지는 경우만 처리
@@ -114,13 +88,4 @@ public class CpValueManager {
 		return value;
 	}
 	
-	private int findErrorPositionFrom(int index) {
-		double diff = diffList.get(index);
-		for(int i=index-1; i >= 0; i--) {
-			if(cpList.get(i) >= -diff) {
-				return i;
-			}
-		}
-		return -1;
-	}
 }

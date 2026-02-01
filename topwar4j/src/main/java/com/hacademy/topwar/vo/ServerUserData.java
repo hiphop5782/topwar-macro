@@ -37,7 +37,7 @@ public class ServerUserData {
 		if(cpList == null) return;
 		CpValueManager manager = new CpValueManager(cpList);
 //		manager.adjust();
-		manager.filterValue();
+//		manager.filterValue();
 		this.okList = manager.getCpList().stream().map(cp->cp+"M").toList();
 	}
 	public void saveToJson(File dir) throws StreamWriteException, DatabindException, IOException {

@@ -44,17 +44,19 @@ public class Test23서버Top100분석 {
 			}
 		}
 		
-		//CaptureUtils.top100(rect, server);
+		System.out.println("감지영역 : " + rect);
 		
-		List<String> cpList = OcrUtils.doOcrDirectory(dir);
-		//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
+		CaptureUtils.top100(rect, server);
 		
-		ServerUserData serverUserData = new ServerUserData(server, cpList);
-		File target = new File(System.getProperty("user.home"), "git/topwar-json");
-		serverUserData.saveToJson(target);
-		serverUserData.print();
-		serverUserData.printAll();
-		serverUserData.printCorrect();
-		serverUserData.printError();
+//		List<String> cpList = OcrUtils.doOcrDirectory(dir);
+//		//List<String> cpList = OcrUtils.doOcrDirectoryByTesseract(dir);
+//		
+//		ServerUserData serverUserData = new ServerUserData(server, cpList);
+//		File target = new File(System.getProperty("user.home"), "git/topwar-json");
+//		serverUserData.saveToJson(target);
+//		serverUserData.print();
+//		serverUserData.printAll();
+//		serverUserData.printCorrect();
+//		serverUserData.printError();
 	}
 }
