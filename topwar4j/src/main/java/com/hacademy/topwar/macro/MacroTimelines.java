@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.hacademy.topwar.util.PropertyManager;
+
 import lombok.Data;
 import lombok.Setter;
 
@@ -33,7 +35,8 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 	}
 	public void add(MacroTimeline timeline) {
 		timelineList.add(timeline);
-		delayList.add(0.25d);
+		//delayList.add(0.5d);
+		delayList.add(PropertyManager.getMacroStatus().getMacroDelay());
 	}
 	public void add(MacroTimeline timeline, double delayAfter) {
 		timelineList.add(timeline);

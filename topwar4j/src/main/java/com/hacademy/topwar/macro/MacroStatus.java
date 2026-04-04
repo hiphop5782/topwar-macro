@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hacademy.topwar.ui.ScreenMode;
 import com.hacademy.topwar.util.RectData;
 
 import lombok.Data;
@@ -13,7 +14,7 @@ public class MacroStatus implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int darkforceAttackCount = 1;
-	private String darkforceLevel = "random";
+	private String darkforceLevel = "랜덤";
 	private int darkforceDuration = 300;
 	private int darkforceMarchNumber = 1;
 	
@@ -28,6 +29,9 @@ public class MacroStatus implements Serializable{
 	private boolean terror4kManual = false;
 	
 	private List<RectData> screenList = new ArrayList<>();
+	public long getActiveScreen() {
+		return screenList.stream().filter(screen->screen.active).count();
+	}
 	
 	//기지 내부 작업
 	//daily task
@@ -52,6 +56,8 @@ public class MacroStatus implements Serializable{
 	private boolean empireRelics = true;
 	private int treasureCount = 1;
 	
+	private boolean monsterDonation = true;
+	
 	//weekly task
 	private boolean weeklyDecorFreeToken = true;
 	
@@ -62,4 +68,9 @@ public class MacroStatus implements Serializable{
 	private int foodFacilityLevel = 5;
 	private boolean odinFacility = true;
 	private int odinFacilityLevel = 3;
+	
+	//매크로 사이 기본 간격
+	private double macroDelay = 0.5d;
+	
+	private int screenMode = ScreenMode.NORMAL;
 }

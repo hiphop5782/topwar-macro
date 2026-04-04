@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hacademy.topwar.macro.action.MacroAction;
 import com.hacademy.topwar.ui.LogDialog;
+import com.hacademy.topwar.util.PropertyManager;
 
 import lombok.Setter;
 
@@ -94,6 +95,7 @@ public class MacroTimeline {
 		}
 	}
 	private void pause(double delaySecond) throws InterruptedException {
+		System.out.println("├──── pause : " + delaySecond + "s ──┤");
 		Thread.sleep((long)(delaySecond * 1000L));
 	}
 	public void stop() {
