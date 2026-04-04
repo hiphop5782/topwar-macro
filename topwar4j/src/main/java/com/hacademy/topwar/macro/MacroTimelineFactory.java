@@ -449,7 +449,9 @@ public class MacroTimelineFactory {
 		for(int i=0; i < 5; i++) {
 			timeline.add(randomDelay(status, 5, 6));
 			timeline.add(전투스킵(status, basePoint));
-			timeline.add(randomDelay(status, 3, 5));
+			timeline.add(randomDelay(status, 5, 7));
+			timeline.add(사판훈련재도전(status, basePoint));
+			timeline.add(randomDelay(status, 1, 2));
 			timeline.add(사판훈련재도전(status, basePoint));
 		}
 		
@@ -1317,9 +1319,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 사판훈련도전(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 213, 403, status.getScreenList().size() < singleCount);
+			return new MacroMouseAction(basePoint, 230, 370, status.getScreenList().size() < singleCount);
 		}
-		return new MacroMouseAction(basePoint, 200, 663, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 200, 600, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 전투스킵(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
@@ -1329,9 +1331,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 사판훈련재도전(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 210, 377, status.getScreenList().size() < singleCount);
+			return new MacroMouseAction(basePoint, 200, 340, status.getScreenList().size() < singleCount);
 		}
-		return new MacroMouseAction(basePoint, 187, 615, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 170, 555, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 영웅메뉴(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
