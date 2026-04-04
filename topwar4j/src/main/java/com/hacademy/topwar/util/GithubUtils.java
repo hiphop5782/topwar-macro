@@ -20,8 +20,45 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 public class GithubUtils {
-	public static void commitAndPush() throws IOException, AbortedByHookException, ConcurrentRefUpdateException, NoHeadException, NoMessageException, ServiceUnavailableException, UnmergedPathsException, WrongRepositoryStateException, GitAPIException {
+	public static void commitAndPush() throws IOException, AbortedByHookException, ConcurrentRefUpdateException,
+			NoHeadException, NoMessageException, ServiceUnavailableException, UnmergedPathsException,
+			WrongRepositoryStateException, GitAPIException {
 		File repoPath = new File(System.getProperty("user.home"), "git/topwar-json");
+		Scanner sc = new Scanner(new File(".", "github"));
+		String token = sc.nextLine();
+		sc.close();
+
+		Repository repo = new FileRepositoryBuilder().setGitDir(new File(repoPath, ".git")).readEnvironment()
+				.findGitDir().build();
+
+		try (Git git = new Git(repo);) {
+			// Git 계정 정보 (개인 액세스 토큰 사용 권장)
+			UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(
+					"hiphop5782", token);
+
+			// Pull Command
+			PullResult result = git.pull().setCredentialsProvider(credentialsProvider).call();
+
+			if (result.isSuccessful()) {
+				System.out.println("Pull이 완료되었습니다.");
+
+				// 변경된 파일 추가 (Staging)
+				git.add().addFilepattern(".").call();
+
+				// 커밋
+				git.commit().setMessage("JGit auto upload").call();
+
+				// 원격 저장소에 푸시
+
+				git.push().setCredentialsProvider(credentialsProvider).call();
+
+				System.out.println("커밋 및 푸시가 완료되었습니다.");
+			}
+		}
+	}
+
+	public static void commitAndPush(String repoName) throws IOException, AbortedByHookException, ConcurrentRefUpdateException, NoHeadException, NoMessageException, ServiceUnavailableException, UnmergedPathsException, WrongRepositoryStateException, GitAPIException {
+		File repoPath = new File(System.getProperty("user.home")+"/git", repoName);
 		Scanner sc = new Scanner(new File(".", "github"));
 		String token = sc.nextLine();
 		sc.close();
@@ -59,6 +96,5 @@ public class GithubUtils {
 			
 			
 		}
-		
 	}
 }

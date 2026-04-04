@@ -32,7 +32,7 @@ import com.hacademy.topwar.util.Keyboard;
 import com.hacademy.topwar.util.OcrUtils;
 import com.hacademy.topwar.vo.ServerUserData;
 
-public class Test24여러서버Top100분석4 {
+public class Test24주요서버Top100조사 {
 	public static void main(String[] args) throws Exception {
 		long begin = System.currentTimeMillis();
 		
@@ -59,24 +59,24 @@ public class Test24여러서버Top100분석4 {
 			}
 		}
 		
-//		HttpClient client = HttpClient.newBuilder().build();
-//		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://raw.githubusercontent.com/hiphop5782/topwar-json/refs/heads/main/servers.json")).GET().build();
-//		HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-//		
-//		ObjectMapper mapper = new ObjectMapper();
-//		JsonNode root = mapper.readTree(response.body());
-//		
-//		JsonNode listNode = root.get("list");
-//		if(listNode == null || !listNode.isArray()) return;
+		HttpClient client = HttpClient.newBuilder().build();
+		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://raw.githubusercontent.com/hiphop5782/topwar-json/refs/heads/main/servers.json")).GET().build();
+		HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 		
-//		List<Integer> servers = new ArrayList<>();
-//		for(JsonNode node : listNode) {
-//			servers.add(node.asInt());
-//		}
-//		servers.sort((o1, o2)->Math.abs(3453-o1) - Math.abs(3453-o2));
-		final List<Integer> servers = List.of(
-				2566
-		);
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(response.body());
+		
+		JsonNode listNode = root.get("list");
+		if(listNode == null || !listNode.isArray()) return;
+		
+		List<Integer> servers = new ArrayList<>();
+		for(JsonNode node : listNode) {
+			servers.add(node.asInt());
+		}
+		servers.sort((o1, o2)->Math.abs(3453-o1) - Math.abs(3453-o2));
+//		final List<Integer> servers = List.of(
+//				2566
+//		);
 		System.out.println(servers.size()+"개 서버에 대한 분석을 시작합니다");
 		
 		//ESC 설정

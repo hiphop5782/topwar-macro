@@ -21,14 +21,17 @@ public class CaptureUtils {
 		//저장 폴더 초기화
 		File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
 		if(dir.exists()) {
+			System.out.println("폴더가 이미 존재합니다");
 			try {
 				FileUtils.deleteDirectory(dir);
+				System.out.println("폴더를 삭제했습니다");
 			}
 			catch(Exception e) {
 				System.err.println("Directory 삭제 실패 : " + e.getMessage());
 			}
 		}
 		dir.mkdirs();
+		System.out.println("폴더 생성 완료");
 		
 		//Top100 메뉴로 진입
 		Mouse.create()

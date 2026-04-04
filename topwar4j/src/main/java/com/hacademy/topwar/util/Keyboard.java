@@ -50,7 +50,13 @@ public class Keyboard {
 	public Keyboard type(String text) {
 		for(int i=0; i < text.length(); i++) {
 			char ch = text.charAt(i);
-			type(ch).hold();
+			// 문자에 따른 KeyCode 가져오기
+            int keyCode = KeyEvent.getExtendedKeyCodeForChar(ch);
+
+            if (KeyEvent.CHAR_UNDEFINED == keyCode) {
+                throw new RuntimeException("입력할 수 없는 문자입니다: " + ch);
+            }
+			type(keyCode).hold();
 		}
 		return this;
 	}
@@ -95,6 +101,12 @@ public class Keyboard {
 		return this;
 	}
 	
+	public Keyboard selectAll() {
+		return press(KeyEvent.VK_CONTROL).hold()
+					.press(KeyEvent.VK_A).hold()
+					.release(KeyEvent.VK_A).hold()
+					.release(KeyEvent.VK_CONTROL);
+	}
 	public Keyboard copy() {
 		return press(KeyEvent.VK_CONTROL).hold()
 					.press(KeyEvent.VK_C).hold()

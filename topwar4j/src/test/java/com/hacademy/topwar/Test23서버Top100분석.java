@@ -19,7 +19,7 @@ public class Test23서버Top100분석 {
 	public static void main(String[] args) throws Exception {
 		
 		//서버 설정
-		int server = 3384;
+		int server = 3453;
 		boolean usePrevScreen = true;
 		
 		File dir = new File(System.getProperty("user.home"), "tw-macro/ocr/"+server);
