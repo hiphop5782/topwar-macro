@@ -799,6 +799,11 @@ public class MacroTimelineFactory {
 		timeline.add(randomDelay(status, 1, 1.5));
 		timeline.add(레이더버튼(status, basePoint));
 		timeline.add(randomDelay(status, 1, 1.5));
+		if(status.isUseRader()) {
+			timeline.add(레이더일괄지원(status, basePoint));
+			timeline.add(randomDelay(status, 1, 1.5));
+			timeline.add(뒤로가기(status, basePoint));
+		}
 		timeline.add(뒤로가기(status, basePoint));
 		return timeline;
 	}
@@ -1210,9 +1215,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 처음탭으로이동(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 232, 42, MacroMouseActionType.WHEELDOWN, 20, status.getScreenList().size() < singleCount);
+			return new MacroMouseAction(basePoint, 232, 42, MacroMouseActionType.WHEELDOWN, 200, status.getScreenList().size() < singleCount);
 		}
-		return new MacroMouseAction(basePoint, 225, 75, MacroMouseActionType.WHEELDOWN, 20, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 225, 75, MacroMouseActionType.WHEELDOWN, 200, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 마지막탭으로이동(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
@@ -1246,9 +1251,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 특별패키지탭(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 234, 44, status.getScreenList().size() < singleCount);
+			return new MacroMouseAction(basePoint, 284, 44, status.getScreenList().size() < singleCount);
 		}
-		return new MacroMouseAction(basePoint, 223, 70, status.getScreenList().size() < singleCount);
+		return new MacroMouseAction(basePoint, 273, 70, status.getScreenList().size() < singleCount);
 	}
 	private static MacroAction 특별패키지무료보상클릭(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
@@ -1264,9 +1269,9 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 주간카드탭으로이동(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 330, 45, 247, 45, MacroMouseActionType.DRAG);
+			return new MacroMouseAction(basePoint, 330, 45, 197, 45, MacroMouseActionType.DRAG);
 		}
-		return new MacroMouseAction(basePoint, 342, 72, 189, 72, MacroMouseActionType.DRAG);
+		return new MacroMouseAction(basePoint, 342, 72, 74, 72, MacroMouseActionType.DRAG);
 	}
 	private static MacroAction 보석함클릭(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
@@ -1853,27 +1858,33 @@ public class MacroTimelineFactory {
 	}
 	private static MacroAction 길드메뉴에서괴물클릭(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 191, 352);
+			return new MacroMouseAction(basePoint, 301, 352);
 		}
-		return new MacroMouseAction(basePoint, 169, 575);
+		return new MacroMouseAction(basePoint, 336, 575);
 	}
 	private static MacroAction 길드괴물레벨업버튼(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 314, 370);
+			return new MacroMouseAction(basePoint, 321, 324);
 		}
-		return new MacroMouseAction(basePoint, 354, 606);
+		return new MacroMouseAction(basePoint, 363, 525);
 	}
 	private static MacroAction 길드괴물기부버튼(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 251, 361);
+			return new MacroMouseAction(basePoint, 257, 284);
 		}
-		return new MacroMouseAction(basePoint, 251, 588);
+		return new MacroMouseAction(basePoint, 257, 474);
 	}
 	private static MacroAction 길드괴물기부닫기버튼(MacroStatus status, Point basePoint) {
 		if(status.getScreenMode() == ScreenMode.SMALL) {
-			return new MacroMouseAction(basePoint, 347, 58);
+			return new MacroMouseAction(basePoint, 349, 103);
 		}
-		return new MacroMouseAction(basePoint, 403, 93);
+		return new MacroMouseAction(basePoint, 403, 170);
+	}
+	private static MacroAction 레이더일괄지원(MacroStatus status, Point basePoint) {
+		if(status.getScreenMode() == ScreenMode.SMALL) {
+			return new MacroMouseAction(basePoint, 250, 350);
+		}
+		return new MacroMouseAction(basePoint, 250, 430);
 	}
 }
 

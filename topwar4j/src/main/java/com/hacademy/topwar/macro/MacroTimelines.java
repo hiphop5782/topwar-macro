@@ -34,9 +34,11 @@ public class MacroTimelines implements Iterable<MacroTimeline> {
 		this.where = where;
 	}
 	public void add(MacroTimeline timeline) {
+		System.out.println("딜레이추가 : " + PropertyManager.getMacroStatus().getMacroDelay());
 		timelineList.add(timeline);
 		//delayList.add(0.5d);
-		delayList.add(PropertyManager.getMacroStatus().getMacroDelay());
+		//delayList.add(PropertyManager.getMacroStatus().getMacroDelay());
+		delayList.add(PropertyManager.getMacroStatus().getCalculateDelay());
 	}
 	public void add(MacroTimeline timeline, double delayAfter) {
 		timelineList.add(timeline);

@@ -352,12 +352,15 @@ public class MainFrame extends JFrame {
 //		});
 		StatusCheckBox useVit = new StatusCheckBox("물약 사용", "potion");
 		StatusCheckBox materialRequest = new StatusCheckBox("재료 지원 요청(암흑, 워해머, 테러 시)", "materialRequest");
+		StatusCheckBox useRader = new StatusCheckBox("레이더 일괄지원 사용", "useRader");
 
 		useVitPanel.add(useVit);
 		useVitPanel.add(materialRequest);
+		useVitPanel.add(useRader);
 		contentPanel.add(useVitPanel);
 		waitingComponentList.add(useVit);
 		waitingComponentList.add(materialRequest);
+		waitingComponentList.add(useRader);
 
 		// 암흑사냥
 		JPanel darkforcePanel = new JPanel(new MigLayout("inset 5", "[]10[grow,fill]", ""));

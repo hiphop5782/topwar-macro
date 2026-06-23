@@ -24,6 +24,7 @@ public class MacroStatus implements Serializable{
 	
 	private boolean potion = true;//물약 사용
 	private boolean materialRequest = false;//재료 요청
+	private boolean useRader = true;//레이더 요청
 	
 	private int terror4kLevel = 5;
 	private boolean terror4kManual = false;
@@ -71,6 +72,11 @@ public class MacroStatus implements Serializable{
 	
 	//매크로 사이 기본 간격
 	private double macroDelay = 0.5d;
+	public double getCalculateDelay() {
+		if(screenList.isEmpty()) return macroDelay;
+		double limit = 2;
+		return limit / Math.sqrt(screenList.size());
+	}
 	
 	private int screenMode = ScreenMode.NORMAL;
 }
