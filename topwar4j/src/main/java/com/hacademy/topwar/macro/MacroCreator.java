@@ -125,7 +125,9 @@ public class MacroCreator {
 	}
 	public static void moveIntoBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		MacroTimelines last = timelinesGroup.getLast();
-		if(last != null && last.isInner()) return;
+		if(last == null) return;
+		if(last.isInner()) return;
+		if(last.isAnywhere()) return;
 		int offset=1;
 		while(true) {
 			last = timelinesGroup.getFromLast(offset++);
@@ -145,7 +147,9 @@ public class MacroCreator {
 	}
 	public static void moveOutofBase(MacroTimelinesGroup timelinesGroup, MacroStatus status) throws Exception {
 		MacroTimelines last = timelinesGroup.getLast();
-		if(last != null && last.isOuter()) return;
+		if(last == null) return;
+		if(last.isOuter()) return;
+		if(last.isAnywhere()) return;
 		int offset=1;
 		while(true) {
 			last = timelinesGroup.getFromLast(offset++);
