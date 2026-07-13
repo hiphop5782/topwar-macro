@@ -34,13 +34,15 @@ public class ClipboardUtil {
 		
 	    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 	    int maxAttempts = 20; // 0.1초씩 20번 = 최대 2초
+//	    int maxAttempts = Integer.MAX_VALUE;
 	    
 	    for (int i = 0; i < maxAttempts; i++) {
 	        try {
 	            Transferable contents = clipboard.getContents(null);
 	            if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 	                String currentData = (String) contents.getTransferData(DataFlavor.stringFlavor);
-	                
+	                //System.out.println("prev : "+previousData);
+	                //System.out.println("curr : "+currentData);
 	                // 1. 데이터가 존재하고
 	                // 2. 이전 데이터(자바가 JS에 보냈던 값)와 달라졌다면 복사 성공으로 간주
 	                if (currentData != null && !currentData.equals(previousData)) {

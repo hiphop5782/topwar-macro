@@ -61,6 +61,9 @@ public class JavascriptUtil {
 		List<ServerInfo> serverList = mapper.readValue(jsonStr, new TypeReference<List<ServerInfo>>() {});
 		return serverList;
 	}
+	public static List<ServerInfo> getAllServersByPopularity(Rectangle rect, boolean usePrevScreen) throws InterruptedException, JsonMappingException, JsonProcessingException {
+		return getAllServers2(rect, usePrevScreen).stream().sorted((a,b)->a.getPlayerList().size() - b.getPlayerList().size()).toList();
+	}
 	public static ServerInfo getServerInfo(Rectangle rect, int server) throws JsonMappingException, JsonProcessingException, InterruptedException {
 		System.out.println("["+server+" 서버 조사 시작]");
 		//개인전투력랭킹
@@ -259,5 +262,28 @@ public class JavascriptUtil {
 		File gitDir  = new File(System.getProperty("user.home"), "git/topwar-webutil-vite/src/assets/json/kartz/history");
 		gitDir.mkdirs();
 		mapper.writeValue(new File(gitDir, month+".json"), data);
+	}
+	
+	public static void saveServerList(List<ServerInfo> servers) throws StreamWriteException, DatabindException, IOException {
+		File gitDir  = new File(System.getProperty("user.home"), "git/topwar-webutil-vite/src/assets/json/servers");
+		gitDir.mkdirs();
+
+		List<Integer> serverNumbersByPopularity = servers.stream()
+					.sorted(
+						(a,b)->{
+							long ta = a.getPlayerList().stream().filter(user->user.isActive()).map(ServerPlayerInfo::getCp).reduce(0L, Long::sum);
+							long tb = b.getPlayerList().stream().filter(user->user.isActive()).map(ServerPlayerInfo::getCp).reduce(0L, Long::sum);
+							int gap = (int)(ta - tb);
+							System.out.println("<gap = "+gap+">");
+							return gap;
+						}
+					)
+				.map(ServerInfo::getServerNumber).toList();
+		List<Integer> serverNumbers = serverNumbersByPopularity.stream().sorted().toList();
+		
+		String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		mapper.writeValue(new File(gitDir, "servers-"+today+".json"), serverNumbers);
+		mapper.writeValue(new File(gitDir, "servers-latest.json"), serverNumbers);
+		mapper.writeValue(new File(gitDir, "servers-popular.json"), serverNumbersByPopularity);
 	}
 }

@@ -40,6 +40,7 @@ public class Test34새로운방식서버정보조사3무한반복 {
 					server.setAllianceList(info.getAllianceList());
 				}
 				System.out.println("[알림] 모든 조회 완료");
+				JavascriptUtil.saveServerList(servers);
 				JavascriptUtil.savePowerData(servers);
 				GithubUtils.commitAndPush("topwar-webutil-vite");
 			}

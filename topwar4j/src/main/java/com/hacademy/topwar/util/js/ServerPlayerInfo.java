@@ -63,4 +63,9 @@ public class ServerPlayerInfo {
 					.nickname(detail.getUsername() != null ? detail.getUsername() : detail.getNickname())
 				.build();
 	}
+	
+	public boolean isActive() {
+		if(lastLogin == null) return false;
+		return System.currentTimeMillis() - lastLogin < 7 * 24 * 60 * 60 * 1000L;
+	}
 }
